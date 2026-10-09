@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Пилот для Huna Arabic: бот записи на одной группе</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --em-950:#08241f; --em-900:#0c332b; --em-800:#12473b; --em-700:#1a5e4e; --em-100:#e2efe8;
+  --gold:#c2a05a; --gold-soft:#f0e4c4; --ivory:#f4eedf; --card:#fffdf8; --ink:#1a2622;
+  --muted:#657570; --line:#e3dac4; --red:#a4433a; --red-bg:#f6dfda; --ok:#2c7a55; --ok-bg:#dcefe4;
+  --warn:#a56a12; --warn-bg:#faecd0;
+  --ui:'Onest',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --disp:'Cormorant Garamond',Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--ui);color:var(--ink);background:var(--ivory);font-size:15px;line-height:1.45;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23c2a05a' stroke-opacity='.13'%3E%3Crect x='16' y='16' width='32' height='32'/%3E%3Crect x='16' y='16' width='32' height='32' transform='rotate(45 32 32)'/%3E%3C/g%3E%3C/svg%3E")}
+button{font-family:inherit;cursor:pointer}
+.wrap{max-width:1220px;margin:0 auto;padding:28px 16px 48px}
+.top h1{font-family:var(--disp);font-size:38px;line-height:1.1;color:var(--em-900);font-weight:700}
+.top .lead{margin-top:8px;max-width:720px;font-size:16px}
+.top .note{margin-top:6px;color:var(--muted);font-size:13px}
+.ctl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:20px 0 16px;padding:10px 14px;background:var(--card);border:1px solid var(--line);border-radius:14px}
+.ctl .clock{font-weight:600;color:var(--em-900);margin-right:auto}
+.ctl .clock small{display:block;font-weight:400;color:var(--muted);font-size:12.5px}
+.ctl button{border:0;border-radius:999px;padding:9px 16px;font-weight:600;font-size:13.5px}
+.ctl .jump{background:var(--gold);color:var(--em-950)}
+.ctl .jump:disabled{background:#e9e2cf;color:#9a9482;cursor:default}
+.ctl .reset{background:transparent;color:var(--em-700);border:1px solid var(--em-700)}
+.stage{display:grid;grid-template-columns:376px minmax(0,1fr);gap:22px;align-items:start}
+.cap{font-weight:600;color:var(--em-900);margin-bottom:8px;font-size:14px}
+.cap small{font-weight:400;color:var(--muted);margin-left:6px}
+
+/* телефон */
+.phone{height:700px;background:#e7ede3;border-radius:30px;border:7px solid var(--em-950);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 18px 44px rgba(8,36,31,.28)}
+.ph-head{background:var(--em-900);color:#fff;padding:11px 14px;display:flex;gap:10px;align-items:center}
+.ava{width:38px;height:38px;border-radius:50%;background:var(--gold);display:grid;place-items:center;color:var(--em-950);font-size:20px;font-weight:700;flex:0 0 38px}
+.ph-head b{font-size:14px;display:block}
+.ph-head small{opacity:.72;font-size:11.5px}
+.msgs{flex:1;overflow-y:auto;padding:12px 10px;display:flex;flex-direction:column;gap:7px}
+.b{max-width:86%;padding:7px 10px 5px;border-radius:14px;font-size:13.5px;box-shadow:0 1px 1px rgba(0,0,0,.07);word-wrap:break-word}
+.b .tx{white-space:pre-wrap}
+.b .tm{display:block;text-align:right;font-size:10.5px;color:#8a958f;margin-top:1px}
+.b.bot{background:#fff;align-self:flex-start;border-bottom-left-radius:4px}
+.b.me{background:#d9f0cf;align-self:flex-end;border-bottom-right-radius:4px}
+.b.typing{color:var(--muted);font-style:italic;padding-bottom:7px}
+.sep{align-self:center;background:rgba(12,51,43,.55);color:#fff;font-size:11.5px;padding:3px 11px;border-radius:999px;margin:4px 0}
+.sys{align-self:center;text-align:center;background:var(--gold-soft);color:#6d5210;font-size:12px;padding:6px 12px;border-radius:10px;max-width:90%}
+.file{display:flex;gap:9px;align-items:center}
+.file i{width:36px;height:36px;border-radius:50%;background:var(--em-700);color:#fff;display:grid;place-items:center;font-style:normal;font-size:16px}
+.file b{display:block;font-size:13px}.file small{color:var(--muted);font-size:11.5px}
+.kb{align-self:flex-start;width:86%;display:flex;flex-direction:column;gap:5px;margin-top:-2px}
+.kb button{border:0;background:rgba(26,94,78,.15);color:var(--em-900);font-weight:600;font-size:13px;padding:9px 10px;border-radius:10px}
+.kb button:hover{background:rgba(26,94,78,.26)}
+.kb button.used{opacity:.42;pointer-events:none}
+.chips{display:flex;gap:6px;padding:6px 10px 0;background:#f3efe2;flex-wrap:wrap}
+.chips:empty{display:none}
+.chips button{border:1px dashed var(--em-700);background:transparent;color:var(--em-700);font-weight:600;font-size:12px;padding:5px 10px;border-radius:999px}
+.inp{display:flex;gap:8px;padding:8px 10px 10px;background:#f3efe2}
+.inp input{flex:1;min-width:0;border:1px solid var(--line);border-radius:18px;padding:9px 13px;font:inherit;font-size:13.5px;background:#fff}
+.inp input:disabled{background:#ebe5d4}
+.inp button{border:0;background:var(--em-700);color:#fff;border-radius:50%;width:38px;height:38px;font-size:16px;flex:0 0 38px}
+.inp button:disabled{opacity:.4}
+
+/* экран менеджера */
+.desk{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 14px 36px rgba(8,36,31,.12);min-height:700px;display:flex;flex-direction:column}
+.dk-head{background:var(--em-900);color:#fff;padding:14px 18px}
+.dk-head b{font-family:var(--disp);font-size:23px;font-weight:600;display:block;line-height:1.15}
+.dk-head span{font-size:13px;opacity:.78}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:14px 16px 4px}
+.kpi{border:1px solid var(--line);border-radius:12px;padding:9px 10px;background:#fff;min-width:0}
+.kpi b{font-family:var(--disp);font-size:28px;line-height:1;color:var(--em-900);display:block}
+.kpi span{font-size:12px;color:var(--muted)}
+.kpi.hot b{color:var(--red)} .kpi.wait b{color:var(--warn)} .kpi.good b{color:var(--ok)}
+.tabs{display:flex;gap:4px;padding:10px 16px 0;border-bottom:1px solid var(--line)}
+.tabs button{border:0;background:transparent;padding:9px 14px;font-weight:600;font-size:14px;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1px}
+.tabs button.on{color:var(--em-900);border-bottom-color:var(--gold)}
+.tabs i{font-style:normal;background:var(--red);color:#fff;border-radius:999px;font-size:11px;padding:1px 7px;margin-left:5px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px 16px 8px}
+.tools input{flex:1 1 170px;min-width:0;border:1px solid var(--line);border-radius:10px;padding:8px 11px;font:inherit;font-size:13.5px;background:#fff}
+.flt{display:flex;gap:6px;flex-wrap:wrap}
+.flt button{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:6px 11px;font-size:12.5px;font-weight:500}
+.flt button.on{background:var(--em-800);border-color:var(--em-800);color:#fff}
+.list{flex:1;overflow-y:auto;max-height:430px;padding:0 16px 14px}
+.r{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #efe8d6}
+.r.me{background:#fff8e6;margin:0 -10px;padding:9px 10px;border-radius:10px;border-bottom-color:transparent}
+.r b{font-size:14px}
+.r small{display:block;color:var(--muted);font-size:12px}
+.you{font-size:11px;font-weight:600;background:var(--gold);color:var(--em-950);border-radius:999px;padding:1px 8px;margin-left:6px}
+.pill{font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.pill.ok{background:var(--ok-bg);color:var(--ok)} .pill.warn{background:var(--warn-bg);color:var(--warn)}
+.pill.red{background:var(--red-bg);color:var(--red)} .pill.gray{background:#ece7d8;color:var(--muted)}
+.do{min-width:132px;text-align:right;font-size:12px;color:var(--muted)}
+.do button,.qa button.send,.modal button{border:0;border-radius:9px;padding:7px 11px;font-weight:600;font-size:12.5px;background:var(--em-700);color:#fff}
+.do button.sec{background:rgba(26,94,78,.14);color:var(--em-900)}
+.empty{padding:26px 0;color:var(--muted);text-align:center}
+.pane{flex:1;padding:14px 16px;overflow-y:auto;max-height:560px}
+.qa{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;background:#fff}
+.qa.me{border-color:var(--gold);background:#fff8e6}
+.qa .q{margin:6px 0 8px;font-size:14px}
+.qa .ans{background:var(--em-100);border-radius:9px;padding:8px 10px;font-size:13.5px}
+.qa textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font:inherit;font-size:13.5px;resize:vertical;min-height:54px}
+.qa .line{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.qa .hint{border:1px dashed var(--em-700);background:transparent;color:var(--em-700);border-radius:999px;font-size:12px;font-weight:600;padding:5px 10px}
+.log div{padding:8px 0;border-bottom:1px solid #efe8d6;font-size:13.5px}
+.log time{color:var(--muted);font-size:12px;display:inline-block;min-width:104px}
+.log b{color:var(--em-900)}
+
+/* чек */
+.ovl{position:fixed;inset:0;background:rgba(8,36,31,.55);display:grid;place-items:center;padding:16px;z-index:20}
+.modal{background:var(--card);border-radius:18px;padding:20px;width:100%;max-width:380px}
+.modal h3{font-family:var(--disp);font-size:24px;color:var(--em-900);margin-bottom:10px}
+.rcp{border:1px dashed #b9b09a;border-radius:12px;padding:12px 14px;background:#fff;font-size:13.5px}
+.rcp div{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
+.rcp span{color:var(--muted)}
+.modal .line{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.modal button.no{background:transparent;color:var(--red);border:1px solid var(--red)}
+.modal button.x{background:transparent;color:var(--muted);margin-left:auto}
+
+/* низ */
+.below{display:grid;grid-template-columns:1.25fr 1fr;gap:22px;margin-top:26px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px 22px}
+.box h2{font-family:var(--disp);font-size:26px;color:var(--em-900);line-height:1.15;margin-bottom:12px}
+.m{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;padding:10px 0;border-top:1px solid #efe8d6;align-items:baseline}
+.m:first-of-type{border-top:0}
+.m b{font-family:var(--disp);font-size:30px;color:var(--em-800);line-height:1;white-space:nowrap}
+.m p{font-size:14px}.m small{grid-column:2;color:var(--muted);font-size:12.5px}
+.box ul{list-style:none;font-size:14px}
+.box li{padding:5px 0 5px 22px;position:relative}
+.box li::before{content:"";position:absolute;left:2px;top:12px;width:9px;height:9px;border-radius:2px;background:var(--gold);transform:rotate(45deg)}
+.box .no li::before{background:transparent;border:1.5px solid #b3ab97}
+.box h3{font-size:14px;margin:12px 0 2px;color:var(--muted);font-weight:600}
+.foot{margin-top:22px;color:var(--muted);font-size:12.5px;text-align:center}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+@media (max-width:1000px){
+  .stage{grid-template-columns:minmax(0,1fr)}
+  .phone{max-width:400px;width:100%;margin:0 auto;height:640px}
+  .below{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:620px){
+  .top h1{font-size:29px}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .kpi:first-child{grid-column:1/-1}
+  .r{grid-template-columns:minmax(0,1fr) auto}
+  .do{grid-column:1/-1;text-align:left;min-width:0}
+  .tabs button{padding:9px 9px;font-size:13px}
+  .log time{display:block}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <h1>Пилот для Huna Arabic: бот записи на одной группе</h1>
+    <p class="lead">Слева чат ученицы с ботом, справа то, что в эту минуту видит менеджер. Экраны связаны: пройдите запись сами и посмотрите, как заявка появляется в списке.</p>
+    <p class="note">Прототип по описанию вашего процесса, не официальный продукт академии. Имена, цена, даты и числа условные.</p>
+  </div>
+
+  <div class="ctl">
+    <div class="clock"><span id="clock"></span><small id="clockHint"></small></div>
+    <button class="jump" id="jump"></button>
+    <button class="reset" id="reset">Начать заново</button>
+  </div>
+
+  <div class="stage">
+    <div>
+      <div class="cap">Ученица <small>Telegram, чат с ботом</small></div>
+      <div class="phone" id="phone"></div>
+    </div>
+    <div>
+      <div class="cap">Менеджер <small>одно место вместо таблицы, приложения и блокнота</small></div>
+      <div class="desk" id="desk"></div>
+    </div>
+  </div>
+
+  <div class="below">
+    <div class="box">
+      <h2>Что сравним через две недели</h2>
+      <div id="measure"></div>
+    </div>
+    <div class="box">
+      <h2>Что входит в пилот</h2>
+      <ul>
+        <li>Ответ на заявку сразу, в любое время суток</li>
+        <li>Анкета: имя для сертификата, возраст, телефон</li>
+        <li>Условия академии и реквизиты для оплаты</li>
+        <li>Приём чека и подтверждение одной кнопкой</li>
+        <li>Два напоминания об оплате, с возможностью отказаться</li>
+        <li>Вопросы, на которые бот не знает ответа, уходят менеджеру</li>
+        <li>Список группы: кто записался, кто оплатил, кому написать лично</li>
+      </ul>
+      <h3>Не входит</h3>
+      <ul class="no">
+        <li>Остальные группы и перенос старых таблиц</li>
+        <li>Кабинеты преподавателя, директора и владельца</li>
+        <li>Ответы ИИ в свободной форме: бот работает по сценарию</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot">Одна группа нового набора, две недели. Бот не заменяет менеджера: решения по оплате и нестандартные вопросы остаются за человеком.</div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  function el(tag, cls, text){ var e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
+  function esc(s){ return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+  function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+  function p2(n){ return (n<10?'0':'')+n; }
+  var MON=['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
+  var MONF=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+  function fT(d){ return p2(d.getHours())+':'+p2(d.getMinutes()); }
+  function fD(d){ return d.getDate()+' '+MON[d.getMonth()]; }
+  function fDT(d){ return fD(d)+', '+fT(d); }
+
+  var G = {name:'Сёстры · Пн, Ср, Сб · 19:00 мск', start:'19 октября', hold:'17 октября', cap:72};
+  var PRICE = '5 990 ₽';
+  var now = new Date(2026,9,9,23,47);
+  function tick(m){ now = new Date(now.getTime()+(m||1)*60000); }
+
+  /* условные данные группы */
+  var seed = 20261009;
+  function rnd(){ seed|=0; seed=seed+0x6D2B79F5|0; var t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }
+  var FIRST=['Аиша','Марьям','Хадиджа','Фатима','Зейнаб','Амина','Сафия','Асия','Халима','Сумая','Мадина','Лейла','Асма','Румиса','Хава','Иман','Самира','Малика','Салима','Раяна','Джамиля','Камила','Патимат','Заира','Эльвира','Диана','Алия','Ясмина','Нурия','Сабина','Динара','Милана'];
+  var LAST='АБГДИКМНРСТХШЭЮ'.split('');
+  var ROWS=(function(){
+    var sts=[]; function push(st,n){ for(var i=0;i<n;i++) sts.push(st); }
+    push('paid',41); push('check',3); push('wait',14); push('manual',4); push('stop',2);
+    for(var i=sts.length-1;i>0;i--){ var j=Math.floor(rnd()*(i+1)); var t=sts[i]; sts[i]=sts[j]; sts[j]=t; }
+    var t0=new Date(2026,9,5,8,0).getTime(), t1=new Date(2026,9,9,22,30).getTime(), cut=new Date(2026,9,7,23,47).getTime();
+    return sts.map(function(st,i){
+      var ap = st==='manual' ? new Date(2026,9,4,9+Math.floor(rnd()*12),Math.floor(rnd()*60)) : new Date(t0+rnd()*(t1-t0));
+      var r={id:i, name:FIRST[Math.floor(rnd()*FIRST.length)]+' '+LAST[Math.floor(rnd()*LAST.length)]+'.', applied:ap, st:st, rem:0};
+      if(st==='manual') r.rem=2;
+      if(st==='wait') r.rem = ap.getTime()<cut ? 1 : 0;
+      if(st==='stop') r.rem=1;
+      if(st==='paid') r.paidAt=new Date(Math.min(ap.getTime()+(10+rnd()*2400)*60000, t1+40*60000));
+      if(st==='check') r.sentAt=new Date(Math.min(ap.getTime()+(8+rnd()*600)*60000, t1+60*60000));
+      return r;
+    }).sort(function(a,b){ return b.applied-a.applied; });
+  })();
+  var QS=[
+    {id:'q1', name:ROWS[5].name, at:new Date(2026,9,9,21,12), text:'Можно ли заниматься с телефона, без компьютера?', answer:null},
+    {id:'q2', name:ROWS[11].name, at:new Date(2026,9,9,18,40), text:'Если пропущу урок, можно будет посмотреть запись?', answer:null}
+  ];
+  var EVENTS=[
+    {at:new Date(2026,9,9,22,58), who:'Бот', what:'Чек получен, ждёт проверки'},
+    {at:new Date(2026,9,9,21,12), who:'Бот', what:'Вопрос передан менеджеру'},
+    {at:new Date(2026,9,9,19,30), who:'Менеджер', what:'Оплата подтверждена'},
+    {at:new Date(2026,9,9,10,0),  who:'Бот', what:'Напоминание об оплате отправлено 6 ученицам'},
+    {at:new Date(2026,9,9,2,14),  who:'Бот', what:'Новая заявка ночью: анкета заполнена, реквизиты отправлены'}
+  ];
+  function log(who, what){ EVENTS.unshift({at:new Date(now), who:who, what:what}); }
+
+  var S = {status:'new', rem:0, data:{}, expect:null, busy:false, q:null, applied:null, paidAt:null, touched:false, botRems:0};
+  var V = {tab:'list', filter:'all', q:''};
+  var phone=document.getElementById('phone'), desk=document.getElementById('desk');
+  var msgs, chips, input, send, lastDay=null;
+
+  /* ---------- телефон ---------- */
+  (function(){
+    var head=el('div','ph-head'); head.appendChild(el('div','ava','ع'));
+    var t=el('div'); t.innerHTML='<b>Huna Arabic · запись</b><small>бот · прототип</small>'; head.appendChild(t);
+    msgs=el('div','msgs'); chips=el('div','chips');
+    var inp=el('div','inp'); input=el('input'); input.setAttribute('aria-label','Сообщение боту'); send=el('button',null,'➤'); send.setAttribute('aria-label','Отправить');
+    inp.appendChild(input); inp.appendChild(send);
+    [head,msgs,chips,inp].forEach(function(n){ phone.appendChild(n); });
+    send.onclick=submitText; input.onkeydown=function(e){ if(e.key==='Enter') submitText(); };
+  })();
+  function scroll(){ msgs.scrollTop=msgs.scrollHeight; }
+  function daySep(){ var k=now.toDateString(); if(k===lastDay) return; lastDay=k; msgs.appendChild(el('div','sep',now.getDate()+' '+MONF[now.getMonth()])); }
+  function bubble(cls, text){ daySep(); var b=el('div','b '+cls); b.appendChild(el('span','tx',text)); b.appendChild(el('span','tm',fT(now))); msgs.appendChild(b); scroll(); return b; }
+  function me(text){ bubble('me',text); }
+  function sys(text){ msgs.appendChild(el('div','sys',text)); scroll(); }
+  function meFile(){ daySep(); var b=el('div','b me'); b.innerHTML='<div class="file"><i>📄</i><div><b>chek_sbp.pdf</b><small>перевод '+PRICE+'</small></div></div><span class="tm">'+fT(now)+'</span>'; msgs.appendChild(b); scroll(); }
+  function bot(text, btns){
+    bubble('bot',text);
+    if(!btns||!btns.length) return;
+    var kb=el('div','kb');
+    btns.forEach(function(x){
+      var bt=el('button',null,x[0]);
+      bt.onclick=function(){
+        if(S.busy) return;
+        if(x[1]==='terms'){ sys('Здесь откроются условия академии'); return; }
+        Array.prototype.forEach.call(kb.children,function(c){ c.classList.add('used'); });
+        act(x[1], x[0].replace(/^[^A-Za-zА-Яа-яЁё]+/,''));
+      };
+      kb.appendChild(bt);
+    });
+    msgs.appendChild(kb); scroll();
+  }
+  async function say(list){
+    for(var i=0;i<list.length;i++){
+      daySep(); var t=el('div','b bot typing','печатает…'); msgs.appendChild(t); scroll(); await sleep(420); t.remove();
+      bot(list[i][0], list[i][1]);
+    }
+  }
+  function first(){ return (S.data.name||'').trim().split(/\s+/).pop() || 'сестра'; }
+  function who(){ return S.data.name || 'Новая ученица'; }
+  function submitText(){ if(!S.expect||!input.value.trim()) return; var v=input.value.trim(); input.value=''; act(S.expect, v); }
+
+  var PAYTEXT='К оплате: '+PRICE+' за 30 уроков.\n\nПеревод по СБП на номер академии (в прототипе реквизиты скрыты).\nПосле перевода пришлите сюда чек, он сразу попадёт к менеджеру.';
+  var PAYB=[['📎 Отправить чек','receipt'],['❓ Есть вопрос','ask'],['Оплачу позже','later']];
+  var REMB=[['📎 Отправить чек','receipt'],['❓ Есть вопрос','ask'],['Не напоминать','stop']];
+
+  async function act(a, text){
+    if(S.busy) return;
+    S.busy=true; S.expect=null; sync();
+    switch(a){
+      case 'reads': me(text); S.data.reads=text;
+        await say([['Набор открыт 🌿\n\nГруппа: '+G.name+'\nСтарт: '+G.start+'\nСвободных мест: '+free()+'\n\nЗаписать вас?',[['Записаться','join'],['❓ Есть вопрос','ask']]]]); break;
+      case 'join': me(text); await say([['Напишите фамилию и имя так, как они должны быть на сертификате.']]); S.expect='name'; break;
+      case 'name': S.data.name=text; me(text); await say([['Сколько вам лет?']]); S.expect='age'; break;
+      case 'age': S.data.age=text; me(text); await say([['Номер телефона, на котором есть WhatsApp?']]); S.expect='phone'; break;
+      case 'phone': S.data.phone=text; me(text);
+        await say([['Перед записью ознакомьтесь, пожалуйста, с условиями академии.',[['📄 Прочитать условия','terms'],['✅ Принимаю условия','accept']]]]); break;
+      case 'accept': me(text); S.status='wait'; S.applied=new Date(now);
+        log('Бот','Новая заявка: '+who()+'. Анкета заполнена, реквизиты отправлены');
+        await say([['Заявка принята ✅\n\n'+first()+', место в группе за вами до '+G.hold+'.'],[PAYTEXT,PAYB]]); break;
+      case 'later': me(text);
+        await say([['Хорошо 🌿 Напомню через 2 дня. Место за вами до '+G.hold+'.',[['Не напоминать','stop']]]]); break;
+      case 'receipt': tick(4); meFile(); S.status='check'; log('Бот','Чек получен от '+who()+', ждёт проверки');
+        await say([['Чек получен и передан менеджеру. Подтверждение придёт сюда же, обычно в течение дня.']]); break;
+      case 'ask': me(text); await say([['Напишите ваш вопрос одним сообщением.']]); S.expect='q'; break;
+      case 'q': me(text); S.q={id:'me', name:who(), at:new Date(now), text:text, answer:null, me:true};
+        log('Бот','Вопрос от '+who()+' передан менеджеру');
+        await say([['Чтобы не ошибиться, уточню у менеджера и отвечу здесь же 👤']]); break;
+      case 'stop': me(text); S.status='stop'; log('Бот',who()+' отказалась от напоминаний');
+        await say([['Хорошо, больше не напоминаю. Если решите записаться, напишите /start.']]); break;
+      case 'confirm': tick(7); S.status='paid'; S.paidAt=new Date(now); log('Менеджер','Оплата подтверждена: '+who());
+        await say([['Оплата подтверждена ✅\n\nВы в группе: '+G.name+'\nПервый урок: '+G.start+', 19:00 мск.\nСсылку на группу пришлю за день до начала.']]); break;
+      case 'reject': tick(7); S.status='wait'; log('Менеджер','Чек не принят: '+who()+', бот попросил прислать заново');
+        await say([['Менеджер не нашла перевод по этому чеку. Проверьте, пожалуйста, сумму и пришлите чек ещё раз.',[['📎 Отправить чек','receipt'],['❓ Есть вопрос','ask']]]]); break;
+      case 'answer': tick(9); S.q.answer=text; log('Менеджер','Ответ на вопрос: '+who());
+        await say([['Ответ менеджера:\n'+text, S.status==='new' ? [['Записаться','join']] : S.status==='wait' ? PAYB : null]]); break;
+      case 'jump':
+        if(S.rem===0){ jumpDays(2); S.rem=1; S.botRems++; log('Бот','Напоминание 1: '+who());
+          await say([['Ассаляму алейкум, '+first()+'! Напоминаю про оплату: место в группе за вами до '+G.hold+'. Если остались вопросы, подскажу.',REMB]]); }
+        else if(S.rem===1){ jumpDays(3); S.rem=2; S.botRems++; log('Бот','Напоминание 2, последнее: '+who());
+          await say([['Напоминаю в последний раз 🌿\nГруппа стартует '+G.start+'. Если решили, пришлите чек сюда. Если нет, ничего страшного.',REMB]]); }
+        else { jumpDays(2); S.status='manual'; log('Бот','Нет ответа на 2 напоминания: '+who()+' передана менеджеру');
+          sys('Бот больше не пишет. Ученица в списке «Написать лично» у менеджера.'); }
+        break;
+    }
+    S.busy=false; sync();
+  }
+  function jumpDays(n){ var d=new Date(now); d.setDate(d.getDate()+n); d.setHours(10,0,0,0); now=d; }
+
+  /* ---------- менеджер ---------- */
+  var ST={paid:['ok','Оплатила, в группе'], check:['red','Проверить чек'], wait:['warn','Ждёт оплаты'], manual:['red','Написать лично'], stop:['gray','Без напоминаний']};
+  function meRow(){ return {me:true, name:S.data.name, applied:S.applied, st:S.status, rem:S.rem, paidAt:S.paidAt, sentAt:now, touched:S.touched}; }
+  function rows(){ var r=ROWS.slice(); if(S.applied) r.unshift(meRow()); return r; }
+  function cnt(st){ return rows().filter(function(x){ return x.st===st; }).length; }
+  function free(){ return G.cap - rows().length + cnt('stop'); }
+  function questions(){ return (S.q?[S.q]:[]).concat(QS); }
+  function openQ(){ return questions().filter(function(q){ return !q.answer; }).length; }
+
+  function renderDesk(){
+    var all=rows(), n=all.length, paid=cnt('paid');
+    desk.innerHTML='';
+    var h=el('div','dk-head'); h.innerHTML='<b>Группа пилота</b><span>'+esc(G.name)+' · старт '+G.start+' · мест '+G.cap+'</span>'; desk.appendChild(h);
+    var k=el('div','kpis');
+    k.innerHTML='<div class="kpi"><b>'+n+'</b><span>заявок</span></div>'+
+      '<div class="kpi good"><b>'+paid+'</b><span>оплатили · '+Math.round(paid/n*100)+'%</span></div>'+
+      '<div class="kpi wait"><b>'+cnt('wait')+'</b><span>ждут оплаты</span></div>'+
+      '<div class="kpi hot"><b>'+cnt('check')+'</b><span>проверить чек</span></div>'+
+      '<div class="kpi hot"><b>'+cnt('manual')+'</b><span>написать лично</span></div>';
+    desk.appendChild(k);
+    var tabs=el('div','tabs');
+    [['list','Ученицы'],['qs','Вопросы'],['log','Журнал']].forEach(function(x){
+      var b=el('button',V.tab===x[0]?'on':''); b.innerHTML=x[1]+(x[0]==='qs'&&openQ()?'<i>'+openQ()+'</i>':'');
+      b.onclick=function(){ V.tab=x[0]; renderDesk(); }; tabs.appendChild(b);
+    });
+    desk.appendChild(tabs);
+    if(V.tab==='list') paneList(); else if(V.tab==='qs') paneQs(); else paneLog();
+  }
+  function paneList(){
+    var tools=el('div','tools');
+    var inp=el('input'); inp.placeholder='Поиск по имени'; inp.value=V.q; inp.setAttribute('aria-label','Поиск по имени');
+    inp.oninput=function(){ V.q=inp.value; fillList(); };
+    var flt=el('div','flt');
+    [['all','Все'],['check','Проверить чек'],['manual','Написать лично'],['wait','Ждут оплаты'],['paid','Оплатили']].forEach(function(x){
+      var b=el('button',V.filter===x[0]?'on':'',x[1]); b.onclick=function(){ V.filter=x[0]; renderDesk(); }; flt.appendChild(b);
+    });
+    tools.appendChild(inp); tools.appendChild(flt); desk.appendChild(tools);
+    var list=el('div','list'); list.id='list'; desk.appendChild(list); fillList();
+  }
+  function fillList(){
+    var list=document.getElementById('list'); if(!list) return; list.innerHTML='';
+    var q=V.q.trim().toLowerCase();
+    var r=rows().filter(function(x){ return (V.filter==='all'||x.st===V.filter) && (!q||x.name.toLowerCase().indexOf(q)>=0); });
+    if(!r.length){ list.appendChild(el('div','empty','Никого не найдено. Измените фильтр или поиск.')); return; }
+    r.forEach(function(x){
+      var row=el('div','r'+(x.me?' me':'')), st=ST[x.st];
+      var w=el('div'); w.innerHTML='<b>'+esc(x.name)+'</b>'+(x.me?'<span class="you">ваша заявка</span>':'')+
+        '<small>заявка '+fDT(x.applied)+(x.rem?' · напоминаний: '+x.rem:'')+'</small>';
+      row.appendChild(w); row.appendChild(el('span','pill '+st[0],st[1]));
+      var d=el('div','do');
+      if(x.st==='check'){ var b=el('button',null,'Открыть чек'); b.onclick=function(){ receipt(x); }; d.appendChild(b); }
+      else if(x.st==='manual'){
+        if(x.touched) d.textContent='написала лично';
+        else { var b2=el('button','sec','Отметить: написала'); b2.onclick=function(){ if(x.me) S.touched=true; else x.touched=true; log('Менеджер','Написала лично: '+x.name); renderDesk(); renderMeasure(); }; d.appendChild(b2); }
+      }
+      else if(x.st==='paid') d.textContent='оплата '+fD(x.paidAt);
+      else if(x.st==='wait') d.textContent= x.rem<2 ? 'бот напомнит сам' : 'ждём ответа';
+      row.appendChild(d); list.appendChild(row);
+    });
+  }
+  function receipt(x){
+    var o=el('div','ovl'), m=el('div','modal');
+    m.innerHTML='<h3>Чек от '+esc(x.name)+'</h3><div class="rcp">'+
+      '<div><span>Способ</span><b>перевод по СБП</b></div><div><span>Сумма</span><b>'+PRICE+'</b></div>'+
+      '<div><span>Получен ботом</span><b>'+fDT(x.sentAt||now)+'</b></div><div><span>Группа</span><b>Сёстры, 19:00</b></div></div>';
+    var line=el('div','line');
+    var ok=el('button',null,'Подтвердить оплату'), no=el('button','no','Перевод не найден'), cl=el('button','x','Закрыть');
+    function close(){ o.remove(); }
+    ok.onclick=function(){ close(); if(x.me) act('confirm'); else { x.st='paid'; x.paidAt=new Date(now); log('Менеджер','Оплата подтверждена: '+x.name); sync(); } };
+    no.onclick=function(){ close(); if(x.me) act('reject'); else { x.st='wait'; log('Менеджер','Чек не принят: '+x.name+', бот попросил прислать заново'); sync(); } };
+    cl.onclick=close; o.onclick=function(e){ if(e.target===o) close(); };
+    line.appendChild(ok); line.appendChild(no); line.appendChild(cl); m.appendChild(line); o.appendChild(m); document.body.appendChild(o); ok.focus();
+  }
+  function paneQs(){
+    var p=el('div','pane'); desk.appendChild(p);
+    questions().forEach(function(q){
+      var c=el('div','qa'+(q.me?' me':''));
+      c.innerHTML='<b>'+esc(q.name)+'</b>'+(q.me?'<span class="you">ваш вопрос</span>':'')+' <small style="color:var(--muted)">'+fDT(q.at)+'</small><div class="q">'+esc(q.text)+'</div>';
+      if(q.answer){ var a=el('div','ans'); a.textContent='Ответ отправлен через бота: '+q.answer; c.appendChild(a); }
+      else {
+        var ta=el('textarea'); ta.placeholder='Ответ уйдёт ученице в тот же чат с ботом'; ta.setAttribute('aria-label','Ответ ученице'); c.appendChild(ta);
+        var line=el('div','line'), sb=el('button','send','Отправить ответ'), hb=el('button','hint','Подставить пример ответа');
+        hb.onclick=function(){ ta.value='Да, можно. Напишите, пожалуйста, удобный вам вариант, согласуем.'; ta.focus(); };
+        sb.onclick=function(){ var v=ta.value.trim(); if(!v){ ta.focus(); return; } if(q.me){ act('answer', v); } else { q.answer=v; log('Менеджер','Ответ на вопрос: '+q.name); sync(); } };
+        line.appendChild(sb); line.appendChild(hb); c.appendChild(line);
+      }
+      p.appendChild(c);
+    });
+  }
+  function paneLog(){
+    var p=el('div','pane log'); desk.appendChild(p);
+    EVENTS.forEach(function(e){ var d=el('div'); d.innerHTML='<time>'+fDT(e.at)+'</time><b>'+esc(e.who)+'</b> · '+esc(e.what); p.appendChild(d); });
+  }
+
+  /* ---------- низ и управление ---------- */
+  function renderMeasure(){
+    var all=rows(), n=all.length, paid=cnt('paid');
+    var rems=all.reduce(function(a,x){ return a+(x.rem||0); },0);
+    var touched=all.filter(function(x){ return x.touched; }).length;
+    var first = S.applied ? 'Ваша заявка пришла '+fDT(S.applied)+', бот ответил в ту же минуту.' : 'Отправьте заявку в чате слева: бот ответит в ту же минуту, даже ночью.';
+    document.getElementById('measure').innerHTML=
+      '<div class="m"><b>'+paid+' из '+n+'</b><p>записавшихся оплатили, это '+Math.round(paid/n*100)+'%</p><small>Число из прототипа. Рядом встанет ваш прошлый набор: сколько записалось и сколько оплатило.</small></div>'+
+      '<div class="m"><b>сразу</b><p>первый ответ на заявку</p><small>'+esc(first)+'</small></div>'+
+      '<div class="m"><b>'+rems+'</b><p>напоминаний бот отправил сам</p><small>Менеджеру остаются только те, кто не ответил дважды. Сейчас таких '+cnt('manual')+(touched?', '+touched+' из них она уже написала':'')+'.</small></div>';
+  }
+  var jumpBtn=document.getElementById('jump');
+  function sync(){
+    renderDesk(); renderMeasure();
+    document.getElementById('clock').textContent='Сейчас в прототипе: '+fDT(now);
+    chips.innerHTML='';
+    var samples={name:'Тестова Амина', age:'24', phone:'+7 900 000 00 00', q:'Можно ли оплатить двумя частями?'};
+    if(S.expect && samples[S.expect]){ var c=el('button',null,samples[S.expect]); c.onclick=function(){ input.value=samples[S.expect]; submitText(); }; chips.appendChild(c); }
+    input.disabled=!S.expect; send.disabled=!S.expect;
+    input.placeholder = S.expect ? 'Напишите ответ…' : 'Выберите кнопку в чате';
+    var can = S.status==='wait' && !S.busy;
+    jumpBtn.disabled=!can;
+    jumpBtn.textContent = S.rem===0 ? '⏩ Прошло 2 дня без оплаты' : S.rem===1 ? '⏩ Прошло ещё 3 дня' : '⏩ Прошло ещё 2 дня';
+    document.getElementById('clockHint').textContent = S.status==='new' ? 'Заявка приходит ночью, когда менеджер не на связи' :
+      can ? 'Кнопка справа перематывает время, чтобы увидеть напоминания' :
+      S.status==='check' ? 'Откройте чек в списке справа и подтвердите оплату' :
+      S.status==='paid' ? 'Ученица в группе. Можно начать заново и пройти другой путь' :
+      S.status==='manual' ? 'Дальше ученицу ведёт человек' : '';
+  }
+  jumpBtn.onclick=function(){ act('jump'); };
+  document.getElementById('reset').onclick=function(){ location.reload(); };
+
+  bot('Ассаляму алейкум! Это бот записи на курс арабского языка 🌿\nОтвечаю сразу, в любое время.\n\nУмеете читать по-арабски?',[['Да','reads'],['Нет, начну с нуля','reads']]);
+  sync();
+})();
+</script>
+</body>
+</html>

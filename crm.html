@@ -1,0 +1,1392 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Демо CRM для Huna Arabic: роли, доступы, отчёты</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Onest:wght@400;500;600;700&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0b2f28; --emerald:#14584a; --emerald-2:#1c6b5a; --mist:#e7f0eb; --mist-2:#f1f6f3;
+  --gold:#b8923f; --gold-2:#d2b46a; --gold-soft:#f0e6cb;
+  --paper:#fbf8f1; --card:#ffffff; --line:#e8e1cf; --line-2:#f0ead9;
+  --text:#1d2a26; --muted:#6c7570; --danger:#a4432f; --ok:#2c7a56; --warn:#a9741a;
+  --font:'Onest',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --display:'Cormorant Garamond','Onest',Georgia,serif;
+  --arabic:'Reem Kufi','Amiri',serif;
+  --star:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23b8923f' stroke-width='1.4'%3E%3Crect x='14' y='14' width='36' height='36'/%3E%3Crect x='14' y='14' width='36' height='36' transform='rotate(45 32 32)'/%3E%3Ccircle cx='32' cy='32' r='9'/%3E%3C/g%3E%3C/svg%3E");
+  --girih:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23d2b46a' stroke-opacity='.17' stroke-width='1'%3E%3Crect x='18' y='18' width='36' height='36'/%3E%3Crect x='18' y='18' width='36' height='36' transform='rotate(45 36 36)'/%3E%3Cpath d='M0 36h10.5M61.5 36H72M36 0v10.5M36 61.5V72'/%3E%3C/g%3E%3C/svg%3E");
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--font);color:var(--text);background:var(--paper);font-size:14.5px;line-height:1.5;font-variant-numeric:lining-nums tabular-nums;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font-family:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* каркас */
+.app{display:grid;grid-template-columns:268px minmax(0,1fr);min-height:100vh}
+.side{background-color:var(--ink);background-image:var(--girih);color:#fff;padding:22px 14px 16px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brandbox{display:flex;gap:12px;align-items:center;padding:2px 8px 20px}
+.logo{flex:0 0 52px;height:52px;display:grid;place-items:center;font-family:var(--arabic);font-size:21px;color:var(--gold-2);background:var(--star) center/52px no-repeat;padding-bottom:3px}
+.brandbox b{display:block;font-family:var(--display);font-size:23px;font-weight:600;letter-spacing:.2px;line-height:1.05}
+.brandbox small{display:block;font-size:11.5px;color:rgba(255,255,255,.55);margin-top:3px}
+.who{background:rgba(255,255,255,.06);border:1px solid rgba(210,180,106,.22);border-radius:14px 14px 14px 4px;padding:12px 12px 13px;margin:0 2px 16px}
+.who b{display:block;font-family:var(--display);font-size:19px;font-weight:600;color:#fff}
+.who small{color:rgba(255,255,255,.6);font-size:12px}
+.who select{margin-top:9px;width:100%;padding:8px 9px;border:1px solid rgba(210,180,106,.35);border-radius:9px;font-size:13px;background:#0f3a31;color:#fff}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav button{display:flex;align-items:center;gap:11px;width:100%;text-align:left;border:0;background:transparent;font:500 13.5px var(--font);color:rgba(255,255,255,.74);padding:9px 11px;border-radius:10px;cursor:pointer;position:relative}
+.nav button svg{flex:0 0 18px;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
+.nav button span:first-of-type{flex:1;min-width:0}
+.nav button:hover{background:rgba(255,255,255,.07);color:#fff}
+.nav button.on{background:rgba(210,180,106,.16);color:#fff;font-weight:600}
+.nav button.on::before{content:"";position:absolute;left:-14px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--gold-2)}
+.nav button.on svg{stroke:var(--gold-2)}
+.badge{background:var(--gold-2);color:var(--ink);border-radius:999px;font-size:11px;font-weight:700;padding:1px 7px;line-height:1.5}
+.sidefoot{margin-top:auto;padding:16px 8px 0;font-size:11.5px;color:rgba(255,255,255,.45);line-height:1.45}
+.col{min-width:0;display:flex;flex-direction:column}
+.note{background:var(--gold-soft);color:#5d4a16;font-size:12px;padding:6px 32px;border-bottom:1px solid #e2d3a4}
+.top{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px 32px;border-bottom:1px solid var(--line);background:rgba(251,248,241,.92);position:sticky;top:0;z-index:20;backdrop-filter:blur(6px)}
+.top .lbl{font-size:12.5px;color:var(--muted)}
+.roles{display:flex;gap:2px;background:#f1ebdb;border:1px solid var(--line);border-radius:12px;padding:3px;flex-wrap:wrap}
+.roles button{border:0;background:transparent;color:#5c6660;font:600 13px var(--font);padding:7px 15px;border-radius:9px;cursor:pointer}
+.roles button:hover{color:var(--ink)}
+.roles button.on{background:var(--emerald);color:#fff;box-shadow:0 1px 0 rgba(11,47,40,.25)}
+.main{padding:28px 32px 44px;min-width:0;flex:1}
+
+/* типографика */
+h2{font-family:var(--display);font-size:31px;font-weight:600;color:var(--ink);line-height:1.12;letter-spacing:.1px;margin-bottom:5px}
+h3{font-family:var(--display);font-size:20.5px;font-weight:600;color:var(--ink);margin:24px 0 10px}
+.sub{color:var(--muted);font-size:14px;margin-bottom:18px;max-width:74ch}
+.head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.nm{font-weight:600;font-size:14px;color:var(--text)}
+.meta{font-size:12.5px;color:var(--muted)}
+.tag{font-size:12px;font-weight:600;color:var(--gold);margin-bottom:2px}
+.hint{font-size:12.5px;color:var(--muted);margin-top:8px}
+
+/* сетки и карточки */
+.grid{display:grid;gap:12px}
+.g5{grid-template-columns:repeat(5,minmax(0,1fr))} .g4{grid-template-columns:repeat(4,minmax(0,1fr))} .g3{grid-template-columns:repeat(3,minmax(0,1fr))} .g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 17px}
+.card.me{border-color:var(--gold-2);background:#fffbf0}
+.stat{position:relative;overflow:hidden;padding:15px 17px 14px;border-radius:16px 16px 16px 5px}
+.stat::after{content:"";position:absolute;right:-13px;top:-13px;width:62px;height:62px;background:var(--star) center/contain no-repeat;opacity:.3}
+.stat b{display:block;font-family:var(--display);font-size:33px;font-weight:600;color:var(--ink);line-height:1.05;letter-spacing:.2px}
+.stat b span{font-family:var(--font);font-size:12px;font-weight:600;letter-spacing:0;margin-left:6px;vertical-align:middle}
+.stat>span{display:block;font-size:12.5px;color:var(--muted);margin-top:5px}
+.stat.hot b{color:var(--warn)} .stat.red b{color:var(--danger)} .stat.ok b{color:var(--ok)}
+.task{cursor:pointer;transition:border-color .15s,transform .15s}
+.task:hover{border-color:var(--emerald);transform:translateY(-1px)}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:center}
+
+/* плашки и кнопки */
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--mist);color:var(--emerald);white-space:nowrap}
+.pill.ok{background:#e0f1e7;color:var(--ok)} .pill.warn{background:#f8ecd1;color:var(--warn)}
+.pill.red{background:#f6dfd9;color:var(--danger)} .pill.gray{background:#eeeade;color:#6a6d63} .pill.gold{background:var(--gold-soft);color:#7a5b12}
+.acts{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid transparent;background:var(--mist);color:var(--emerald);font:600 13px var(--font);padding:8px 14px;border-radius:10px;cursor:pointer;transition:background .15s,border-color .15s}
+.btn:hover{background:#d8e7df}
+.btn.pri{background:var(--emerald);color:#fff} .btn.pri:hover{background:var(--emerald-2)}
+.btn.gold{background:var(--gold);color:#fff} .btn.gold:hover{background:#a6822f}
+.btn.danger{background:#f6dfd9;color:var(--danger)} .btn.danger:hover{background:#efcdc4}
+.btn.sm{padding:5px 10px;font-size:12px;border-radius:8px}
+.btn:disabled{opacity:.45;cursor:default}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chips button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px;font:500 13px var(--font);cursor:pointer;color:#4d5651}
+.chips button:hover{border-color:var(--gold-2)}
+.chips button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* показатели */
+.bar{height:7px;border-radius:99px;background:#eee8d8;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--emerald);border-radius:99px}
+.bar.warn i{background:var(--warn)} .bar.red i{background:var(--danger)} .bar.gold i{background:var(--gold)}
+.stack{display:flex;height:7px;border-radius:99px;overflow:hidden;background:#eee8d8;min-width:96px}
+.stack i{display:block;height:100%}
+.kv{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;margin:7px 0}
+.kv span{color:var(--muted)}
+.kv.tot{border-top:1px solid var(--line);padding-top:9px;margin-top:10px;font-weight:700}
+.pos{color:var(--ok);font-weight:600} .neg{color:var(--danger);font-weight:600}
+.bars{display:flex;gap:8px;align-items:flex-end;height:140px;margin:12px 0 4px}
+.bars div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;height:100%;font-size:11px;color:var(--muted)}
+.bars i{display:block;width:100%;max-width:46px;background:var(--emerald);border-radius:6px 6px 0 0;opacity:.82}
+.bars div.cur i{background:var(--gold);opacity:1}
+.bars span{white-space:nowrap;line-height:1.2}
+.mbars{display:flex;gap:16px;align-items:flex-end;height:200px;margin:14px 0 6px}
+.mbars .m{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:11.5px;color:var(--muted);gap:6px}
+.mbars .s{display:flex;gap:4px;align-items:flex-end;height:100%;width:100%;justify-content:center}
+.mbars .s i{display:block;flex:1;max-width:24px;border-radius:5px 5px 0 0}
+.legend{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-top:8px;flex-wrap:wrap}
+.legend b{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
+
+/* таблицы */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line-2);white-space:nowrap}
+th{background:#f7f2e4;font-size:12px;color:#6b6a5c;font-weight:600;letter-spacing:.01em;border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:0}
+tbody tr:hover td,table tr:not(:first-child):hover td{background:#fcf9f0}
+tr.sel td{background:var(--mist-2)}
+tr.sum td{background:#f7f2e4;font-weight:700}
+td.c,th.c{text-align:center} td.r,th.r{text-align:right}
+.pager{display:flex;gap:10px;align-items:center;justify-content:flex-end;margin-top:10px;font-size:12.5px;color:var(--muted)}
+.sla{font-weight:600} .sla.red{color:var(--danger)}
+
+/* формы */
+input[type=text],input[type=number],textarea,select{width:100%;padding:9px 12px;border:1px solid #dcd4bf;border-radius:10px;font-size:13.5px;background:#fff;color:var(--text)}
+input[type=text]:focus,input[type=number]:focus,textarea:focus,select:focus{outline:none;border-color:var(--emerald);box-shadow:0 0 0 3px rgba(20,88,74,.13)}
+textarea{resize:vertical;min-height:70px}
+.search{max-width:280px;margin-bottom:12px}
+.inl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.inl select{width:auto}
+.fld{display:block;margin-bottom:12px} .fld span{display:block;font-size:12.5px;font-weight:600;color:#55605a;margin-bottom:5px}
+.chk{width:17px;height:17px;accent-color:var(--emerald);cursor:pointer}
+.slider{display:flex;gap:12px;align-items:center}
+.slider input{flex:1;accent-color:var(--emerald)}
+.bulk{background:var(--ink);color:#fff;border-radius:12px;padding:9px 14px;margin-bottom:10px;display:flex;gap:9px;align-items:center;flex-wrap:wrap;font-size:13px}
+.bulk select{width:auto;padding:5px 8px}
+.bulk .btn{background:rgba(255,255,255,.14);color:#fff} .bulk .btn.gold{background:var(--gold)}
+.att{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 16px}
+.att label{display:flex;gap:9px;align-items:center;font-size:13.5px;padding:4px 0}
+.log div{padding:8px 0;border-bottom:1px solid var(--line-2);font-size:13.5px}
+.log div:last-child{border-bottom:0}
+.log b{color:var(--ink)} .log span{color:var(--muted);font-size:12px}
+.tl{list-style:none;margin:10px 0 6px 4px;border-left:1.5px solid var(--line)}
+.tl li{padding:0 0 11px 16px;position:relative;font-size:13.5px}
+.tl li::before{content:"";position:absolute;left:-5.5px;top:6px;width:9px;height:9px;border-radius:2px;transform:rotate(45deg);background:var(--gold)}
+.tl li small{display:block;color:var(--muted);font-size:11.5px}
+
+/* окна */
+.modal{position:fixed;inset:0;background:rgba(11,47,40,.5);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:40;padding:18px}
+.modal .in{background:var(--paper);border-radius:20px 20px 20px 6px;max-width:640px;width:100%;max-height:88vh;overflow:auto;padding:22px 24px;box-shadow:0 28px 70px rgba(11,47,40,.38);border-top:3px solid var(--gold-2);animation:rise .18s ease-out}
+.modal .in.wide{max-width:900px}
+@keyframes rise{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.modal .in{animation:none}.task{transition:none}}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:12px;border-left:3px solid var(--gold-2);font-size:13.5px;opacity:0;transition:.25s;pointer-events:none;z-index:60;max-width:90%;box-shadow:0 12px 30px rgba(11,47,40,.3)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* календарь в стиле TickTick */
+.calwrap{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.cal-top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;flex-wrap:wrap}
+.cal-top h3{margin:0;font-family:var(--font);font-size:20px;font-weight:700;color:#222}
+.cal-ctl{display:flex;gap:8px;align-items:center}
+.cal-ctl .grp{display:flex;border:1px solid #d9d9d9;border-radius:8px;overflow:hidden}
+.cal-ctl .grp button{border:0;background:#fff;padding:6px 12px;font:500 13px var(--font);cursor:pointer}
+.cal-ctl .grp button:hover{background:#f5f5f5}
+.cal-ctl .grp button+button{border-left:1px solid #d9d9d9}
+.cal-ctl select{width:auto;padding:6px 10px;border:1px solid #d9d9d9;border-radius:8px}
+.cal-head{display:grid;grid-template-columns:48px repeat(var(--n),1fr);border-top:1px solid #eee;border-bottom:1px solid #eee;background:#fff}
+.cal-head .hd{text-align:center;padding:6px 0 4px;font-size:12px;color:#777}
+.cal-head .hd b{display:inline-block;margin-top:3px;font-size:17px;color:#222;font-weight:500;width:30px;height:30px;line-height:30px;border-radius:50%}
+.cal-head .hd.today b{background:#4772fa;color:#fff}
+.cal-allday{display:grid;grid-template-columns:48px repeat(var(--n),1fr);border-bottom:1px solid #eee;min-height:26px}
+.cal-allday .col{padding:3px 2px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.cal-allday .lbl{font-size:10px;color:#999;padding:6px 4px}
+.chip{border-radius:5px;font-size:11.5px;padding:2px 6px;color:#333;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;cursor:pointer}
+.cal-body{max-height:580px;overflow-y:auto;position:relative}
+.cal-grid{display:grid;grid-template-columns:48px repeat(var(--n),1fr);position:relative}
+.hours div{height:44px;font-size:10.5px;color:#999;text-align:right;padding:0 6px;transform:translateY(-6px)}
+.daycol{position:relative;border-left:1px solid #eee;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 43px,#eee 43px,#eee 44px)}
+.daycol.we{background-color:#f7f7f7}
+.ev{position:absolute;border-radius:6px;padding:3px 6px;font-size:12px;overflow:hidden;cursor:pointer;color:#1f2d2b;line-height:1.25}
+.ev small{display:block;font-size:10.5px;opacity:.7}
+.ev .cb{display:inline-block;width:11px;height:11px;border:1.5px solid rgba(0,0,0,.45);border-radius:3px;margin-right:5px;vertical-align:-1px}
+.ev.done{opacity:.55} .ev.done .cb{background:rgba(0,0,0,.35)}
+.nowline{position:absolute;left:0;right:0;height:0;border-top:2px solid #e5484d;z-index:3}
+
+/* аккаунт ассистента */
+.inbox{display:grid;grid-template-columns:330px minmax(0,1fr);gap:12px;min-height:520px}
+.chl{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;align-self:start}
+.chi{padding:10px 14px;border-bottom:1px solid var(--line-2);cursor:pointer}
+.chi:hover{background:#fcf9f0} .chi.on{background:var(--mist-2);box-shadow:inset 3px 0 0 var(--gold-2)}
+.chi .l2{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.thr{background:var(--card);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.thr .hd2{padding:12px 16px;border-bottom:1px solid var(--line)}
+.thr .ms{flex:1;padding:14px;display:flex;flex-direction:column;gap:7px;overflow:auto;max-height:440px;min-height:270px;background-color:#f3efe2;background-image:var(--girih)}
+.msg{max-width:76%;padding:8px 11px;border-radius:13px;font-size:13.5px;box-shadow:0 1px 1px rgba(0,0,0,.05)}
+.msg.c{background:#fff;align-self:flex-start;border-bottom-left-radius:4px}
+.msg.a{background:#dcefd6;align-self:flex-end;border-bottom-right-radius:4px}
+.msg.m{background:var(--gold-soft);align-self:flex-end;border-bottom-right-radius:4px}
+.msg.s{align-self:center;background:rgba(255,255,255,.7);color:var(--muted);font-size:11.5px;max-width:100%;box-shadow:none;border-radius:999px;padding:3px 11px}
+.msg small{display:block;font-size:10.5px;color:var(--muted)}
+.thr .rp{display:flex;gap:8px;padding:11px;border-top:1px solid var(--line)}
+
+/* объявления */
+.composer{border-radius:16px 16px 16px 5px}
+.composer .inl{margin:10px 0 0}
+.ann{display:flex;gap:13px;padding:15px 17px;background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:10px}
+.ann.pin{border-color:var(--gold-2);background:#fffbf0}
+.ava2{flex:0 0 40px;height:40px;border-radius:12px 12px 12px 3px;background:var(--ink);color:var(--gold-2);display:grid;place-items:center;font-family:var(--display);font-size:20px;font-weight:600}
+.ann .bd{flex:1;min-width:0}
+.ann .tx{margin-top:5px;font-size:14.5px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+.ann .ft{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+
+/* приглашение */
+.invite{background:var(--mist-2);border:1px dashed var(--emerald);border-radius:12px;padding:12px 14px;margin:12px 0;font-size:13.5px}
+.invite code{display:block;font-family:ui-monospace,Consolas,monospace;font-size:13px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:7px;overflow-wrap:anywhere}
+
+/* доступы: значки вместо слов */
+.ac{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle}
+.ac.all{width:24px;height:24px;border-radius:50%;background:var(--ok)}
+.ac.all svg{width:15px;height:15px;fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.ac.own{height:24px;padding:0 10px;border-radius:999px;background:var(--gold-soft);color:#7a5b12;font-size:11.5px;font-weight:600}
+.ac.no{width:8px;height:8px;border-radius:50%;background:#ddd6c2}
+.sw{display:inline-flex;vertical-align:middle;cursor:pointer}
+.sw input{position:absolute;opacity:0;width:0;height:0}
+.sw i{width:38px;height:22px;border-radius:999px;background:#d3ccb8;position:relative;transition:background .15s}
+.sw i::after{content:"";position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:left .15s}
+.sw input:checked+i{background:var(--emerald)}
+.sw input:checked+i::after{left:19px}
+.sw input:focus-visible+i{outline:2px solid var(--gold);outline-offset:2px}
+.lg{display:flex;gap:22px;flex-wrap:wrap;align-items:center;margin:16px 0 12px;font-size:13px;color:#4d5651}
+.lg>span{display:inline-flex;align-items:center;gap:8px}
+.rolec b{display:block;font-family:var(--display);font-size:20px;color:var(--ink);font-weight:600}
+.rolec span{display:block;font-size:12.5px;color:var(--muted);margin:3px 0 8px;min-height:3.6em}
+.rolec i{font-style:normal;font-size:12px;font-weight:600;color:var(--emerald)}
+table.mx td,table.mx th{padding-top:9px;padding-bottom:9px}
+table.mx tr.cat td{background:#f3eede;font-family:var(--display);font-size:16.5px;font-weight:600;color:var(--ink);padding:8px 14px}
+table.mx tr.cat:hover td{background:#f3eede}
+/* узкие экраны: графики не распирают страницу */
+.grid>*{min-width:0}
+.bars div{min-width:0}
+.bars span{max-width:100%;overflow:hidden}
+@media (max-width:980px){.g2{grid-template-columns:1fr}}
+
+#printarea{display:none}
+@media print{
+  body{background:#fff}
+  body.printing .app,body.printing #modal,body.printing .toast{display:none!important}
+  body.printing #printarea{display:block;padding:14mm;font-size:12px}
+  .no-print{display:none!important}
+  #printarea h2{font-size:22px}
+  #printarea .phead{display:flex;justify-content:space-between;border-bottom:2px solid #0b2f28;padding-bottom:6px;margin-bottom:12px;font-size:14px}
+  #printarea .pfoot{margin-top:14px;font-size:10px;color:#777;border-top:1px solid #ccc;padding-top:6px}
+  #printarea .tw{overflow:visible;border:0} #printarea table{font-size:10.5px} #printarea th,#printarea td{padding:4px 6px;white-space:normal}
+  #printarea .card{break-inside:avoid}
+  #printarea .stat::after{display:none}
+}
+@media (max-width:980px){
+  .app{grid-template-columns:1fr}
+  .side{position:static;height:auto;padding:16px 12px}
+  .nav{flex-direction:row;overflow-x:auto;padding-bottom:4px} .nav button{white-space:nowrap;width:auto}
+  .nav button.on::before{display:none}
+  .sidefoot{display:none}
+  .main{padding:20px 16px 36px} .top,.note{padding-left:16px;padding-right:16px}
+  .g5,.g4,.g3{grid-template-columns:repeat(2,minmax(0,1fr))} .att{grid-template-columns:1fr 1fr}
+  .inbox{grid-template-columns:1fr}
+}
+@media (max-width:560px){ .g5,.g4,.g3,.g2{grid-template-columns:1fr} .att{grid-template-columns:1fr} h2{font-size:26px} }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brandbox"><div class="logo">هنا</div><div><b>Huna Arabic</b><small>CRM академии, демо-прототип</small></div></div>
+    <div class="who" id="who"></div>
+    <div class="nav" id="nav"></div>
+    <div class="sidefoot" id="scale"></div>
+  </aside>
+  <div class="col">
+    <div class="note">Демо-прототип по описанию процесса Huna Arabic. Не официальный продукт: имена, цены, ставки и числа условные.</div>
+    <div class="top"><span class="lbl">Посмотреть систему глазами роли</span><div class="roles" id="roles"></div></div>
+    <main class="main" id="main"></main>
+  </div>
+</div>
+<div id="modal"></div>
+<div class="toast" id="toast"></div>
+<div id="printarea"></div>
+
+<script>
+(function(){
+  'use strict';
+  /* ===== Масштаб демо (меняйте здесь) ===== */
+  const CFG={W_GROUPS:65, M_GROUPS:70, SIZE_MIN:58, CAP:72, PRICE:5990, TEACHERS_W:24, TEACHERS_M:24, PAGE:12, RATE:1500, MGR_PAY:85000, DIR_PAY:150000, TAX:0.06, RESERVE:0.10};
+
+  const DAY=86400000;
+  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const money=n=>Math.round(n).toLocaleString('ru-RU')+' ₽';
+  const mln=n=>(n/1e6).toLocaleString('ru-RU',{maximumFractionDigits:2})+' млн ₽';
+  const num=n=>Math.round(n).toLocaleString('ru-RU');
+  const avg=a=>a.length?Math.round(a.reduce((x,y)=>x+y,0)/a.length):0;
+  const sum=(a,f)=>a.reduce((s,x)=>s+f(x),0);
+  const pct=(a,b)=>b?Math.round(a/b*100):0;
+  const sod=d=>{const x=new Date(d);x.setHours(0,0,0,0);return x;};
+  const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x;};
+  const fday=d=>new Date(d).toLocaleDateString('ru-RU',{day:'numeric',month:'short'});
+  const pad=n=>String(n).padStart(3,'0');
+  let toastT; const toast=m=>{const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2300);};
+  function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+  const R=rng(20261008);
+  const mins=m=>m<60?m+' мин':m<1440?Math.floor(m/60)+' ч'+(m%60?' '+(m%60)+' мин':''):Math.floor(m/1440)+' дн'+(Math.floor((m%1440)/60)?' '+Math.floor((m%1440)/60)+' ч':'');
+  const ago=m=>m<1?'только что':mins(m)+' назад';
+  const dm=d=>String(d.getDate()).padStart(2,'0')+'.'+String(d.getMonth()+1).padStart(2,'0'); // короткая дата для подписей графиков
+  const delta=(a,b,inv)=>{const d=b-a, p=a?Math.round(d/Math.abs(a)*100):0; const good=inv?d<=0:d>=0; return `<span class="${good?'pos':'neg'}">${d>=0?'▲':'▼'} ${Math.abs(p)}%</span>`;};
+
+  /* ===== Данные (вымышленные) ===== */
+  const FEM=['Айшат','Зейнаб','Патимат','Хадижа','Марьям','Асият','Малика','Салима','Фатима','Амина','Ясмина','Хава','Лейла','Сабина','Заира','Камила','Рукият','Тамила','Эльза','Алина','Дина','Раяна','Зарема','Халимат','Лиана','Нурия','Мадина','Аиша','Сумайя','Румия','Асма','Залина','Карина','Милана','Диана'];
+  const MAL=['Юсуф','Умар','Хамзат','Ахмад','Идрис','Билал','Заур','Адам','Салман','Тимур','Исмаил','Расул','Магомед','Омар','Ильяс','Мансур','Саид','Увайс','Яхья','Бислан','Ренат','Руслан','Закир','Анас','Сулейман','Тагир','Ясин','Абубакар','Мурад','Ибрагим','Хасан','Али','Муса','Арслан'];
+  const INI='АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЭЮЯ';
+  const WT=['Амаль','Хадиджа','Ханан','Рахма','Сара','Хиба','Нура','Асмаа','Малак','Даниа','Ихсан','Мариам','Сухад','Фатима','Зейнаб','Алия','Худа','Сафа','Лина','Нада','Ясмин','Рана','Халя','Вафа'].map(n=>'Устаза '+n);
+  const MT=['Ибрахим','Мухаммад','Салман','Ахмед','Махмуд','Хасан','Ясир','Мустафа','Омар','Халид','Тарек','Ваэль','Самех','Камаль','Хишам','Рашид','Хусам','Мунир','Аймен','Сайф','Бадр','Фарес','Низар','Осама'].map(n=>'Устаз '+n);
+  const LEVELS=['Тамхиди','Huna Arabiya 1.1','Huna Arabiya 1.2','Huna Arabiya 2.1','Huna Arabiya 2.2','Тасхих','Хифз'];
+  const DAYS=['Пн Ср Сб','Вт Чт Вс','Пн Ср Пт','Вт Чт Сб','Ср Пт Вс'];
+  const DAYNUM={'Пн':1,'Вт':2,'Ср':3,'Чт':4,'Пт':5,'Сб':6,'Вс':0};
+  const TIMES=['08:00','10:00','15:00','17:00','19:00','20:30'];
+  const MGRS={'Фатима':'сёстры, приём заявок во все группы','Идрис':'братья, набор 1','Ахмад':'братья, набор 2'};
+  const mkName=(sex,r)=>(sex==='w'?FEM:MAL)[Math.floor(r()*(sex==='w'?FEM:MAL).length)]+' '+INI[Math.floor(r()*INI.length)]+'.';
+
+  const GROUPS=[];
+  function mkGroups(sex,n,teachers,prefix){
+    for(let i=1;i<=n;i++){
+      const size=CFG.SIZE_MIN+Math.floor(R()*(CFG.CAP-CFG.SIZE_MIN+1));
+      const round=Math.floor((i-1)/teachers.length); // у одного преподавателя группы идут в разное время
+      GROUPS.push({id:prefix+'-'+pad(i),sex,num:i,level:LEVELS[(i*3)%LEVELS.length],days:DAYS[i%DAYS.length],time:TIMES[(i+2*round)%TIMES.length],
+        teacher:teachers[i%teachers.length],lesson:3+((i*11)%26),size,att:60+Math.floor(R()*38),perf:55+Math.floor(R()*40),paid:76+Math.floor(R()*23),open:size<CFG.CAP-1,
+        mgr:sex==='w'?'Фатима':(i%2?'Идрис':'Ахмад')});
+    }
+  }
+  mkGroups('w',CFG.W_GROUPS,WT,'Ж'); mkGroups('m',CFG.M_GROUPS,MT,'М');
+  const gid=id=>GROUPS.find(g=>g.id===id);
+  const ME_GROUP='Ж-017';
+  function roster(g){
+    if(g._r) return g._r;
+    const r=rng(g.num*131+(g.sex==='w'?7:13)); g._r=[];
+    for(let i=0;i<g.size;i++){const p=r(); g._r.push({name:mkName(g.sex,r),perf:45+Math.floor(r()*55),att:50+Math.floor(r()*50),hw:40+Math.floor(r()*60),pay:p<.87?'paid':p<.95?'wait':'over',promo:r()<.22});}
+    if(g.id===ME_GROUP) g._r[0].name='Тест Т.';
+    return g._r;
+  }
+  const distrib=g=>{const r=roster(g);return {hi:r.filter(x=>x.perf>=80).length,mid:r.filter(x=>x.perf>=60&&x.perf<80).length,lo:r.filter(x=>x.perf<60).length,n:r.length};};
+  const stackBar=d=>`<div class="stack" title="Отлично ${d.hi}, норма ${d.mid}, отстают ${d.lo}"><i style="width:${pct(d.hi,d.n)}%;background:#2f7d57"></i><i style="width:${pct(d.mid,d.n)}%;background:#c9a24b"></i><i style="width:${pct(d.lo,d.n)}%;background:#a94438"></i></div>`;
+
+  /* сотрудники (единый список) */
+  let SID=1; const STAFFALL=[];
+  // вход по нику Telegram: сотруднику уходит ссылка-приглашение, доступ появляется после перехода по ней
+  const TR={а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'e',ж:'zh',з:'z',и:'i',й:'y',к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'h',ц:'c',ч:'ch',ш:'sh',щ:'sh',ы:'y',э:'e',ю:'yu',я:'ya',ь:'',ъ:''};
+  const nick=n=>'@'+n.toLowerCase().split('').map(c=>TR[c]!==undefined?TR[c]:(/[a-z0-9]/.test(c)?c:'_')).join('').replace(/_+/g,'_').replace(/^_|_$/g,'');
+  const mkStaff=(name,role)=>({id:SID++,name,role,on:true,tg:nick(name),inv:'accepted'});
+  const invLink=()=>'https://t.me/academy_crm_demo_bot?start=inv_'+Math.random().toString(36).slice(2,10);
+  WT.concat(MT).forEach(n=>STAFFALL.push(mkStaff(n,'Преподаватель')));
+  Object.keys(MGRS).forEach(n=>STAFFALL.push(mkStaff(n,'Менеджер')));
+  STAFFALL.push(mkStaff('Руководитель','Директор'),mkStaff('Владелец','Владелец'));
+  const accPill=s=>s.inv==='sent'?'<span class="pill gold">приглашён</span>':s.on?'<span class="pill ok">есть</span>':'<span class="pill gray">отключён</span>';
+  const teachersNow=()=>STAFFALL.filter(s=>s.role==='Преподаватель').map(s=>{const gs=GROUPS.filter(g=>g.teacher===s.name);return {...s,groups:gs,hrs:Math.round(gs.length*4.5*10)/10,cap:20,students:sum(gs,g=>g.size)};});
+  const staff=id=>STAFFALL.find(s=>s.id===+id);
+
+  /* заявки (очередь) */
+  const SRC=['реклама Telegram','реклама Instagram','рекомендация','канал','сайт'];
+  const pickSrc=r=>{const x=r();return x<.45?SRC[0]:x<.73?SRC[1]:x<.85?SRC[2]:x<.95?SRC[3]:SRC[4];}; // платные каналы дают большую часть заявок
+  let NEXTID=1; const LEADS=[];
+  function mkLeads(mgr,sex,dist){
+    Object.keys(dist).forEach(st=>{for(let i=0;i<dist[st];i++){
+      const open=GROUPS.filter(g=>g.sex===sex&&g.size<CFG.CAP&&(mgr==='Фатима'||g.mgr===mgr)), g=open[Math.floor(R()*open.length)];
+      const age={new:[5,420],form:[30,900],wait:[1440,6000],check:[20,300],noreact:[4000,9000]}[st], m=age[0]+Math.floor(R()*(age[1]-age[0]));
+      LEADS.push({id:NEXTID++,name:mkName(sex,R),sex,group:g.id,mgr,st,rem:st==='noreact'?2:st==='wait'?(R()<.45?1:0):0,promo:R()<.24,age:m,src:pickSrc(R),note:'',amount:CFG.PRICE,match:R()<.86});
+    }});
+  }
+  mkLeads('Фатима','w',{new:18,form:22,wait:63,check:19,noreact:18});
+  mkLeads('Идрис','m',{new:10,form:14,wait:41,check:15,noreact:15});
+  mkLeads('Ахмад','m',{new:9,form:13,wait:43,check:16,noreact:14});
+  const QTXT=['Можно ли перейти в другую группу после первой недели?','Есть ли рассрочка на 30 уроков?','Подойдёт ли группа, если я работаю до 10 утра?','Нужно ли покупать книги отдельно?','Можно ли оплатить частями?','Как получить сертификат?','Есть ли пробный урок?','Можно ли заниматься с телефона?','Что делать, если пропустила занятие?'];
+  const QUESTIONS=[];
+  Object.keys(MGRS).forEach(m=>{const n=m==='Фатима'?9:4;for(let i=0;i<n;i++)QUESTIONS.push({id:NEXTID++,from:mkName(m==='Фатима'?'w':'m',R),mgr:m,text:QTXT[(i+m.length)%QTXT.length],st:'open',ans:''});});
+  const AUDIT=[], NEWS=[], HWX=[], HWDONE={};
+
+  /* переписки ассистента и архив заказов */
+  const CHS={ai:['ok','Ведёт ассистент'],human:['gold','Ведёт менеджер'],wait:['red','Ждёт человека'],closed:['gray','Закрыт']};
+  const chStatus=l=>l.taken?'human':(l.st==='done'||l.st==='closed')?'closed':(l.st==='noreact'||l.st==='check')?'wait':'ai';
+  function thread(l){
+    if(l._t) return l._t; const f=l.name.split(' ')[0], g=gid(l.group), t=[];
+    t.push(['c','Ассаляму алейкум, хочу записаться на арабский']);
+    t.push(['a','Ва алейкум ассалям! Это ассистент академии. Умеете читать по-арабски?']);
+    t.push(['c','Да, умею']);
+    t.push(['a','Подойдёт группа '+g.id+' ('+g.level+'): '+g.days+' в '+g.time+' мск. Записать вас?']);
+    if(l.st!=='new'){t.push(['c','Да, запишите']);t.push(['a','Анкета получена. К оплате '+money(CFG.PRICE)+' за 30 уроков, вот ссылка на оплату.'+(l.promo?' Вы участвуете в акции: книги в подарок.':'')]);}
+    if(l.rem>=1) t.push(['a',f+', удалось определиться с группой? Если остались вопросы, подскажем.']);
+    if(l.rem>=2) t.push(['a','Напоминаю в последний раз. Занятия скоро начнутся, оплатить можно по той же ссылке.']);
+    if(l.st==='check') t.push(['c',l.sex==='w'?'Я оплатила, отправляю чек':'Я оплатил, отправляю чек']);
+    if(l.st==='check') t.push(['s','Ассистент передал диалог менеджеру: нужно проверить оплату']);
+    if(l.st==='noreact') t.push(['s','Ассистент передал диалог менеджеру: нет ответа на 2 напоминания']);
+    return (l._t=t);
+  }
+  const RA=rng(770011), WG=GROUPS.filter(g=>g.sex==='w'), MG=GROUPS.filter(g=>g.sex==='m');
+  const OST={paid:['ok','Оплачен'],wait:['warn','Ожидает'],refund:['red','Возврат']};
+  const ORDERS=[], ARCH=[];
+  // объёмы согласованы с потоком: около 130 заявок в день (сёстры 50+, братья больше), история за 150 дней
+  for(let i=0;i<7600;i++){const sex=RA()<.47?'w':'m', g=(sex==='w'?WG:MG)[Math.floor(RA()*(sex==='w'?WG:MG).length)], p=RA();
+    ORDERS.push({id:'З-'+String(48000+i),days:Math.floor(RA()*150),name:mkName(sex,RA),group:g.id,amount:CFG.PRICE,st:p<.88?'paid':p<.96?'wait':'refund',mgr:g.mgr,src:pickSrc(RA),promo:RA()<.22});}
+  for(let i=0;i<19500;i++){const sex=RA()<.47?'w':'m', p=RA();
+    ARCH.push({i,days:Math.floor(RA()*150),name:mkName(sex,RA),sex,mgr:sex==='w'?'Фатима':(RA()<.5?'Идрис':'Ахмад'),src:pickSrc(RA),msgs:6+Math.floor(RA()*34),res:p<.39?'оплатил':p<.67?'думает':p<.85?'отказ':'не ответил',by:RA()<.78?'ассистент':'менеджер'});}
+  ORDERS.sort((a,b)=>a.days-b.days); ARCH.sort((a,b)=>a.days-b.days);
+  const dago=d=>d===0?'сегодня':d===1?'вчера':fday(addDays(new Date(),-d));
+  let aiOn=true;
+
+  /* история заявок по дням за два года: считается на лету и кешируется */
+  const TODAY=sod(new Date()), HIST_DAYS=760, MIDX={'Фатима':0,'Идрис':1,'Ахмад':2};
+  function dayCount(d,mgr){ // d: сколько дней назад
+    if(MIDX[mgr]===undefined) return 0;
+    const wd=addDays(TODAY,-d).getDay(), base=130*(1-d/1900), wk=[0.78,1.05,1.0,1.02,1.0,0.92,0.85][wd], wave=1+0.18*Math.sin(d/9.5)+0.10*Math.sin(d/47);
+    return Math.max(4,Math.round(base*wk*wave*(mgr==='Фатима'?0.47:0.265)*(0.9+rng(d*7919+MIDX[mgr]*104729+11)()*0.2)));
+  }
+  const _day={}, _pool={};
+  function dayApps(d,mgr){
+    const key=d+'|'+mgr; if(_day[key]) return _day[key];
+    const n=dayCount(d,mgr), r=rng(d*7919+(MIDX[mgr]||0)*104729+97), sex=mgr==='Фатима'?'w':'m', out=[];
+    const pool=_pool[mgr]||(_pool[mgr]=GROUPS.filter(g=>sex==='w'?g.sex==='w':g.sex==='m')), work=d===0?.45:d===1?.22:d===2?.09:0;
+    for(let i=0;i<n;i++){const p=r(), w=r()<work; out.push({id:(MIDX[mgr]||0)+'-'+d+'-'+i,d,h:8+Math.floor(r()*15),name:mkName(sex,r),sex,group:pool[Math.floor(r()*pool.length)].id,res:w?'в работе':p<.39?'оплатил':p<.67?'думает':p<.85?'отказ':'не ответил',src:pickSrc(r),promo:r()<.22,mgr});}
+    return (_day[key]=out);
+  }
+  function period(mode,off){
+    const t=TODAY; let a,b,label;
+    if(mode==='day'){a=b=addDays(t,off);label=a.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long',year:'numeric'});}
+    else if(mode==='week'){a=addDays(t,-((t.getDay()+6)%7)+off*7);b=addDays(a,6);label='неделя '+fday(a)+' – '+fday(b)+' '+b.getFullYear();}
+    else if(mode==='month'){a=new Date(t.getFullYear(),t.getMonth()+off,1);b=new Date(t.getFullYear(),t.getMonth()+off+1,0);label=a.toLocaleDateString('ru-RU',{month:'long',year:'numeric'}).replace(/\s*г\.$/,'');}
+    else {a=new Date(t.getFullYear()+off,0,1);b=new Date(t.getFullYear()+off,11,31);label=a.getFullYear()+' год';}
+    if(+b>+t) b=t;
+    return {a,b,dFrom:Math.round((+t-+sod(a))/DAY),dTo:Math.round((+t-+sod(b))/DAY),label:(label.charAt(0).toUpperCase()+label.slice(1)).replace(/\s*г\.$/,'')};
+  }
+  const _per={};
+  function periodApps(mgr,mode,off){
+    const k=mgr+'|'+mode+'|'+off; if(_per[k]) return _per[k]; const p=period(mode,off), out=[];
+    for(let d=Math.max(0,p.dTo);d<=Math.min(HIST_DAYS-1,p.dFrom);d++) Array.prototype.push.apply(out,dayApps(d,mgr));
+    return (_per[k]=out);
+  }
+  const rangeCount=(mgr,p)=>{let s=0;for(let d=Math.max(0,p.dTo);d<=Math.min(HIST_DAYS-1,p.dFrom);d++)s+=dayCount(d,mgr);return s;};
+  const RPILL={'в работе':'gold','оплатил':'ok','думает':'warn','отказ':'red','не ответил':'gray'};
+
+  /* объявления: писать может каждый, получатели выбираются */
+  let ANNID=1;
+  const ANN=[
+    {from:'Владелец',role:'owner',aud:'all',text:'С 1 ноября у всех групп появятся личные кабинеты. Вход по вашему нику в Telegram, ссылка придёт в личные сообщения.',mins:180,pin:true},
+    {from:'Тест Т.',role:'student',aud:'g:'+ME_GROUP,text:'Сёстры, у кого есть конспект прошлого занятия? Поделитесь, пожалуйста.',mins:95},
+    {from:'Устаза Сафа',role:'teacher',aud:'g:'+ME_GROUP,text:'В среду разбираем четвёртую главу. Повторите слова из прошлого урока.',mins:410},
+    {from:'Руководитель',role:'director',aud:'teachers',text:'Просьба отмечать посещаемость в журнале в день занятия, до 23:00.',mins:1500},
+    {from:'Фатима',role:'manager',aud:'students',text:'Набор в утренние группы открыт до воскресенья. Место закрепляется после оплаты.',mins:2900},
+    {from:'Руководитель',role:'director',aud:'managers',text:'Заявки, которые ждут дольше двух часов, разбираем в первую очередь.',mins:4300}
+  ].map(a=>({...a,id:ANNID++}));
+  const AUD={all:'Всем',students:'Студентам',teachers:'Преподавателям',managers:'Менеджерам',lead:'Руководству'};
+  const RLAB={student:'Студент',teacher:'Преподаватель',manager:'Менеджер',director:'Директор',owner:'Владелец'};
+  const audLabel=a=>a.indexOf('g:')===0?'Группе '+a.slice(2):AUD[a];
+
+  /* ===== Финансовая модель (условная) ===== */
+  const MONTHS=['Май','Июн','Июл','Авг','Сен','Окт'], SEASON=[0.86,0.92,0.84,0.97,1.08,1.0], GROWTH=[0.90,0.93,0.95,0.97,0.99,1.0];
+  const totalStudents=()=>sum(GROUPS,g=>g.size);
+  let adSpend=900000; // за один набор; наборов в месяц: 2
+  const adsMonth=()=>adSpend*2;
+  function gFin(g,mi){
+    const rev=g.size*GROWTH[mi]*(g.paid/100)*CFG.PRICE/2.5*SEASON[mi];
+    const teacher=4.5*1.3*4.33*CFG.RATE, ads=adsMonth()*(g.size/totalStudents())*(0.9+mi*0.02), platform=(6000+38000)/GROUPS.length, other=rev*0.15;
+    const exp=teacher+ads+platform+other;
+    return {rev,teacher,ads,platform,other,exp,profit:rev-exp,margin:rev?(rev-exp)/rev:0};
+  }
+  const _tot={};
+  function tot(mi){
+    const key=mi+'|'+adSpend+'|'+totalStudents(); if(_tot[key]) return _tot[key];
+    const t={rev:0,teacher:0,ads:0,platform:0,other:0}; GROUPS.forEach(g=>{const f=gFin(g,mi);Object.keys(t).forEach(k=>t[k]+=f[k]);});
+    t.mgr=CFG.MGR_PAY*Object.keys(MGRS).length+CFG.DIR_PAY; t.tax=t.rev*CFG.TAX; t.reserve=t.rev*CFG.RESERVE;
+    t.exp=t.teacher+t.ads+t.platform+t.other+t.mgr; t.profit=t.rev-t.exp; t.free=t.profit-t.tax-t.reserve; t.margin=t.rev?t.profit/t.rev:0;
+    t.students=Math.round(totalStudents()*GROWTH[mi]); return (_tot[key]=t);
+  }
+  const INTAKE_NAMES=['Набор №66 (май)','Набор №67 (июнь)','Набор №68 (июль)','Набор №69 (август)','Набор №70 (сентябрь)','Набор №71 (октябрь)'];
+  function intake(i){
+    const f=[0.88,0.95,0.90,1.0,1.10,1.0][i], apps=[1820,1875,1780,1925,2040,1950][i], rate=[.37,.38,.36,.39,.41,.39][i];
+    const spend=Math.round(adSpend*f), paid=Math.round(apps*rate), rev=paid*CFG.PRICE;
+    return {name:INTAKE_NAMES[i],spend,apps,paid,rev,cpl:spend/apps,cpa:spend/paid,roi:rev/spend};
+  }
+
+  /* ===== Доступы ===== */
+  const ACC={manager:{pay:true,groups:true,questions:true,stats:true,inbox:true,archive:true},director:{groups:true,team:true,staff:true,ads:true,audit:false,inbox:true,archive:true,eff:true},teacher:{students:true,allprog:true}};
+  const MATRIX=[
+    {h:'Заявки и общение'},
+    {cap:'Заявки и анкеты',s:'own',t:false,m:'own',d:'all',o:'all'},
+    {cap:'Переписки ассистента',s:false,t:false,m:['manager','inbox'],d:['director','inbox'],o:'all'},
+    {cap:'Архив переписок и заказов',s:false,t:false,m:['manager','archive'],d:['director','archive'],o:'all'},
+    {cap:'Вопросы от ассистента',s:false,t:false,m:['manager','questions'],d:'all',o:'all'},
+    {cap:'Объявления',s:'own',t:'own',m:'own',d:'all',o:'all'},
+    {h:'Учёба'},
+    {cap:'Расписание занятий',s:'own',t:'own',m:false,d:'all',o:'all'},
+    {cap:'Успеваемость учеников',s:'own',t:['teacher','students'],m:false,d:'all',o:'all'},
+    {cap:'Сравнение всех групп по этапам',s:false,t:['teacher','allprog'],m:false,d:'all',o:'all'},
+    {cap:'Группы и свободные места',s:false,t:'own',m:['manager','groups'],d:['director','groups'],o:'all'},
+    {h:'Деньги'},
+    {cap:'Оплаты и должники',s:'own',t:false,m:['manager','pay'],d:'all',o:'all'},
+    {cap:'Акция и отправка книг',s:'own',t:false,m:'own',d:'all',o:'all'},
+    {cap:'Окупаемость рекламы',s:false,t:false,m:false,d:['director','ads'],o:'all'},
+    {cap:'Доходы, расходы и отчёты',s:false,t:false,m:false,d:false,o:'all'},
+    {h:'Команда'},
+    {cap:'Часы работы',s:false,t:'own',m:false,d:'all',o:'all'},
+    {cap:'Показатели менеджеров',s:false,t:false,m:['manager','stats'],d:['director','team'],o:'all'},
+    {cap:'Эффективность сотрудников',s:false,t:false,m:false,d:['director','eff'],o:'all'},
+    {cap:'Наём и удаление сотрудников',s:false,t:false,m:false,d:['director','staff'],o:'all'},
+    {h:'Система'},
+    {cap:'Журнал действий',s:false,t:false,m:false,d:['director','audit'],o:'all'},
+    {cap:'Настройка доступов',s:false,t:false,m:false,d:false,o:'all'}
+  ];
+
+  /* ===== Состояние ===== */
+  const S={role:'manager',mgr:'Фатима',teacher:(teachersNow().find(t=>t.groups.some(g=>g.id===ME_GROUP))||teachersNow()[0]).name,view:'',filter:'all',gf:'all',gsex:'all',sf:'all',tg:'',q:{},sel:{},open:null,att:{},adDelta:5,seen:0,calOff:0,calMode:'week',fm:5,cmpA:4,cmpB:5,ff:'all',chat:null,cf:'all',im:'all',at:'chats',os:'all',cr:'all',ef:'all',af:'all',annSeen:{},lm:'week',lo:0,pr:'all',psel:{},mk:'week',gn:'week',grp:null,al:'all',hm:'week',hs:null,hf:'all',am:'month',aoff:0,pm:'same'};
+  const P={};
+  const ROLES=[['student','Студент'],['teacher','Преподаватель'],['manager','Менеджер'],['director','Директор'],['owner','Владелец']];
+  const log=(who,what)=>{AUDIT.unshift({t:'сегодня, '+new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}),who,what});if(AUDIT.length>120)AUDIT.pop();};
+  [['вчера, 21:14','Фатима','подтвердила оплату: Малика В., группа Ж-005'],['вчера, 20:47','Бот','отправил напоминание об оплате 38 студенткам'],['вчера, 20:02','Владелец','изменил доступ: раздел «Оплаты» для роли менеджер включён'],['вчера, 18:40','Руководитель','передал группу Ж-041: Устаза Сафа → Устаза Лина'],['вчера, 17:15','Устаз Ибрахим','сохранил журнал занятия М-001: 61 из 66'],['вчера, 16:25','Идрис','закрыл 3 заявки как «не актуально»'],['вчера, 14:08','Ахмад','подтвердил оплату: Умар Б., группа М-014'],['вчера, 12:30','Руководитель','пригласил сотрудника: Устаза Нада, @ustaza_nada'],['вчера, 11:52','Фатима','вернула в работу 12 заявок из истории и отправила напоминания'],['2 дня назад, 19:20','Владелец','отключил доступ: Устаз Фарес'],['2 дня назад, 15:03','Фатима','закрыла набор Ж-003'],['2 дня назад, 10:41','Руководитель','поставил ассистента на паузу на 20 минут'],['3 дня назад, 22:10','Владелец','выгрузил отчёт «Доходы и расходы по группам» в PDF'],['3 дня назад, 13:36','Устаза Хадиджа','выдала задание группе Ж-001']].forEach(e=>AUDIT.push({t:e[0],who:e[1],what:e[2]}));
+  const acc=(role,key)=>!(ACC[role]&&ACC[role][key]===false);
+  const myLeads=()=>LEADS.filter(l=>l.mgr===S.mgr);
+  const mySex=()=>S.mgr==='Фатима'?'w':'m';
+  const myGroups=()=>GROUPS.filter(g=>S.mgr==='Фатима'?g.sex==='w':g.mgr===S.mgr);
+  const lead=id=>LEADS.find(l=>l.id===+id);
+
+  function navFor(role){
+    let n=[];
+    if(role==='student') n=[['s_home','Главная'],['s_sched','Расписание'],['s_hw','Домашние задания'],['s_prog','Прогресс'],['s_pay','Оплата и книги']];
+    if(role==='teacher'){n=[['t_sched','Расписание'],['t_hours','Мои часы'],['t_groups','Мои группы'],['t_att','Журнал занятия']];if(acc('teacher','students'))n.push(['t_students','Ученики']);if(acc('teacher','allprog'))n.push(['t_prog','Прогресс групп']);n.push(['t_post','Задания группе']);}
+    if(role==='manager'){n=[['m_today','Сегодня'],['m_leads','Заявки']];if(acc('manager','inbox'))n.push(['m_inbox','Аккаунт ассистента']);if(acc('manager','archive'))n.push(['m_arch','База переписок и заказов']);if(acc('manager','pay'))n.push(['m_pay','Оплаты']);if(acc('manager','groups'))n.push(['m_groups','Группы и места']);if(acc('manager','questions'))n.push(['m_q','Вопросы от ассистента']);if(acc('manager','stats'))n.push(['m_stats','Мои показатели']);}
+    if(role==='director'){n=[['d_over','Обзор']];if(acc('director','staff'))n.push(['d_staff','Сотрудники']);if(acc('director','groups'))n.push(['d_groups','Группы и прогресс']);if(acc('director','team'))n.push(['d_team','Загрузка команды']);if(acc('director','eff'))n.push(['d_eff','Эффективность сотрудников']);if(acc('director','ads'))n.push(['d_ads','Окупаемость рекламы']);if(acc('director','inbox'))n.push(['d_inbox','Аккаунт ассистента']);if(acc('director','archive'))n.push(['d_arch','База переписок и заказов']);if(ACC.director.audit)n.push(['d_audit','Журнал действий']);}
+    if(role==='owner') n=[['o_fin','Финансы'],['o_income','Источники дохода'],['o_groups','Доходы и расходы по группам'],['o_intakes','Наборы и реклама'],['o_compare','Сравнение периодов'],['o_dyn','Динамика'],['o_access','Доступы и аккаунты'],['o_audit','Журнал действий']];
+    if(role==='manager') n.push(['m_promo','Акция']);
+    if(role==='director') n.push(['d_hours','Часы работы'],['d_promo','Акция']);
+    if(role==='owner') n.splice(6,0,['o_hours','Часы и оплата труда'],['o_promo','Акция']);
+    n.splice(role==='owner'?8:n.length,0,['ann','Объявления']);
+    return n;
+  }
+  function badge(id){
+    if(id==='ann') return annVisible().filter(a=>a.id>(S.annSeen[S.role]||0)&&!annMine(a)).length;
+    if(S.role!=='manager') return 0;
+    const L=myLeads(), open=QUESTIONS.filter(q=>q.mgr===S.mgr&&q.st==='open').length;
+    if(id==='m_today') return L.filter(l=>l.st==='check'||l.st==='noreact').length+open;
+    if(id==='m_leads') return L.filter(slaRed).length;
+    if(id==='m_q') return open; return 0;
+  }
+
+  /* ===== Общие элементы ===== */
+  const stat=(n,l,cls)=>`<div class="card stat ${cls||''}"><b>${n}</b><span>${l}</span></div>`;
+  const tone=p=>p<60?['red','Отстаёт']:p<80?['gray','Норма']:['ok','Отлично'];
+  const loadTone=p=>p>100?['red','Перегруз']:p>=85?['warn','Высокая']:['ok','Норма'];
+  const LST={new:['gray','Новая'],form:['gray','Анкета'],wait:['warn','Ждёт оплаты'],check:['red','Проверить оплату'],done:['ok','В группе'],noreact:['red','Нет ответа на 2 напоминания']};
+  const slaRed=l=>(l.st==='new'||l.st==='form'||l.st==='check')&&l.age>120;
+  const pdfBtn=()=>`<button class="btn gold no-print" data-act="pdf">⬇ Скачать PDF</button>`;
+  function pager(key,total,full){
+    if(full) return {from:0,to:total,html:''};
+    const pages=Math.max(1,Math.ceil(total/CFG.PAGE)); P[key]=Math.min(P[key]||0,pages-1); const p=P[key], from=p*CFG.PAGE, to=Math.min(total,from+CFG.PAGE);
+    return {from,to,html:`<div class="pager no-print"><button class="btn sm" data-act="page" data-key="${key}" data-d="-1" ${p===0?'disabled':''}>‹</button><span>${total?from+1:0}–${to} из ${num(total)}</span><button class="btn sm" data-act="page" data-key="${key}" data-d="1" ${p>=pages-1?'disabled':''}>›</button></div>`};
+  }
+  const searchBox=(key,ph)=>`<input type="text" class="search no-print" data-act="q" data-key="${key}" placeholder="${ph}" value="${esc(S.q[key]||'')}">`;
+  const chipRow=(opts,cur,act)=>`<div class="chips no-print">${opts.map(o=>`<button class="${cur===o[0]?'on':''}" data-act="${act}" data-id="${o[0]}">${o[1]}</button>`).join('')}</div>`;
+  const bars=(rows,curLast)=>{const max=Math.max(1,...rows.map(r=>r[1]));return `<div class="bars">${rows.map((r,i)=>`<div class="${curLast&&i===rows.length-1?'cur':''}"><i style="height:${Math.round(r[1]/max*100)}%"></i><span>${r[0]}</span></div>`).join('')}</div>`;};
+  const funnel=(l,n,max)=>`<div class="kv"><span>${l}</span><b>${num(n)}</b></div><div class="bar" style="margin-bottom:8px"><i style="width:${pct(n,max)}%"></i></div>`;
+  const monthSel=(act,cur)=>`<select data-act="${act}">${MONTHS.map((m,i)=>`<option value="${i}" ${cur===i?'selected':''}>${m} 2026</option>`).join('')}</select>`;
+
+  /* ===== Календарь в стиле TickTick ===== */
+  const CALC=[['#8bd3cd','#d9f0ee'],['#f6a6bb','#fbe1e8'],['#f7d77a','#fcf1cf'],['#9db8f3','#e0e8fb'],['#c5a6ee','#eadffa'],['#f3b08d','#fbe4d7']];
+  const HS=7, HE=23, RH=44;
+  const weekStart=off=>{const d=sod(new Date());return addDays(d,-((d.getDay()+6)%7)+off*7);};
+  const hwList=()=>{
+    const today=sod(new Date());
+    const base=[{id:'h1',title:'Чтение слогов, стр. 14',ts:addDays(today,-5).getTime(),grade:5},{id:'h2',title:'Письмо: соединение букв',ts:addDays(today,-2).getTime(),grade:4},{id:'h3',title:'Слова с сукуном: упражнения 1–3',ts:addDays(today,1).getTime()},{id:'h4',title:'Повторить буквы по аудио',ts:addDays(today,4).getTime()}];
+    return base.concat(HWX.filter(h=>h.g===ME_GROUP)).map(h=>({...h,state:h.grade?'checked':(HWDONE[h.id]?'sent':'open')}));
+  };
+  function calEvents(role,from,n){
+    const evs=[], groups=role==='student'?[gid(ME_GROUP)]:curT().groups, now=new Date(), nowMin=now.getHours()*60+now.getMinutes(), today=+sod(now);
+    groups.forEach((g,gi)=>{g.days.split(' ').forEach(dn=>{for(let i=0;i<n;i++){const d=addDays(from,i); if(d.getDay()!==DAYNUM[dn]) continue;
+      const [h,m]=g.time.split(':').map(Number), start=h*60+m, past=+d<today||(+d===today&&start+90<nowMin);
+      evs.push({day:i,start,dur:90,title:g.id+' · '+g.level,sub:g.teacher,color:gi%CALC.length,group:g.id,done:past,date:d,time:g.time});}});});
+    if(role==='student') hwList().forEach(h=>{const d=sod(h.ts);for(let i=0;i<n;i++) if(+d===+addDays(from,i)) evs.push({day:i,allday:true,title:'ДЗ: '+h.title,color:1,done:h.state!=='open',date:d,hw:true});});
+    return evs;
+  }
+  function layout(list){
+    list.sort((a,b)=>a.start-b.start); let cluster=[],end=0; const out=[];
+    const flush=()=>{if(!cluster.length) return; const lanes=[]; cluster.forEach(e=>{let l=lanes.findIndex(x=>x<=e.start); if(l<0){l=lanes.length;lanes.push(0);} lanes[l]=e.start+e.dur; e.lane=l;}); cluster.forEach(e=>{e.lanes=lanes.length;out.push(e);}); cluster=[];};
+    list.forEach(e=>{if(cluster.length&&e.start>=end) flush(); cluster.push(e); end=Math.max(end,e.start+e.dur);}); flush(); return out;
+  }
+  function vCal(role){
+    const week=S.calMode==='week', from=week?weekStart(S.calOff):addDays(sod(new Date()),S.calOff), n=week?7:1;
+    const evs=calEvents(role,from,n); const todayI=Math.round((+sod(new Date())-+from)/DAY);
+    const title=from.toLocaleDateString('ru-RU',{month:'long',year:'numeric'}).replace(/^./,c=>c.toUpperCase()).replace(/\s*г\.$/,'');
+    const WD=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+    let head='<div></div>', allday='<div class="lbl">весь день</div>', cols='';
+    for(let i=0;i<n;i++){const d=addDays(from,i), wi=(d.getDay()+6)%7;
+      head+=`<div class="hd ${i===todayI?'today':''}">${WD[wi]}<br><b>${d.getDate()}</b></div>`;
+      allday+=`<div class="col">${evs.filter(e=>e.allday&&e.day===i).map(e=>`<div class="chip" style="background:${CALC[e.color][e.done?1:0]};${e.done?'opacity:.6':''}" data-act="evhw">${esc(e.title)}</div>`).join('')}</div>`;
+      const day=layout(evs.filter(e=>!e.allday&&e.day===i)), now=new Date();
+      cols+=`<div class="daycol ${wi>=5?'we':''}" style="height:${(HE-HS)*RH}px">${day.map((e,k)=>{const top=(e.start-HS*60)/60*RH, h=e.dur/60*RH-2, w=100/e.lanes, hh=Math.floor(e.start/60), mm=e.start%60, t=pad2(hh)+':'+pad2(mm)+' – '+fmtEnd(e.start+e.dur);
+        return `<div class="ev ${e.done?'done':''}" style="top:${top}px;height:${h}px;left:${e.lane*w}%;width:calc(${w}% - 3px);background:${CALC[e.color][e.done?1:0]}" data-act="ev" data-g="${e.group}" data-t="${t}" data-d="${+e.date}"><span class="cb"></span>${esc(e.title)}<small>${t}</small></div>`;}).join('')}${i===todayI?`<div class="nowline" style="top:${(now.getHours()*60+now.getMinutes()-HS*60)/60*RH}px"></div>`:''}</div>`;}
+    const hours=Array.from({length:HE-HS},(_,k)=>`<div>${pad2(HS+k)}:00</div>`).join('');
+    const minStart=Math.min(...evs.filter(e=>!e.allday).map(e=>e.start),HS*60+60);
+    return `<div class="calwrap" data-scroll="${Math.max(0,(minStart-HS*60)/60*RH-30)}"><div class="cal-top"><h3>${title}</h3><div class="cal-ctl"><div class="grp"><button data-act="calnav" data-d="-1">‹</button><button data-act="calnav" data-d="0">Сегодня</button><button data-act="calnav" data-d="1">›</button></div><select data-act="calmode"><option value="week" ${week?'selected':''}>Неделя</option><option value="day" ${week?'':'selected'}>День</option></select></div></div>
+    <div class="cal-head" style="--n:${n}">${head}</div><div class="cal-allday" style="--n:${n}">${allday}</div>
+    <div class="cal-body"><div class="cal-grid" style="--n:${n}"><div class="hours">${hours}</div>${cols}</div></div></div>`;
+  }
+  const pad2=n=>String(n).padStart(2,'0'), fmtEnd=m=>pad2(Math.floor(m/60))+':'+pad2(m%60);
+
+  /* ===== Студент (группа Ж-017) ===== */
+  const MEG=()=>gid(ME_GROUP);
+  function vS_home(){
+    const g=MEG(), news=NEWS.filter(n=>n.g===ME_GROUP), next=calEvents('student',sod(new Date()),14).filter(e=>!e.allday&&!e.done).sort((a,b)=>(+a.date-+b.date)||a.start-b.start)[0];
+    return `<h2>Здравствуйте, Тест</h2><div class="sub">${esc(g.id)} · ${esc(g.level)} · ${g.days}, ${g.time} мск · ${esc(g.teacher)}</div>
+    <div class="grid g2"><div class="card"><div class="tag">Ближайшее занятие</div><div class="nm" style="font-size:18px;margin:4px 0">${next?next.date.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'})+', '+next.time:'—'}</div><div class="meta">Урок 21 из 30</div></div>
+    <div class="card"><div class="tag">Оплата</div><div class="nm" style="font-size:18px;margin:4px 0">Оплачено</div><div class="meta">Следующий платёж: 6 ноября, ${money(CFG.PRICE)} (условно)</div></div></div>
+    <div class="head" style="align-items:baseline"><h3>Последние объявления</h3><button class="btn sm" data-act="go" data-id="ann">Все объявления</button></div>${annVisible().slice(0,3).map(a=>`<div class="ann ${a.pin?'pin':''}"><div class="ava2">${esc(a.from.replace(/^Устаза? /,'')[0])}</div><div class="bd"><div class="row"><div><span class="nm">${esc(a.from)}</span> <span class="meta">${RLAB[a.role]}, ${ago(a.mins)}</span></div><span class="pill">${audLabel(a.aud)}</span></div><div class="tx">${esc(a.text)}</div></div></div>`).join('')}`;
+  }
+  const vS_sched=()=>`<h2>Расписание</h2><div class="sub">Занятия вашей группы ${ME_GROUP} и сроки сдачи ДЗ. Прошедшие занятия отмечены.</div>${vCal('student')}<div class="hint">Нажмите на занятие, чтобы увидеть подробности.</div>`;
+  function vS_hw(){
+    const h=hwList(), today=sod(new Date()).getTime();
+    return `<h2>Домашние задания</h2><div class="sub">К сдаче: ${h.filter(x=>x.state==='open').length}</div>`+h.map(x=>{const diff=Math.round((sod(x.ts).getTime()-today)/DAY);
+      const pill=x.state==='checked'?`<span class="pill ok">Проверено · ${x.grade}</span>`:x.state==='sent'?'<span class="pill gold">Сдано</span>':`<span class="pill ${diff<=1?'warn':'gray'}">${diff===0?'сегодня':diff===1?'завтра':'до '+fday(x.ts)}</span>`;
+      return `<div class="card" style="margin-bottom:8px"><div class="row"><div class="nm">${esc(x.title)}</div>${pill}</div>${x.state==='open'?`<div class="acts"><button class="btn" data-act="hwdone" data-id="${x.id}">Отметить выполненным</button></div>`:''}</div>`;}).join('');
+  }
+  function vS_prog(){
+    const h=hwList(), sent=h.filter(x=>x.state!=='open').length;
+    return `<h2>Мой прогресс</h2><div class="sub">Демо-данные</div><div class="grid g3">${stat('70%','курса пройдено')}${stat('92%','посещаемость')}${stat('4.5','средняя оценка')}</div><h3>Домашние задания</h3><div class="card"><div class="row"><div>Сдано ${sent} из ${h.length}</div><b>${pct(sent,h.length)}%</b></div><div class="bar gold" style="margin-top:8px"><i style="width:${pct(sent,h.length)}%"></i></div></div>`;
+  }
+  const vS_pay=()=>`<h2>Оплата и книги</h2><div class="sub">История платежей и статус комплекта книг</div><div class="card"><div class="kv"><span>Курс</span><b>30 уроков, ${money(CFG.PRICE)} (условно)</b></div><div class="kv"><span>Статус</span><b style="color:var(--ok)">Оплачено</b></div><div class="kv"><span>Следующий платёж</span><b>6 ноября</b></div></div><h3>Акция «30 уроков сразу + книги»</h3><div class="card"><div class="kv"><span>Участие</span><b>Да</b></div><div class="kv"><span>Комплект книг</span><span class="pill gold">Готовится к отправке</span></div><div class="meta" style="margin-top:6px">Доставка за ваш счёт, стоимость уточним перед отправкой.</div></div>`;
+
+  /* ===== Преподаватель ===== */
+  function curT(){const t=teachersNow().filter(x=>x.on);return t.find(x=>x.name===S.teacher)||t[0];}
+  function curTG(){const gs=curT().groups; if(!gs.length) return null; if(!gs.some(g=>g.id===S.tg)) S.tg=gs[0].id; return gid(S.tg);}
+  const tgChips=()=>chipRow(curT().groups.map(g=>[g.id,g.id]),S.tg,'tg');
+  const noGroups=()=>`<div class="card meta">У преподавателя пока нет групп. Директор может назначить группы в разделе «Сотрудники».</div>`;
+  function vT_sched(){const t=curT();return `<h2>Расписание</h2><div class="sub">${esc(t.name)} · групп: ${t.groups.length}, учеников: ${t.students}. Занятия вашей недели.</div>${t.groups.length?vCal('teacher'):noGroups()}<div class="hint">Нажмите на занятие, чтобы открыть журнал группы.</div>`;}
+  function vT_groups(){
+    const t=curT();
+    return `<h2>Мои группы</h2><div class="sub">${esc(t.name)} · групп: ${t.groups.length}, учеников: ${t.students} · нагрузка ${t.hrs} из ${t.cap} ч в неделю</div>${t.groups.length?`<div class="grid g2">${t.groups.map(g=>{
+      const r=roster(g), p=avg(r.map(x=>x.perf)), h=avg(r.map(x=>x.hw)), d=distrib(g);
+      return `<div class="card"><div class="row"><div class="nm">${g.id} · ${esc(g.level)}</div><span class="pill">${g.size} уч.</span></div><div class="meta">${g.days} · ${g.time} мск</div>
+      <div class="kv"><span>Успеваемость</span><b>${p}%</b></div>${stackBar(d)}<div class="meta" style="margin:3px 0">Отлично ${d.hi} · норма ${d.mid} · отстают ${d.lo}</div><div class="kv"><span>Посещаемость</span><b>${g.att}%</b></div><div class="kv"><span>ДЗ сдано</span><b>${h}%</b></div></div>`;}).join('')}</div>`:noGroups()}`;
+  }
+  function vT_att(){
+    const g=curTG(); if(!g) return `<h2>Журнал занятия</h2>${noGroups()}`; const r=roster(g), key=g.id;
+    return `<h2>Журнал занятия</h2><div class="sub">Отметьте, кто присутствует на сегодняшнем уроке. Группа ${g.id}, ${g.size} учеников.</div>${tgChips()}
+    <div class="acts" style="margin-top:0;margin-bottom:10px"><button class="btn" data-act="attall" data-v="1">Отметить всех</button><button class="btn" data-act="attall" data-v="0">Снять отметки</button><button class="btn pri" data-act="attsave">Сохранить посещаемость</button><span class="meta" id="attcnt">${r.filter(x=>S.att[key+x.name]!==false).length} из ${r.length} присутствуют</span></div>
+    <div class="card"><div class="att">${r.map(x=>`<label><input type="checkbox" class="chk" data-act="att" data-k="${esc(key+x.name)}" ${S.att[key+x.name]!==false?'checked':''}>${esc(x.name)}</label>`).join('')}</div></div>`;
+  }
+  function vT_students(){
+    const g=curTG(); if(!g) return `<h2>Ученики</h2>${noGroups()}`;
+    let r=roster(g).slice().sort((a,b)=>a.perf-b.perf); const q=(S.q.ts||'').toLowerCase();
+    if(q) r=r.filter(x=>x.name.toLowerCase().includes(q)); if(S.filter==='low') r=r.filter(x=>x.perf<60);
+    const pg=pager('ts',r.length);
+    return `<h2>Ученики</h2><div class="sub">Только ваши группы</div>${tgChips()}${chipRow([['all','Все'],['low','Отстают']],S.filter==='low'?'low':'all','filter')}${searchBox('ts','Поиск по имени')}
+    <div class="tw"><table><tr><th>Ученик</th><th class="c">Успеваемость</th><th class="c">Посещаемость</th><th class="c">ДЗ</th><th class="c">Оплата</th><th></th></tr>${r.slice(pg.from,pg.to).map(x=>{const t=tone(x.perf);return `<tr><td>${esc(x.name)}</td><td class="c">${x.perf}%</td><td class="c">${x.att}%</td><td class="c">${x.hw}%</td><td class="c"><span class="pill ${x.pay==='paid'?'ok':x.pay==='wait'?'warn':'red'}">${x.pay==='paid'?'оплачено':x.pay==='wait'?'ждёт':'долг'}</span></td><td><span class="pill ${t[0]}">${t[1]}</span></td></tr>`;}).join('')}</table></div>${pg.html}`;
+  }
+  function vT_post(){
+    const gs=curT().groups; if(!gs.length) return `<h2>Объявления и ДЗ</h2>${noGroups()}`;
+    return `<h2>Задания группе</h2><div class="sub">Объявление и домашнее задание для одной из ваших групп. Студенты увидят их в своём кабинете сразу.</div><div class="card"><div class="nm" style="margin-bottom:8px">Объявление</div><select id="tp-g">${gs.map(g=>`<option value="${g.id}">${g.id} · ${esc(g.level)}</option>`).join('')}</select><textarea id="tp-text" placeholder="Например: занятие в субботу переносится на 20:00" style="margin-top:8px"></textarea><div class="acts"><button class="btn pri" data-act="postnews">Опубликовать</button></div></div>
+    <div class="card" style="margin-top:10px"><div class="nm" style="margin-bottom:8px">Домашнее задание</div><input type="text" id="tp-title" placeholder="Название задания"><div class="acts"><button class="btn pri" data-act="posthw">Выдать задание (срок 3 дня)</button></div></div>
+    <div class="meta" style="margin-top:10px">Чтобы увидеть результат, выберите преподавателя группы Ж-017 (выбран по умолчанию) и переключитесь в роль «Студент».</div>`;
+  }
+
+  /* прогресс всех групп: на том же этапе и на разных этапах */
+  const gPerf=g=>g._p||(g._p=avg(roster(g).map(x=>x.perf)));
+  function vT_prog(){
+    const t=curT(), mine=t.groups; if(!mine.length) return `<h2>Прогресс групп</h2>${noGroups()}`;
+    if(!mine.some(g=>g.id===S.tg)) S.tg=mine[0].id; const g0=gid(S.tg), ids=mine.map(g=>g.id), same=S.pm==='same';
+    const row=(g,i)=>`<tr class="${ids.includes(g.id)?'sel':''}"><td class="c">${i+1}</td><td><span class="nm">${g.id}</span>${ids.includes(g.id)?' <span class="pill gold">моя</span>':''}</td><td>${esc(g.level)}</td><td>${esc(g.teacher)}</td><td class="c">${g.lesson} из 30</td><td class="c"><b>${gPerf(g)}%</b></td><td class="c">${g.att}%</td><td>${stackBar(distrib(g))}</td></tr>`;
+    const th='<tr><th class="c">Место</th><th>Группа</th><th>Этап</th><th>Преподаватель</th><th class="c">Урок</th><th class="c">Успеваемость</th><th class="c">Посещаемость</th><th>Прогресс людей</th></tr>';
+    const head=`<div class="head"><div><h2>Прогресс групп</h2><div class="sub">Сравните свои группы с остальными: с теми, кто проходит тот же этап, и по всем этапам академии. Ваши группы выделены.</div></div><div class="inl no-print">${pdfBtn()}</div></div>${chipRow([['same','На том же этапе'],['all','Все этапы']],S.pm,'pm')}`;
+    if(same){
+      const L=GROUPS.filter(g=>g.level===g0.level).sort((a,b)=>gPerf(b)-gPerf(a)), rank=L.findIndex(g=>g.id===g0.id)+1, av=avg(L.map(gPerf)), d=gPerf(g0)-av, pg=pager('tp',L.length);
+      return head+tgChips()+`<div class="grid g4">${stat(rank+' из '+L.length,'место группы '+g0.id+' на этапе')}${stat(gPerf(g0)+'%','успеваемость группы',d>=0?'ok':'hot')}${stat(av+'%','в среднем на этапе')}${stat((d>=0?'+':'−')+Math.abs(d)+' п.п.','разница со средним',d>=0?'ok':'red')}</div>
+      <h3>Все группы этапа «${esc(g0.level)}»</h3><div class="tw"><table>${th}${L.slice(pg.from,pg.to).map((g,i)=>row(g,pg.from+i)).join('')}</table></div>${pg.html}
+      <div class="legend no-print"><span><b style="background:#2f7d57"></b>отлично</span><span><b style="background:#c9a24b"></b>норма</span><span><b style="background:#a94438"></b>отстают</span></div>`;
+    }
+    const lv=LEVELS.map(l=>{const L=GROUPS.filter(g=>g.level===l);return {l,n:L.length,perf:avg(L.map(gPerf)),att:avg(L.map(g=>g.att)),lesson:avg(L.map(g=>g.lesson)),mine:L.filter(g=>ids.includes(g.id))};}).filter(x=>x.n);
+    const q=(S.q.tp||'').toLowerCase(); let A=GROUPS.slice().sort((a,b)=>gPerf(b)-gPerf(a)); const rankOf={}; A.forEach((g,i)=>{rankOf[g.id]=i;}); if(q) A=A.filter(g=>g.id.toLowerCase().includes(q)||g.level.toLowerCase().includes(q)||g.teacher.toLowerCase().includes(q)); const pg=pager('tp',A.length);
+    return head+`<h3>Средняя успеваемость по этапам</h3><div class="card">${bars(lv.map(x=>[x.l.replace('Huna Arabiya','HA'),x.perf]))}<div class="meta">HA: Huna Arabiya. Чем выше столбец, тем лучше идут группы этого этапа.</div></div>
+    <h3>Этапы</h3><div class="tw"><table><tr><th>Этап</th><th class="c">Групп</th><th class="c">В среднем на уроке</th><th class="c">Успеваемость</th><th class="c">Посещаемость</th><th>Мои группы на этапе</th></tr>${lv.map(x=>`<tr class="${x.mine.length?'sel':''}"><td class="nm">${esc(x.l)}</td><td class="c">${x.n}</td><td class="c">${x.lesson} из 30</td><td class="c">${x.perf}%</td><td class="c">${x.att}%</td><td>${x.mine.map(g=>`${g.id}: ${gPerf(g)}% <span class="${gPerf(g)>=x.perf?'pos':'neg'}">${gPerf(g)>=x.perf?'выше среднего':'ниже среднего'}</span>`).join('<br>')||'<span class="meta">нет</span>'}</td></tr>`).join('')}</table></div>
+    <h3>Все группы академии</h3>${searchBox('tp','Номер, этап или преподаватель')}<div class="tw"><table>${th}${A.slice(pg.from,pg.to).map(g=>row(g,rankOf[g.id])).join('')}</table></div>${pg.html}`;
+  }
+
+  /* ===== Менеджер ===== */
+  const mgrNote=()=>`${esc(S.mgr)} · ${esc(MGRS[S.mgr]||'')}`;
+  function vM_today(){
+    const L=myLeads(), c=st=>L.filter(l=>l.st===st).length, sla=L.filter(slaRed).length, q=QUESTIONS.filter(x=>x.mgr===S.mgr&&x.st==='open').length;
+    const task=(n,l,v,f)=>`<div class="card stat task ${n?'hot':''}" data-act="go" data-id="${v}" data-f="${f}"><b>${n}</b><span>${l}</span></div>`;
+    const urgent=L.filter(slaRed).sort((a,b)=>b.age-a.age).slice(0,6), newToday=(S.mgr==='Фатима'?63:36)+S.seen;
+    return `<h2>Сегодня</h2><div class="sub">${mgrNote()}. Что требует вашего внимания сейчас.</div>
+    <div class="grid g5">${stat(newToday,'новых заявок сегодня')}${task(c('check'),'проверить оплату','m_leads','check')}${task(c('noreact'),'написать лично','m_leads','noreact')}${task(sla,'ждут ответа дольше 2 ч','m_leads','sla')}${acc('manager','questions')?task(q,'вопросов от ассистента','m_q',''):''}</div>
+    <h3>Самые долгие ожидания</h3><div class="tw"><table><tr><th>Заявка</th><th>Группа</th><th>Статус</th><th>Ждёт</th><th></th></tr>${urgent.map(l=>`<tr><td>${esc(l.name)}</td><td>${l.group}</td><td><span class="pill ${LST[l.st][0]}">${LST[l.st][1]}</span></td><td class="sla red">${mins(l.age)}</td><td><button class="btn sm" data-act="open" data-id="${l.id}">Открыть</button></td></tr>`).join('')||'<tr><td colspan="5" class="meta">Нет просроченных</td></tr>'}</table></div>
+    <div class="acts" style="margin-top:12px"><button class="btn gold" data-act="newlead">Имитировать новую заявку из бота</button><span class="meta">Бот собрал анкету и ссылку на оплату, заявка появилась в очереди.</span></div>`;
+  }
+  const FILTERS=[['all','Все'],['new','Новые'],['form','Анкета'],['check','Проверить'],['wait','Ждут оплаты'],['noreact','Написать лично'],['sla','Просрочено >2 ч'],['promo','Акция']];
+  const LMODES=[['now','В работе сейчас'],['day','День'],['week','Неделя'],['month','Месяц'],['year','Год']];
+  function vM_leads(){
+    return `<div class="head"><div><h2>Заявки</h2><div class="sub">${mgrNote()}. Смотрите заявки за день, неделю, месяц или год и работайте с любой из них.</div></div>${S.lm==='now'?'':`<div class="inl no-print">${pdfBtn()}</div>`}</div>${chipRow(LMODES,S.lm,'lm')}${S.lm==='now'?vM_queue():vM_period(false)}`;
+  }
+  function buckets(list,mode,p){
+    if(mode==='day'){const b=Array.from({length:15},(_,i)=>[pad2(8+i),0]);list.forEach(x=>{b[x.h-8][1]++;});return b;}
+    if(mode==='week'){const b=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(x=>[x,0]);list.forEach(x=>{b[(addDays(TODAY,-x.d).getDay()+6)%7][1]++;});return b;}
+    if(mode==='month'){const days=new Date(p.a.getFullYear(),p.a.getMonth()+1,0).getDate(), b=Array.from({length:days},(_,i)=>[String(i+1),0]);list.forEach(x=>{b[addDays(TODAY,-x.d).getDate()-1][1]++;});return b;}
+    const b=['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'].map(x=>[x,0]);list.forEach(x=>{b[addDays(TODAY,-x.d).getMonth()][1]++;});return b;
+  }
+  const canBack=x=>x.res==='думает'||x.res==='не ответил';
+  function vM_period(full){
+    const p=period(S.lm,S.lo), all=periodApps(S.mgr,S.lm,S.lo), c=r=>all.filter(x=>x.res===r).length, paid=c('оплатил'), q=(S.q.pa||'').toLowerCase();
+    let F=all; if(S.pr!=='all') F=F.filter(x=>x.res===S.pr); if(q) F=F.filter(x=>x.name.toLowerCase().includes(q)||x.group.toLowerCase().includes(q));
+    const pg=pager('pa',F.length,full), rows=full?F.slice(0,400):F.slice(pg.from,pg.to), n=Object.keys(S.psel).filter(k=>S.psel[k]).length;
+    return `<div class="head" style="align-items:center;margin:4px 0 12px"><h3 style="margin:0">${p.label}</h3><div class="cal-ctl no-print"><div class="grp"><button data-act="lnav" data-d="-1">‹ Раньше</button><button data-act="lnav" data-d="0">Текущий</button><button data-act="lnav" data-d="1" ${S.lo>=0?'disabled':''}>Позже ›</button></div></div></div>
+    <div class="grid g5">${stat(num(all.length),'заявок за период')}${stat(num(paid),'оплатили','ok')}${stat(pct(paid,all.length)+'%','конверсия в оплату')}${stat(num(c('думает')+c('не ответил')),'можно вернуть','hot')}${stat(num(c('в работе')),'ещё в работе')}</div>
+    <h3>${{day:'По часам',week:'По дням недели',month:'По дням месяца',year:'По месяцам'}[S.lm]}</h3><div class="card">${bars(buckets(all,S.lm,p))}</div>
+    <h3>Заявки периода${full&&F.length>400?' (первые 400 из '+num(F.length)+')':''}</h3>${chipRow([['all','Все'],['в работе','В работе'],['оплатил','Оплатили'],['думает','Думают'],['не ответил','Не ответили'],['отказ','Отказ']],S.pr,'pr')}${searchBox('pa','Поиск по имени или группе')}
+    ${n&&!full?`<div class="bulk no-print"><b>Выбрано: ${n}</b><button class="btn gold sm" data-act="pbulk">Вернуть в работу и напомнить</button><button class="btn sm" data-act="pclear">Снять выбор</button></div>`:''}
+    <div class="tw"><table><tr><th class="no-print"></th><th>Дата</th><th>Заявка</th><th>Группа</th><th>Итог</th><th>Источник</th><th class="no-print"></th></tr>${rows.map(x=>`<tr class="${S.psel[x.id]?'sel':''}"><td class="no-print">${canBack(x)?`<input type="checkbox" class="chk" data-act="psel" data-id="${x.id}" ${S.psel[x.id]?'checked':''}>`:''}</td><td>${fday(addDays(TODAY,-x.d))}, ${pad2(x.h)}:00</td><td><span class="nm">${esc(x.name)}</span>${x.promo?' <span class="pill gold">Акция</span>':''}</td><td>${x.group}</td><td><span class="pill ${RPILL[x.res]}">${x.res}</span></td><td class="meta">${x.src}</td><td class="no-print"><button class="btn sm" data-act="popen" data-id="${x.id}">Открыть</button>${canBack(x)?` <button class="btn sm gold" data-act="pback" data-id="${x.id}">Вернуть в работу</button>`:''}</td></tr>`).join('')||'<tr><td colspan="7" class="meta">За этот период заявок нет</td></tr>'}</table></div>${pg.html}`;
+  }
+  function recCard(id){
+    const x=periodApps(S.mgr,S.lm,S.lo).find(z=>z.id===id); if(!x) return; const g=gid(x.group);
+    const end={'оплатил':[['c',x.sex==='w'?'Оплатила, отправляю чек':'Оплатил, отправляю чек'],['m','Оплата подтверждена, место закреплено.']],'думает':[['c','Мне нужно подумать'],['a','Хорошо, напишу вам через 2 дня. Место пока не закреплено.']],'отказ':[['c','Пока не получится, спасибо'],['a','Понимаю. Если решите позже, напишите сюда.']],'не ответил':[['a','Удалось определиться с группой?'],['a','Напоминаю в последний раз, больше не побеспокою.'],['s','Диалог закрыт: нет ответа']],'в работе':[['a','Анкета получена, вот ссылка на оплату.'],['s','Заявка в работе у менеджера']]}[x.res];
+    const t=[['c','Ассаляму алейкум, хочу записаться'],['a','Ва алейкум ассалям! Подойдёт группа '+g.id+' ('+g.level+'): '+g.days+' в '+g.time+' мск.']].concat(end);
+    document.getElementById('modal').innerHTML=`<div class="modal" data-act="mclose"><div class="in"><div class="row"><div><h2>${esc(x.name)}</h2><div class="meta">${fday(addDays(TODAY,-x.d))}, ${pad2(x.h)}:00, группа ${g.id}, источник: ${x.src}</div></div><button class="btn sm" data-act="mclose">Закрыть</button></div>
+    <div class="row" style="margin:10px 0;justify-content:flex-start"><span class="pill ${RPILL[x.res]}">${x.res}</span>${x.promo?'<span class="pill gold">Акция «30 уроков сразу»</span>':''}</div>
+    <div class="thr"><div class="ms">${t.map(m=>m[0]==='s'?`<div class="msg s">${esc(m[1])}</div>`:`<div class="msg ${m[0]}"><small>${m[0]==='c'?esc(x.name):m[0]==='a'?'ассистент':'менеджер '+esc(x.mgr)}</small>${esc(m[1])}</div>`).join('')}</div></div>
+    ${canBack(x)?`<div class="acts"><button class="btn gold" data-act="pback" data-id="${x.id}">Вернуть в работу и напомнить</button></div>`:''}</div></div>`;
+  }
+  function backToWork(x){
+    x.res='в работе'; LEADS.unshift({id:NEXTID++,name:x.name,sex:x.sex,group:x.group,mgr:S.mgr,st:'wait',rem:1,promo:x.promo,age:4,src:x.src,note:'Возвращена из истории заявок',amount:CFG.PRICE,match:true});
+  }
+  function vM_queue(){
+    let L=myLeads().filter(l=>l.st!=='done'&&l.st!=='closed'); const q=(S.q.lq||'').toLowerCase();
+    if(S.filter==='sla') L=L.filter(slaRed); else if(S.filter==='promo') L=L.filter(l=>l.promo); else if(S.filter!=='all') L=L.filter(l=>l.st===S.filter);
+    if(q) L=L.filter(l=>l.name.toLowerCase().includes(q)||l.group.toLowerCase().includes(q));
+    L.sort((a,b)=>(slaRed(b)-slaRed(a))||b.age-a.age);
+    const pg=pager('lq',L.length), n=Object.keys(S.sel).filter(k=>S.sel[k]).length;
+    return `<div class="sub" style="margin-bottom:10px">Сейчас в работе: ${num(myLeads().filter(l=>l.st!=='done'&&l.st!=='closed').length)}. Сначала самые срочные.</div>${chipRow(FILTERS,S.filter,'filter')}${searchBox('lq','Поиск по имени или группе')}
+    ${n?`<div class="bulk"><b>Выбрано: ${n}</b><button class="btn gold sm" data-act="bremind">Напомнить</button><select data-act="bassign"><option>Передать другому…</option>${Object.keys(MGRS).filter(k=>k!==S.mgr).map(k=>`<option>${k}</option>`).join('')}</select><button class="btn sm" data-act="bclose">Не актуально</button><button class="btn sm" data-act="bclear">Снять выбор</button></div>`:''}
+    <div class="tw"><table><tr><th></th><th>Заявка</th><th>Группа</th><th>Статус</th><th>Ждёт</th><th class="c">Напом.</th><th>Источник</th><th></th></tr>${L.slice(pg.from,pg.to).map(l=>`<tr class="${S.sel[l.id]?'sel':''}"><td><input type="checkbox" class="chk" data-act="sel" data-id="${l.id}" ${S.sel[l.id]?'checked':''}></td><td><span class="nm">${esc(l.name)}</span>${l.promo?' <span class="pill gold">Акция</span>':''}</td><td>${l.group}</td><td><span class="pill ${LST[l.st][0]}">${LST[l.st][1]}</span></td><td class="sla ${slaRed(l)?'red':''}">${mins(l.age)}</td><td class="c">${l.rem}</td><td class="meta">${l.src}</td><td><button class="btn sm" data-act="open" data-id="${l.id}">Открыть</button></td></tr>`).join('')||'<tr><td colspan="8" class="meta">Здесь пока пусто</td></tr>'}</table></div>${pg.html}`;
+  }
+  function vM_pay(){
+    const check=myLeads().filter(l=>l.st==='check'), gs=myGroups(); let over=0,wait=0,paid=0;
+    gs.forEach(g=>roster(g).forEach(x=>{if(x.pay==='over')over++;else if(x.pay==='wait')wait++;else paid++;}));
+    return `<h2>Оплаты</h2><div class="sub">${mgrNote()}</div><div class="grid g4">${stat(check.length,'поступлений проверить','hot')}${stat(num(paid),'студентов оплатили')}${stat(num(wait),'ждут оплаты в этом месяце','hot')}${stat(num(over),'просрочили','red')}</div>
+    <h3>Поступления на проверку</h3><div class="tw"><table><tr><th>Студент</th><th>Группа</th><th class="c">Сумма</th><th>Сверка с анкетой</th><th></th></tr>${check.slice(0,10).map(l=>`<tr><td>${esc(l.name)}${l.promo?' <span class="pill gold">Акция</span>':''}</td><td>${l.group}</td><td class="c">${money(l.amount)}</td><td><span class="pill ${l.match?'ok':'warn'}">${l.match?'совпадает':'сумма отличается'}</span></td><td><button class="btn pri sm" data-act="confirm" data-id="${l.id}">Подтвердить</button></td></tr>`).join('')||'<tr><td colspan="5" class="meta">Нет поступлений на проверку</td></tr>'}</table></div>
+    ${check.length>10?`<div class="meta" style="margin-top:6px">Показаны первые 10 из ${check.length}</div>`:''}
+    <h3>Должники месяца</h3><div class="card"><div class="row"><div>Ждут оплаты: <b>${num(wait)}</b>, просрочили: <b>${num(over)}</b></div><button class="btn gold" data-act="debtremind">Напомнить всем должникам (${num(wait+over)})</button></div><div class="meta" style="margin-top:6px">Напоминание уходит ботом лично каждому, а не в общую группу. Не ответившие попадают в «Написать лично».</div></div>`;
+  }
+  function vM_groups(){
+    let gs=myGroups(); const q=(S.q.gq||'').toLowerCase();
+    if(S.gf==='free') gs=gs.filter(g=>g.size<CFG.CAP&&g.open); else if(S.gf==='full') gs=gs.filter(g=>g.size>=CFG.CAP-1||!g.open);
+    if(q) gs=gs.filter(g=>g.id.toLowerCase().includes(q)||g.teacher.toLowerCase().includes(q)||g.level.toLowerCase().includes(q));
+    const pg=pager('gq',gs.length), all=myGroups(), free=sum(all,g=>Math.max(0,CFG.CAP-g.size));
+    return `<h2>Группы и места</h2><div class="sub">${mgrNote()} · ${all.length} групп, свободно мест: ${num(free)}</div>${chipRow([['all','Все'],['free','Есть места'],['full','Заполнены / закрыты']],S.gf,'gf')}${searchBox('gq','Номер, уровень или преподаватель')}
+    <div class="tw"><table><tr><th>Группа</th><th>Уровень</th><th>Расписание</th><th>Преподаватель</th><th class="c">Занято</th><th class="c">Свободно</th><th></th></tr>${gs.slice(pg.from,pg.to).map(g=>{const left=CFG.CAP-g.size;return `<tr><td class="nm">${g.id}</td><td>${esc(g.level)}</td><td>${g.days} · ${g.time}</td><td>${esc(g.teacher)}</td><td class="c">${g.size}/${CFG.CAP}</td><td class="c"><span class="pill ${!g.open?'gray':left<=2?'warn':'ok'}">${g.open?left:'закрыт'}</span></td><td><button class="btn sm pri" data-act="gopen" data-id="${g.id}">Открыть группу</button> <button class="btn sm" data-act="gtoggle" data-id="${g.id}">${g.open?'Закрыть набор':'Открыть набор'}</button></td></tr>`;}).join('')}</table></div>${pg.html}`;
+  }
+  function vM_q(){
+    const Q=QUESTIONS.filter(q=>q.mgr===S.mgr);
+    return `<h2>Вопросы от ассистента</h2><div class="sub">Ассистент передал то, чего не знает. Ваш ответ уйдёт ученику.</div>${Q.map(q=>`<div class="card" style="margin-bottom:8px"><div class="row"><div class="nm">${esc(q.from)}</div><span class="pill ${q.st==='open'?'warn':'ok'}">${q.st==='open'?'Ждёт ответа':'Отвечено'}</span></div><div style="margin:6px 0">${esc(q.text)}</div>${q.st==='open'?`<textarea id="qa-${q.id}" placeholder="Ваш ответ"></textarea><div class="acts"><button class="btn pri" data-act="answer" data-id="${q.id}">Отправить ответ ученику</button></div>`:`<div class="meta">Ответ: ${esc(q.ans)}</div>`}</div>`).join('')}<div class="acts" style="margin-top:10px"><button class="btn gold" data-act="newq">Имитировать вопрос от ассистента</button></div>`;
+  }
+  function vM_stats(){
+    const g=S.mk, L=myLeads(), series=[], shortM=d=>d.toLocaleDateString('ru-RU',{month:'short'}).replace('.','');
+    if(g==='week') for(let w=11;w>=0;w--){const p=period('week',-w);series.push([dm(p.a),rangeCount(S.mgr,p)]);}
+    else if(g==='month') for(let m=11;m>=0;m--){const p=period('month',-m);series.push([shortM(p.a)+' '+String(p.a.getFullYear()).slice(2),rangeCount(S.mgr,p)]);}
+    else for(let y=2;y>=0;y--){const p=period('year',-y);series.push([String(p.a.getFullYear()),rangeCount(S.mgr,p)]);}
+    const cur=series[series.length-1][1], prev=series[series.length-2][1], rec=periodApps(S.mgr,g,0), paid=rec.filter(x=>x.res==='оплатил').length, closed=rec.filter(x=>x.res!=='в работе').length;
+    const lab={week:['за эту неделю','за прошлую неделю','Заявки по неделям'],month:['за этот месяц','за прошлый месяц','Заявки по месяцам'],year:['за этот год','за прошлый год','Заявки по годам']}[g];
+    return `<h2>Мои показатели</h2><div class="sub">${mgrNote()}. Демо-данные.</div>${chipRow([['week','По неделям'],['month','По месяцам'],['year','По годам']],g,'mk')}
+    <div class="grid g5">${stat(num(cur),'заявок '+lab[0])}${stat(num(prev),'заявок '+lab[1])}${stat(pct(paid,closed)+'%','конверсия в оплату','ok')}${stat('1 ч 40 мин','среднее время ответа')}${stat(L.filter(slaRed).length,'просрочено сейчас',L.filter(slaRed).length>10?'red':'hot')}</div>
+    <h3>${lab[2]}</h3><div class="card">${bars(series,true)}<div class="meta">${g==='year'?'2024 год неполный: история ведётся с сентября. Текущий год ещё не закончился.':'Последний столбец: текущий период, он ещё не закончился.'}</div></div>
+    <h3>Напоминания, которые бот отправил за вас</h3><div class="card"><div class="kv"><span>${lab[0].replace('за ','За ')}</span><b>${num(Math.round(cur*0.55))}</b></div><div class="bar gold"><i style="width:72%"></i></div><div class="meta" style="margin-top:6px">Эту работу раньше делали вручную в группе и в личку.</div></div>`;
+  }
+  function vM_statsOld(){
+    const L=myLeads(), days=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'], base=S.mgr==='Фатима'?[48,52,57,61,59,44,63]:[34,38,41,40,43,31,36];
+    return `<h2>Мои показатели</h2><div class="sub">${mgrNote()} · демо-данные за неделю</div><div class="grid g4">${stat(sum(base,x=>x),'заявок за неделю')}${stat(pct(L.filter(l=>l.st==='done').length+18,sum(base,x=>x))+'%','доля оплативших')}${stat('1 ч 40 мин','среднее время ответа')}${stat(L.filter(slaRed).length,'просрочено сейчас',L.filter(slaRed).length>10?'red':'hot')}</div>
+    <h3>Заявок в день</h3><div class="card">${bars(days.map((d,i)=>[d,base[i]]),true)}</div>
+    <h3>Напоминания, которые бот отправил за вас</h3><div class="card"><div class="kv"><span>За неделю</span><b>${num(210+sum(L,l=>l.rem))}</b></div><div class="bar gold"><i style="width:72%"></i></div><div class="meta" style="margin-top:6px">Эту работу раньше делали вручную в группе и в личку.</div></div>`;
+  }
+
+  /* ===== Часы работы ===== */
+  const shortM=d=>d.toLocaleDateString('ru-RU',{month:'short'}).replace('.','');
+  function hoursVal(s,mode,i){ // i: сколько периодов назад
+    const gs=s.role==='Преподаватель'?GROUPS.filter(g=>g.teacher===s.name).length:0;
+    const wk=s.role==='Преподаватель'?gs*4.5*1.3:s.role==='Менеджер'?46:s.role==='Директор'?44:38;
+    let v=wk*(0.9+rng(s.id*7919+i*131+(mode==='week'?1:2))()*0.2)*(mode==='week'?1:4.33);
+    if(i===0){const t=TODAY;v*=mode==='week'?(((t.getDay()+6)%7)+1)/7:t.getDate()/new Date(t.getFullYear(),t.getMonth()+1,0).getDate();} // текущий период ещё идёт
+    return Math.round(v*10)/10;
+  }
+  const hoursNorm=(s,mode)=>Math.round((s.role==='Преподаватель'?20:40)*(mode==='week'?1:4.33));
+  const hoursSeries=(s,mode)=>{const out=[];for(let i=11;i>=0;i--){const p=period(mode,-i);out.push([mode==='week'?dm(p.a):shortM(p.a),hoursVal(s,mode,i)]);}return out;};
+  // преподавателям платят по часам, менеджерам и руководителю оклад: так же, как в разделе «Финансы»
+  const payFor=(s,hours,mode)=>s.role==='Преподаватель'?hours*CFG.RATE:(s.role==='Директор'?CFG.DIR_PAY:CFG.MGR_PAY)/(mode==='week'?4.33:1);
+  const HMODE=[['week','По неделям'],['month','По месяцам']];
+  function vT_hours(){
+    const s=STAFFALL.find(x=>x.name===S.teacher), t=curT(), m=S.hm, ser=hoursSeries(s,m), prev=hoursVal(s,m,1), cur=hoursVal(s,m,0), norm=hoursNorm(s,m), k=m==='week'?1:4.33;
+    return `<div class="head"><div><h2>Мои часы</h2><div class="sub">${esc(t.name)}. Сколько часов вы отработали: занятия плюс подготовка и проверка домашних заданий.</div></div><div class="inl no-print">${pdfBtn()}</div></div>${chipRow(HMODE,m,'hm')}
+    <div class="grid g4">${stat(cur+' ч',m==='week'?'за эту неделю':'за этот месяц')}${stat(prev+' ч',m==='week'?'за прошлую неделю':'за прошлый месяц')}${stat(norm+' ч',m==='week'?'норма в неделю':'норма в месяц')}${stat(pct(prev,norm)+'%','загрузка в прошлом периоде',pct(prev,norm)>100?'red':pct(prev,norm)>=85?'hot':'ok')}</div>
+    <h3>${m==='week'?'Часы по неделям':'Часы по месяцам'}</h3><div class="card">${bars(ser,true)}<div class="meta">Последний столбец: текущий период, он ещё не закончился.</div></div>
+    <h3>Из чего складываются часы</h3><div class="tw"><table><tr><th>Группа</th><th>Расписание</th><th class="c">Занятий</th><th class="c">Часы занятий</th><th class="c">Подготовка и проверка ДЗ</th><th class="c">Итого</th></tr>${t.groups.map(g=>`<tr><td class="nm">${g.id}</td><td>${g.days} в ${g.time}</td><td class="c">${Math.round(3*k)}</td><td class="c">${(4.5*k).toFixed(1)}</td><td class="c">${(1.35*k).toFixed(1)}</td><td class="c"><b>${(5.85*k).toFixed(1)}</b></td></tr>`).join('')||'<tr><td colspan="6" class="meta">Групп пока нет</td></tr>'}<tr class="sum"><td colspan="2">Плановая нагрузка ${m==='week'?'в неделю':'в месяц'}</td><td class="c">${Math.round(t.groups.length*3*k)}</td><td class="c">${(t.groups.length*4.5*k).toFixed(1)}</td><td class="c">${(t.groups.length*1.35*k).toFixed(1)}</td><td class="c">${(t.groups.length*5.85*k).toFixed(1)}</td></tr></table></div>
+    <div class="hint">Занятие длится 1,5 часа. На подготовку и проверку заложено 30% от времени занятий.</div>`;
+  }
+  function vHours(full){
+    const m=S.hm, own=S.role==='owner', q=(S.q.hq||'').toLowerCase();
+    let rows=STAFFALL.filter(s=>s.role!=='Владелец').map(s=>{const cur=hoursVal(s,m,0), prev=hoursVal(s,m,1), norm=hoursNorm(s,m);return {s,cur,prev,norm,load:pct(prev,norm),cost:payFor(s,prev,m)};});
+    const all=rows.slice(), over=all.filter(r=>r.load>100).length;
+    if(!full){if(S.hf==='t') rows=rows.filter(r=>r.s.role==='Преподаватель'); else if(S.hf==='m') rows=rows.filter(r=>r.s.role!=='Преподаватель'); else if(S.hf==='over') rows=rows.filter(r=>r.load>100);}
+    if(q&&!full) rows=rows.filter(r=>r.s.name.toLowerCase().includes(q));
+    rows.sort((a,b)=>b.prev-a.prev); const pg=pager('hq',rows.length,full);
+    const sel=STAFFALL.find(s=>s.id===S.hs)||(rows[0]||all[0]).s, total=Array.from({length:12},(_,k)=>{const i=11-k,p=period(m,-i);return [m==='week'?dm(p.a):shortM(p.a),Math.round(sum(all,r=>hoursVal(r.s,m,i)))];});
+    const pl=m==='week'?'прошлую неделю':'прошлый месяц';
+    return `<div class="head"><div><h2>${own?'Часы и оплата труда':'Часы работы'}</h2><div class="sub">Сколько часов отработал каждый сотрудник: преподаватели, менеджеры и руководитель.${own?' Стоимость считается по условным ставкам.':''}</div></div><div class="inl no-print">${pdfBtn()}</div></div>${chipRow(HMODE,m,'hm')}
+    <div class="grid g4">${stat(num(sum(all,r=>r.prev))+' ч','отработала команда за '+pl)}${stat(all.length,'человек в команде')}${stat(over,'работают сверх нормы',over?'hot':'ok')}${own?stat(mln(sum(all,r=>r.cost)),'оплата труда за '+pl):stat(avg(all.map(r=>r.load))+'%','средняя загрузка')}</div>
+    <div class="grid g2"><div><h3>Часы всей команды</h3><div class="card">${bars(total,true)}</div></div>
+    <div><h3>${esc(sel.name)}</h3><div class="card">${bars(hoursSeries(sel,m),true)}<div class="meta">${sel.role}. Норма: ${hoursNorm(sel,m)} ч ${m==='week'?'в неделю':'в месяц'}. Чтобы посмотреть другого сотрудника, нажмите «График» в таблице.</div></div></div></div>
+    <h3>Все сотрудники</h3>${full?'':chipRow([['all','Все'],['t','Преподаватели'],['m','Менеджеры и руководитель'],['over','Сверх нормы']],S.hf,'hf')+searchBox('hq','Поиск по имени')}
+    <div class="tw"><table><tr><th>Сотрудник</th><th>Роль</th><th class="c">Текущий период</th><th class="c">За ${pl}</th><th class="c">Норма</th><th>Загрузка</th>${own?'<th class="r">Оплата труда</th>':''}<th class="no-print"></th></tr>${rows.slice(pg.from,pg.to).map(r=>{const l=loadTone(r.load);return `<tr class="${sel.id===r.s.id?'sel':''}"><td class="nm">${esc(r.s.name)}</td><td>${r.s.role}</td><td class="c">${r.cur} ч</td><td class="c"><b>${r.prev} ч</b></td><td class="c">${r.norm} ч</td><td><div style="display:flex;gap:6px;align-items:center"><div class="bar ${r.load>100?'red':r.load>=85?'warn':''}" style="width:70px"><i style="width:${Math.min(100,r.load)}%"></i></div><span class="pill ${l[0]}">${r.load}%</span></div></td>${own?`<td class="r">${money(r.cost)}</td>`:''}<td class="no-print"><button class="btn sm" data-act="hsel" data-id="${r.s.id}">График</button></td></tr>`;}).join('')||'<tr><td colspan="8" class="meta">Никого не найдено</td></tr>'}</table></div>${pg.html}`;
+  }
+
+  /* ===== Акция: участники по периодам ===== */
+  const AMODES=[['day','День'],['week','Неделя'],['month','Месяц'],['year','Год']];
+  function promoRecs(){
+    const ms=S.role==='manager'?[S.mgr]:Object.keys(MIDX); let all=[], paid=0;
+    ms.forEach(m=>{const r=periodApps(m,S.am,S.aoff);paid+=r.filter(x=>x.res==='оплатил').length;all=all.concat(r.filter(x=>x.promo&&x.res==='оплатил'));});
+    return {list:all.sort((a,b)=>a.d-b.d||b.h-a.h),paid};
+  }
+  const bookSt=x=>x.d>5?['ok','отправлены']:x.d>2?['gold','готовы к отправке']:['gray','ждём адрес'];
+  function vPromo(full){
+    const p=period(S.am,S.aoff), R=promoRecs(), L=R.list, q=(S.q.pq||'').toLowerCase(), sent=L.filter(x=>x.d>5).length;
+    let F=L; if(q&&!full) F=F.filter(x=>x.name.toLowerCase().includes(q)||x.group.toLowerCase().includes(q)); const pg=pager('pq',F.length,full), rows=full?F.slice(0,400):F.slice(pg.from,pg.to);
+    return `<div class="head"><div><h2>Акция «30 уроков сразу + книги»</h2><div class="sub">Кто оплатил 30 уроков до начала курса и получает комплект Huna Arabiya в подарок.${S.role==='manager'?' Показаны ваши студенты.':' Показаны все менеджеры.'}</div></div><div class="inl no-print">${pdfBtn()}</div></div>${chipRow(AMODES,S.am,'am')}
+    <div class="head" style="align-items:center;margin:4px 0 12px"><h3 style="margin:0">${p.label}</h3><div class="cal-ctl no-print"><div class="grp"><button data-act="anav" data-d="-1">‹ Раньше</button><button data-act="anav" data-d="0">Текущий</button><button data-act="anav" data-d="1" ${S.aoff>=0?'disabled':''}>Позже ›</button></div></div></div>
+    <div class="grid g5">${stat(num(L.length),'участников акции')}${stat(pct(L.length,R.paid)+'%','от всех оплативших')}${stat(mln(L.length*CFG.PRICE),'оплачено по акции','ok')}${stat(num(sent),'комплектов отправлено')}${stat(num(L.length-sent),'ждут отправки',L.length-sent?'hot':'ok')}</div>
+    <h3>${{day:'Участники по часам',week:'Участники по дням недели',month:'Участники по дням месяца',year:'Участники по месяцам'}[S.am]}</h3><div class="card">${bars(buckets(L,S.am,p))}</div>
+    <h3>Участники${full&&F.length>400?' (первые 400 из '+num(F.length)+')':''}</h3>${full?'':searchBox('pq','Поиск по имени или группе')}
+    <div class="tw"><table><tr><th>Дата оплаты</th><th>Студент</th><th>Группа</th><th>Менеджер</th><th class="r">Сумма</th><th>Комплект книг</th></tr>${rows.map(x=>{const b=bookSt(x);return `<tr><td>${fday(addDays(TODAY,-x.d))}</td><td class="nm">${esc(x.name)}</td><td>${x.group}</td><td>${esc(x.mgr)}</td><td class="r">${money(CFG.PRICE)}</td><td><span class="pill ${b[0]}">${b[1]}</span></td></tr>`;}).join('')||'<tr><td colspan="6" class="meta">За этот период участников нет</td></tr>'}</table></div>${pg.html}`;
+  }
+
+  /* ===== Страница группы (менеджер и директор) ===== */
+  function tMetrics(name){
+    const t=teachersNow().find(x=>x.name===name); if(!t) return null;
+    const att=avg(t.groups.map(g=>g.att)), perf=avg(t.groups.map(g=>g.perf)), ret=70+((t.id*37)%26);
+    return {name:t.name,tg:t.tg,groups:t.groups.length,students:t.students,att,perf,ret,rate:(4.2+((t.id*13)%8)/10).toFixed(1),idx:Math.round(0.4*att+0.4*perf+0.2*ret),load:Math.round(t.hrs/t.cap*100)};
+  }
+  function grpNew(g,mode){
+    const r=rng(g.num*977+(g.sex==='w'?3:5)+(mode==='week'?1:2)), n=mode==='week'?12:6, out=[];
+    for(let i=n-1;i>=0;i--){const p=period(mode,-i);out.push([mode==='week'?dm(p.a):p.a.toLocaleDateString('ru-RU',{month:'short'}).replace('.',''),Math.round((mode==='week'?1:5)+r()*(mode==='week'?4:9))]);}
+    return out;
+  }
+  const grpTrend=g=>{const r=rng(g.num*313+7);return MONTHS.map((m,i)=>[m,Math.max(35,Math.round(g.perf-(5-i)*(1.5+r()*2.5)))]);};
+  function vGroup(full){
+    const g=gid(S.grp); if(!g) return '<div class="card meta">Группа не найдена</div>';
+    const r=roster(g), d=distrib(g), tm=tMetrics(g.teacher), nw=grpNew(g,S.gn), tr=grpTrend(g), q=(S.q.gs||'').toLowerCase();
+    let st=r.slice().sort((a,b)=>a.perf-b.perf); if(q&&!full) st=st.filter(x=>x.name.toLowerCase().includes(q)); const pg=pager('gs',st.length,full);
+    const paid=r.filter(x=>x.pay==='paid').length;
+    return `<div class="head"><div>${full?'':`<button class="btn sm no-print" data-act="gback" style="margin-bottom:10px">‹ Ко всем группам</button>`}<h2>Группа ${g.id}, ${esc(g.level)}</h2><div class="sub">${g.days} в ${g.time} мск. Преподаватель: ${esc(g.teacher)}. Набор ${g.open?'открыт':'закрыт'}.</div></div><div class="inl no-print">${pdfBtn()}</div></div>
+    <div class="grid g5">${stat(g.size+' из '+CFG.CAP,'учеников в группе')}${stat(g.att+'%','посещаемость')}${stat(avg(r.map(x=>x.perf))+'%','успеваемость')}${stat(pct(paid,r.length)+'%','оплатили за месяц',pct(paid,r.length)<85?'hot':'ok')}${stat(d.lo,'отстают','red')}</div>
+    <div class="grid g2">
+      <div><div class="head" style="align-items:baseline"><h3>Преподаватель</h3>${S.role==='director'&&!full?`<select data-act="gteacher" class="no-print" style="width:auto;max-width:230px"><option value="">Сменить преподавателя…</option>${teachersNow().filter(x=>x.on&&x.name!==g.teacher&&(!tSex(x.name)||tSex(x.name)===g.sex)).map(x=>`<option>${esc(x.name)}</option>`).join('')}</select>`:''}</div><div class="card">${tm?`<div class="row"><div><div class="nm" style="font-size:16px">${esc(tm.name)}</div><div class="meta">${esc(tm.tg)}</div></div><span class="pill ${tm.idx>=80?'ok':tm.idx>=72?'gray':'red'}">индекс ${tm.idx}</span></div>
+        <div class="kv" style="margin-top:10px"><span>Ведёт</span><b>групп: ${tm.groups}, учеников: ${num(tm.students)}</b></div><div class="kv"><span>Нагрузка</span><b>${tm.load}%</b></div><div class="kv"><span>Посещаемость по всем группам преподавателя</span><b>${tm.att}%</b></div><div class="kv"><span>Успеваемость по всем группам преподавателя</span><b>${tm.perf}%</b></div><div class="kv"><span>Продлили обучение</span><b>${tm.ret}%</b></div><div class="kv"><span>Оценка студентов</span><b>${tm.rate} из 5</b></div>`:'<div class="meta">Преподаватель не назначен</div>'}</div></div>
+      <div><h3>Прогресс группы</h3><div class="card"><div class="row"><div>Отлично ${d.hi}, норма ${d.mid}, отстают ${d.lo}</div></div><div style="margin:8px 0 2px">${stackBar(d)}</div>${bars(tr,true)}<div class="meta">Средняя успеваемость по месяцам</div></div></div>
+    </div>
+    <div class="head" style="align-items:baseline"><h3>Новоприбывшие</h3>${full?'':chipRow([['week','По неделям'],['month','По месяцам']],S.gn,'gn')}</div>
+    <div class="card">${bars(nw,true)}<div class="meta">Всего за период пришло ${sum(nw,x=>x[1])} человек. Последний столбец: текущий период.</div></div>
+    <h3>Ученики (${r.length})</h3>${full?'':searchBox('gs','Поиск по имени')}
+    <div class="tw"><table><tr><th>Ученик</th><th class="c">Успеваемость</th><th class="c">Посещаемость</th><th class="c">ДЗ</th><th class="c">Оплата</th><th></th></tr>${st.slice(pg.from,pg.to).map(x=>{const t=tone(x.perf);return `<tr><td>${esc(x.name)}</td><td class="c">${x.perf}%</td><td class="c">${x.att}%</td><td class="c">${x.hw}%</td><td class="c"><span class="pill ${x.pay==='paid'?'ok':x.pay==='wait'?'warn':'red'}">${x.pay==='paid'?'оплачено':x.pay==='wait'?'ждёт':'долг'}</span></td><td><span class="pill ${t[0]}">${t[1]}</span></td></tr>`;}).join('')||'<tr><td colspan="6" class="meta">Никого не найдено</td></tr>'}</table></div>${pg.html}`;
+  }
+
+  /* ===== Директор ===== */
+  function staffLoad(){
+    const t=teachersNow().filter(x=>x.on).map(x=>({name:x.name,kind:'t',pct:Math.round(x.hrs/x.cap*100),hrs:x.hrs,cap:x.cap,groups:x.groups.length,students:x.students,att:avg(x.groups.map(g=>g.att))}));
+    const m=Object.keys(MGRS).map(k=>{const L=LEADS.filter(l=>l.mgr===k&&l.st!=='done'&&l.st!=='closed');const chats=Math.round(L.length*0.55)+({Фатима:62,Идрис:40,Ахмад:38}[k]||30);return {name:k+' ('+MGRS[k]+')',kind:'m',pct:Math.round(chats/90*100),chats,cap:90};});
+    return t.concat(m);
+  }
+  const risk=g=>g.att<68||g.paid<80;
+  function collect(){let p=0,n=0;GROUPS.forEach(g=>{p+=g.paid*g.size;n+=g.size;});return Math.round(p/n);}
+  function vD_over(){
+    const c=st=>LEADS.filter(l=>l.st===st).length, total=totalStudents(), sl=staffLoad(), avgLoad=avg(sl.map(s=>s.pct));
+    const apps=940, forms=Math.round(apps*.86), paid=Math.round(apps*.39)+c('done'), al=[];
+    sl.filter(s=>s.pct>100).forEach(s=>al.push(['red',esc(s.name)+': перегруз '+s.pct+'%']));
+    sl.filter(s=>s.kind==='m'&&s.pct>=85&&s.pct<=100).forEach(s=>al.push(['warn',esc(s.name)+': высокая загрузка '+s.pct+'%']));
+    const rg=GROUPS.filter(risk).length; if(rg) al.push(['warn','Групп с низкой посещаемостью или оплатой: '+rg]);
+    const sla=LEADS.filter(slaRed).length; if(sla) al.push(['red','Заявок ждут ответа дольше 2 часов: '+sla]);
+    const nr=c('noreact'); if(nr) al.push(['warn','Не ответили на 2 напоминания: '+nr+' (нужен личный контакт)']);
+    return `<h2>Обзор</h2><div class="sub">${GROUPS.length} групп (${CFG.W_GROUPS} женских и ${CFG.M_GROUPS} мужских), ${num(total)} студентов, ${teachersNow().filter(x=>x.on).length} преподавателей</div>
+    <div class="grid g5">${stat(num(total),'студентов в группах')}${stat(GROUPS.length,'групп')}${stat(num(c('wait')+c('noreact')+c('check')),'заявок ждут оплаты','hot')}${stat(collect()+'%','собираемость платежей')}${stat(avgLoad+'%','средняя загрузка команды')}</div>
+    <div class="grid g2"><div><h3>Воронка за 7 дней (демо)</h3><div class="card">${funnel('Заявки',apps,apps)}${funnel('Анкеты заполнены',forms,apps)}${funnel('Оплатили',paid,apps)}</div></div>
+    <div><h3>Требует внимания</h3><div class="card">${al.map(a=>`<div class="row" style="padding:5px 0;justify-content:flex-start;gap:8px"><span class="pill ${a[0]}">•</span><span>${a[1]}</span></div>`).join('')||'Всё в порядке'}</div></div></div>`;
+  }
+  function vD_staff(){
+    let rows=teachersNow().map(t=>({id:t.id,name:t.name,role:'Преподаватель',groups:t.groups.length,students:t.students,pct:Math.round(t.hrs/t.cap*100),att:avg(t.groups.map(g=>g.att)),perf:avg(t.groups.map(g=>g.perf)),on:t.on}))
+      .concat(STAFFALL.filter(s=>s.role==='Менеджер').map(s=>{const gs=GROUPS.filter(g=>g.mgr===s.name);const L=LEADS.filter(l=>l.mgr===s.name&&l.st!=='done'&&l.st!=='closed');return {id:s.id,name:s.name,role:'Менеджер',groups:gs.length,students:sum(gs,g=>g.size),pct:Math.min(130,Math.round((L.length*0.55+({Фатима:62,Идрис:40,Ахмад:38}[s.name]||30))/90*100)),att:avg(gs.map(g=>g.att)),perf:avg(gs.map(g=>g.perf)),on:s.on};}));
+    const q=(S.q.st||'').toLowerCase();
+    if(S.sf==='t') rows=rows.filter(r=>r.role==='Преподаватель'); else if(S.sf==='m') rows=rows.filter(r=>r.role==='Менеджер'); else if(S.sf==='over') rows=rows.filter(r=>r.pct>100);
+    if(q) rows=rows.filter(r=>r.name.toLowerCase().includes(q));
+    rows.sort((a,b)=>b.pct-a.pct); const pg=pager('st',rows.length);
+    return `<div class="head"><div><h2>Сотрудники</h2><div class="sub">Загруженность, группы и прогресс. Здесь можно добавить или удалить сотрудника и выдать доступ.</div></div><button class="btn pri" data-act="addstaff">+ Нанять сотрудника</button></div>
+    ${chipRow([['all','Все'],['t','Преподаватели'],['m','Менеджеры'],['over','Перегруз']],S.sf,'sf')}${searchBox('st','Поиск по имени')}
+    <div class="tw"><table><tr><th>Сотрудник</th><th>Роль</th><th class="c">Групп</th><th class="c">Учеников</th><th>Нагрузка</th><th class="c">Посещаемость</th><th class="c">Успеваемость</th><th class="c">Доступ</th><th></th></tr>${rows.slice(pg.from,pg.to).map(r=>{const l=loadTone(r.pct);return `<tr><td><div class="nm">${esc(r.name)}</div><div class="meta">${esc(staff(r.id).tg)}</div></td><td>${r.role}</td><td class="c">${r.groups}</td><td class="c">${num(r.students)}</td><td><div style="display:flex;gap:6px;align-items:center"><div class="bar ${r.pct>100?'red':r.pct>=85?'warn':''}" style="width:70px"><i style="width:${Math.min(100,r.pct)}%"></i></div><span class="pill ${l[0]}">${r.pct}%</span></div></td><td class="c">${r.att}%</td><td class="c">${r.perf}%</td><td class="c">${accPill(staff(r.id))}</td><td><button class="btn sm" data-act="staffcard" data-id="${r.id}">Карточка</button></td></tr>`;}).join('')}</table></div>${pg.html}`;
+  }
+  function staffCard(id){
+    const s=staff(id); if(!s) return; let body='';
+    if(s.role==='Преподаватель'){
+      const t=teachersNow().find(x=>x.id===s.id), others=teachersNow().filter(x=>x.id!==s.id&&x.on&&x.name.split(' ')[0]===s.name.split(' ')[0]);
+      body=`<div class="grid g4" style="margin:10px 0">${stat(t.groups.length,'групп')}${stat(num(t.students),'учеников')}${stat(Math.round(t.hrs/t.cap*100)+'%','нагрузка')}${stat(avg(t.groups.map(g=>g.perf))+'%','успеваемость')}</div>
+      <h3>Группы и прогресс</h3><div class="tw"><table><tr><th>Группа</th><th>Уровень</th><th>Расписание</th><th class="c">Учеников</th><th>Прогресс</th><th class="c">Посещ.</th><th>Передать</th></tr>${t.groups.map(g=>{const d=distrib(g);return `<tr><td class="nm">${g.id}</td><td>${esc(g.level)}</td><td>${g.days} · ${g.time}</td><td class="c">${g.size}</td><td>${stackBar(d)}<span class="meta">отл. ${d.hi} · норма ${d.mid} · отст. ${d.lo}</span></td><td class="c">${g.att}%</td><td><select data-act="regroup" data-g="${g.id}" style="width:auto;padding:4px 6px"><option>…</option>${others.map(o=>`<option>${esc(o.name)}</option>`).join('')}</select></td></tr>`;}).join('')||'<tr><td colspan="7" class="meta">Групп пока нет. Прикрепите первую ниже.</td></tr>'}</table></div>
+      <h3>Прикрепить группу</h3><div class="inl"><select id="at-g" style="max-width:520px">${GROUPS.filter(g=>g.teacher!==s.name&&(!tSex(s.name)||g.sex===tSex(s.name))).map(g=>`<option value="${g.id}">${g.id}, ${esc(g.level)}, ${g.days} в ${g.time}, сейчас ведёт ${esc(g.teacher)}</option>`).join('')}</select><button class="btn pri" data-act="attach" data-id="${s.id}">Прикрепить к преподавателю</button></div>
+      <div class="meta">Группа перейдёт к этому преподавателю вместе с учениками и расписанием. Если время совпадает с его занятием, система не даст прикрепить.</div>`;
+    } else if(s.role==='Менеджер'){
+      const gs=GROUPS.filter(g=>g.mgr===s.name), L=LEADS.filter(l=>l.mgr===s.name&&l.st!=='done'&&l.st!=='closed');
+      body=`<div class="grid g3" style="margin:10px 0">${stat(L.length,'заявок в работе')}${stat(gs.length,'групп в секторе')}${stat(L.filter(slaRed).length,'просрочено >2 ч','hot')}</div><div class="meta">${esc(MGRS[s.name]||'')}</div>`;
+    } else body='<div class="meta" style="margin:10px 0">Служебный аккаунт. Управляется владельцем.</div>';
+    const canDel=s.role==='Преподаватель'||s.role==='Менеджер';
+    document.getElementById('modal').innerHTML=`<div class="modal" data-act="mclose"><div class="in wide"><div class="row"><div><h2>${esc(s.name)}</h2><div class="meta">${s.role}, вход по нику ${esc(s.tg)} ${accPill(s)}</div></div><button class="btn sm" data-act="mclose">Закрыть</button></div>${body}
+    ${canDel?`<div class="acts">${s.inv==='sent'?`<button class="btn gold" data-act="invshow" data-id="${s.id}">Показать приглашение</button>`:`<button class="btn" data-act="stafftoggle" data-id="${s.id}">${s.on?'Отключить доступ':'Включить доступ'}</button>`}<button class="btn danger" data-act="staffdel" data-id="${s.id}">Удалить сотрудника</button></div>`:''}</div></div>`;
+  }
+  const tSex=name=>/^Устаза /.test(name)?'w':/^Устаз /.test(name)?'m':null;
+  // занятие пересекается, если совпадает время и хотя бы один день недели
+  const clashFor=(name,g)=>GROUPS.find(x=>x.id!==g.id&&x.teacher===name&&x.time===g.time&&x.days.split(' ').some(d=>g.days.split(' ').indexOf(d)>=0));
+  function moveGroup(g,toName){
+    const c=clashFor(toName,g); if(c){toast('Не получилось: в это время у преподавателя уже группа '+c.id);return false;}
+    const from=g.teacher; g.teacher=toName; log('Директор','прикрепил(а) группу '+g.id+' к преподавателю '+toName+' (раньше вёл(а) '+from+')'); toast('Группа '+g.id+' прикреплена: '+toName); return true;
+  }
+  function staffAddForm(){
+    const ts=teachersNow().filter(x=>x.on&&x.groups.length>1);
+    document.getElementById('modal').innerHTML=`<div class="modal" data-act="mclose"><div class="in"><div class="row"><h2>Нанять сотрудника</h2><button class="btn sm" data-act="mclose">Закрыть</button></div>
+    <label class="fld"><span>Имя</span><input type="text" id="sf-name" placeholder="Например: Устаза Рим"></label>
+    <label class="fld"><span>Ник в Telegram</span><input type="text" id="sf-tg" placeholder="@username"></label>
+    <label class="fld"><span>Роль</span><select id="sf-role"><option>Преподаватель</option><option>Менеджер</option></select></label>
+    <label class="fld"><span>Забрать группы у преподавателя (необязательно)</span><select id="sf-from"><option value="">Не передавать группы</option>${ts.map(t=>`<option value="${t.id}">${esc(t.name)} (${t.groups.length} групп)</option>`).join('')}</select></label>
+    <label class="fld"><span>Сколько групп передать</span><input type="number" id="sf-n" value="1" min="1" max="6"></label>
+    <div class="meta">Вход в систему идёт по нику Telegram. Сотруднику придёт ссылка-приглашение, доступ по его роли откроется после перехода по ней.</div>
+    <div class="acts"><button class="btn pri" data-act="staffadd">Отправить приглашение</button></div></div></div>`;
+  }
+  const actorLead=()=>S.role==='owner'?'Владелец':'Директор';
+  function inviteCard(id){
+    const s=staff(id); if(!s) return; const pend=s.inv==='sent';
+    document.getElementById('modal').innerHTML=`<div class="modal" data-act="mclose"><div class="in"><div class="row"><div><h2>Приглашение</h2><div class="meta">${esc(s.name)}, ${s.role.toLowerCase()}, ${esc(s.tg)}</div></div><button class="btn sm" data-act="mclose">Закрыть</button></div>
+    <div class="invite">${pend?`Сообщение со ссылкой отправлено в Telegram на ${esc(s.tg)}. Доступ откроется, когда сотрудник перейдёт по ней.`:`Сотрудник уже принял приглашение и входит по нику ${esc(s.tg)}.`}<code>${esc(s.link||'ссылка использована')}</code></div>
+    <div class="meta">Ссылка одноразовая и привязана к этому нику: другой человек по ней не войдёт.</div>
+    ${pend?`<div class="acts"><button class="btn" data-act="invcopy" data-id="${s.id}">Скопировать ссылку</button><button class="btn" data-act="invresend" data-id="${s.id}">Отправить ещё раз</button><button class="btn gold" data-act="invaccept" data-id="${s.id}">Демо: сотрудник перешёл по ссылке</button></div>`:''}</div></div>`;
+  }
+  function staffDelForm(id){
+    const s=staff(id), isT=s.role==='Преподаватель', cand=isT?teachersNow().filter(x=>x.id!==s.id&&x.on):STAFFALL.filter(x=>x.role==='Менеджер'&&x.id!==s.id);
+    const n=isT?GROUPS.filter(g=>g.teacher===s.name).length:LEADS.filter(l=>l.mgr===s.name&&l.st!=='done').length;
+    document.getElementById('modal').innerHTML=`<div class="modal" data-act="mclose"><div class="in"><div class="row"><h2>Удалить: ${esc(s.name)}</h2><button class="btn sm" data-act="mclose">Закрыть</button></div>
+    <div class="card" style="margin:10px 0">${isT?`У преподавателя <b>${n}</b> групп. Их нужно передать другому.`:`У менеджера <b>${n}</b> заявок в работе. Их нужно передать другому.`}</div>
+    ${n?`<label class="fld"><span>Кому передать</span><select id="sd-to">${cand.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')}</select></label>`:''}
+    <div class="meta">Доступ сотрудника будет закрыт сразу, действие попадёт в журнал.</div><div class="acts"><button class="btn danger" data-act="staffdelok" data-id="${s.id}">Удалить и закрыть доступ</button></div></div></div>`;
+  }
+  function vD_groups(){
+    let gs=GROUPS.slice(); const q=(S.q.dg||'').toLowerCase();
+    if(S.gsex!=='all') gs=gs.filter(g=>g.sex===S.gsex); if(S.gf==='risk') gs=gs.filter(risk);
+    if(q) gs=gs.filter(g=>g.id.toLowerCase().includes(q)||g.teacher.toLowerCase().includes(q)||g.level.toLowerCase().includes(q));
+    gs.sort((a,b)=>(risk(b)-risk(a))||a.att-b.att); const pg=pager('dg',gs.length);
+    return `<h2>Группы и прогресс</h2><div class="sub">Сначала группы, которые требуют внимания. Нажмите на группу, чтобы увидеть людей.</div>${chipRow([['all','Все'],['w','Женские'],['m','Мужские']],S.gsex,'gsex')}${chipRow([['all','Все группы'],['risk','Только риск']],S.gf==='risk'?'risk':'all','gf')}${searchBox('dg','Номер, уровень или преподаватель')}
+    <div class="tw"><table><tr><th>Группа</th><th>Уровень</th><th>Преподаватель</th><th class="c">Занято</th><th>Прогресс людей</th><th class="c">Оплатили</th><th class="c">Посещ.</th><th></th><th></th></tr>${gs.slice(pg.from,pg.to).map(g=>`<tr><td class="nm">${g.id}</td><td>${esc(g.level)}</td><td>${esc(g.teacher)}</td><td class="c">${g.size}/${CFG.CAP}</td><td>${stackBar(distrib(g))}</td><td class="c">${g.paid}%</td><td class="c">${g.att}%</td><td>${risk(g)?'<span class="pill red">Риск</span>':'<span class="pill ok">Норма</span>'}</td><td><button class="btn sm pri" data-act="gopen" data-id="${g.id}">Открыть группу</button> <button class="btn sm" data-act="groupcard" data-id="${g.id}">Отстающие</button></td></tr>`).join('')}</table></div>${pg.html}<div class="legend no-print"><span><b style="background:#2f7d57"></b>отлично</span><span><b style="background:#c9a24b"></b>норма</span><span><b style="background:#a94438"></b>отстают</span></div>`;
+  }
+  function groupCard(id){
+    const g=gid(id), r=roster(g).slice().sort((a,b)=>a.perf-b.perf), d=distrib(g);
+    document.getElementById('modal').innerHTML=`<div class="modal" data-act="mclose"><div class="in wide"><div class="row"><div><h2>${g.id} · ${esc(g.level)}</h2><div class="meta">${g.days} · ${g.time} · ${esc(g.teacher)}</div></div><button class="btn sm" data-act="mclose">Закрыть</button></div>
+    <div class="grid g4" style="margin:10px 0">${stat(g.size,'учеников')}${stat(d.hi,'отлично','ok')}${stat(d.mid,'норма')}${stat(d.lo,'отстают','red')}</div>
+    <h3>Отстающие и их показатели</h3><div class="tw"><table><tr><th>Ученик</th><th class="c">Успев.</th><th class="c">Посещ.</th><th class="c">ДЗ</th><th class="c">Оплата</th></tr>${r.filter(x=>x.perf<60).slice(0,12).map(x=>`<tr><td>${esc(x.name)}</td><td class="c">${x.perf}%</td><td class="c">${x.att}%</td><td class="c">${x.hw}%</td><td class="c"><span class="pill ${x.pay==='paid'?'ok':x.pay==='wait'?'warn':'red'}">${x.pay==='paid'?'оплачено':x.pay==='wait'?'ждёт':'долг'}</span></td></tr>`).join('')||'<tr><td colspan="5" class="meta">Отстающих нет</td></tr>'}</table></div></div></div>`;
+  }
+  function vD_team(){
+    const st=staffLoad(), t=st.filter(s=>s.kind==='t').sort((a,b)=>b.pct-a.pct), m=st.filter(s=>s.kind==='m'), pg=pager('dt',t.length);
+    return `<h2>Загрузка команды</h2><div class="sub">Загруженность сотрудников (условные данные)</div><h3>Менеджеры</h3><div class="grid g3">${m.map(s=>{const l=loadTone(s.pct);return `<div class="card"><div class="row"><div class="nm">${esc(s.name)}</div><span class="pill ${l[0]}">${l[1]} · ${s.pct}%</span></div><div class="bar ${s.pct>100?'red':s.pct>=85?'warn':''}" style="margin:8px 0"><i style="width:${Math.min(100,s.pct)}%"></i></div><div class="meta">${s.chats} из ${s.cap} чатов в день</div></div>`;}).join('')}</div>
+    <h3>Преподаватели (${t.length})</h3><div class="tw"><table><tr><th>Преподаватель</th><th class="c">Групп</th><th class="c">Учеников</th><th class="c">Нагрузка</th><th class="c">Посещаемость</th><th></th></tr>${t.slice(pg.from,pg.to).map(s=>{const l=loadTone(s.pct);return `<tr><td>${esc(s.name)}</td><td class="c">${s.groups}</td><td class="c">${num(s.students)}</td><td class="c">${s.hrs} из ${s.cap} ч</td><td class="c">${s.att}%</td><td><span class="pill ${l[0]}">${l[1]} · ${s.pct}%</span></td></tr>`;}).join('')}</table></div>${pg.html}`;
+  }
+  function vD_ads(){
+    const it=intake(5), apps=it.apps, paid=it.paid, cpa=Math.round(adSpend/paid), cpl=Math.round(adSpend/apps), extra=Math.round(apps*S.adDelta/100);
+    return `<h2>Окупаемость рекламы</h2><div class="sub">Сколько стоит оплатившая студентка и какие каналы окупаются. Данные условные: подставьте свои.</div>
+    <div class="card"><div class="kv"><span>Расход на рекламу за набор (₽)</span><input type="number" style="max-width:160px" data-act="spend" value="${adSpend}"></div></div>
+    <div class="grid g4" style="margin-top:10px">${stat(num(apps),'заявок за набор')}${stat(num(paid),'оплатили')}${stat(money(cpl),'цена заявки')}${stat(money(cpa),'цена оплатившей','hot')}</div>
+    <h3>Сценарий: что если оплачивать будет больше</h3><div class="card"><div class="slider"><span>+${S.adDelta} п.п. к доле оплативших</span><input type="range" min="1" max="15" value="${S.adDelta}" data-act="delta"></div>
+    <div class="grid g3" style="margin-top:10px">${stat('+'+num(extra),'оплативших за набор')}${stat(money(extra*CFG.PRICE),'дополнительная выручка')}${stat(money(Math.round(adSpend/(paid+extra))),'новая цена оплатившей')}</div>
+    <div class="meta" style="margin-top:8px">Это расчёт сценария, а не прогноз и не обещание результата. Реальный эффект покажет пилот на одной группе набора.</div></div>
+    <h3>Окупаемость по каналам (30 дней)</h3>${channelsTable()}
+    <h3>Окупаемость по наборам</h3>${intakesTable()}<div class="hint">Окупаемость = выручка с первых оплат ÷ расход на рекламу.</div>`;
+  }
+  const AKIND=a=>/оплат|должник/i.test(a.what)?'money':/доступ|приглас|удалил\(а\) сотрудника|добавил/i.test(a.what)?'access':/групп|набор|журнал/i.test(a.what)?'groups':'other';
+  function vAudit(){
+    let L=AUDIT; if(S.al!=='all') L=L.filter(a=>AKIND(a)===S.al); const pg=pager('al',L.length);
+    return `<h2>Журнал действий</h2><div class="sub">Здесь записывается каждое важное действие: кто подтвердил оплату, изменил доступ, удалил сотрудника или передал группу. Нужен, чтобы разобрать спорную ситуацию: например, если студентка говорит, что оплатила, видно, кто и когда подтвердил оплату.</div>
+    ${chipRow([['all','Все'],['money','Оплаты'],['access','Доступы и сотрудники'],['groups','Группы и занятия'],['other','Остальное']],S.al,'al')}
+    <div class="tw"><table><tr><th>Когда</th><th>Кто</th><th>Что сделал</th></tr>${L.slice(pg.from,pg.to).map(a=>`<tr><td class="meta">${a.t}</td><td class="nm">${esc(a.who)}</td><td style="white-space:normal">${esc(a.what)}</td></tr>`).join('')||'<tr><td colspan="3" class="meta">Записей этого типа пока нет</td></tr>'}</table></div>${pg.html}`;
+  }
+
+  /* ===== Объявления (есть в каждом кабинете) ===== */
+  const meNow=()=>({student:'Тест Т.',teacher:S.teacher,manager:S.mgr,director:'Руководитель',owner:'Владелец'}[S.role]);
+  const annMine=a=>a.role===S.role&&a.from===meNow();
+  const isLead=()=>S.role==='director'||S.role==='owner';
+  function annVisible(){
+    const r=S.role, tg=r==='teacher'?curT().groups.map(g=>g.id):[];
+    return ANN.filter(a=>{
+      if(annMine(a)||isLead()||a.aud==='all') return true;
+      if(a.aud==='students') return r==='student'; if(a.aud==='teachers') return r==='teacher'; if(a.aud==='managers') return r==='manager';
+      if(a.aud.indexOf('g:')===0){const g=a.aud.slice(2);return (r==='student'&&g===ME_GROUP)||(r==='teacher'&&tg.indexOf(g)>=0);}
+      return false;
+    }).sort((a,b)=>(b.pin?1:0)-(a.pin?1:0)||a.mins-b.mins);
+  }
+  function annAudiences(){
+    const r=S.role;
+    if(r==='student') return [['g:'+ME_GROUP,'Моей группе '+ME_GROUP],['managers','Менеджерам'],['lead','Руководству']];
+    if(r==='teacher') return curT().groups.map(g=>['g:'+g.id,'Группе '+g.id]).concat([['teachers','Преподавателям'],['managers','Менеджерам'],['lead','Руководству']]);
+    if(r==='manager') return [['students','Студентам'],['managers','Менеджерам'],['teachers','Преподавателям'],['lead','Руководству']];
+    return [['all','Всем'],['students','Студентам'],['teachers','Преподавателям'],['managers','Менеджерам'],['lead','Руководству']];
+  }
+  function vAnn(){
+    let list=annVisible(); S.annSeen[S.role]=Math.max(0,...ANN.map(a=>a.id)); if(S.af==='mine') list=list.filter(annMine); else if(S.af==='pin') list=list.filter(a=>a.pin);
+    return `<h2>Объявления</h2><div class="sub">Написать может каждый. Выберите, кому адресовано объявление: его увидят только эти люди и руководство.</div>
+    <div class="card composer"><textarea id="ann-text" placeholder="Напишите объявление: что случилось, кого касается и что нужно сделать"></textarea>
+    <div class="inl"><span class="meta">Кому</span><select id="ann-aud">${annAudiences().map(o=>`<option value="${o[0]}">${o[1]}</option>`).join('')}</select><button class="btn pri" data-act="annsend">Отправить объявление</button><span class="meta">От имени: ${esc(meNow())}, ${RLAB[S.role].toLowerCase()}</span></div></div>
+    <div style="height:16px"></div>${chipRow([['all','Все'],['pin','Закреплённые'],['mine','Мои']],S.af,'af')}
+    ${list.map(a=>`<div class="ann ${a.pin?'pin':''}"><div class="ava2">${esc(a.from.replace(/^Устаза? /,'')[0])}</div><div class="bd"><div class="row"><div><span class="nm">${esc(a.from)}</span> <span class="meta">${RLAB[a.role]}, ${ago(a.mins)}</span></div><div>${a.pin?'<span class="pill gold">закреплено</span> ':''}<span class="pill">${audLabel(a.aud)}</span></div></div>
+      <div class="tx">${esc(a.text)}</div>${(isLead()||annMine(a))?`<div class="ft">${isLead()?`<button class="btn sm" data-act="annpin" data-id="${a.id}">${a.pin?'Открепить':'Закрепить'}</button>`:''}<button class="btn sm danger" data-act="anndel" data-id="${a.id}">Удалить</button></div>`:''}</div></div>`).join('')||'<div class="card meta">Объявлений пока нет. Напишите первое.</div>'}`;
+  }
+
+  /* ===== Аккаунт ассистента, база переписок и заказов ===== */
+  const isDir=()=>S.role==='director';
+  const actor=()=>isDir()?'Директор':S.mgr;
+  const mgrSel=()=>isDir()?`<select data-act="im"><option value="all" ${S.im==='all'?'selected':''}>Все менеджеры</option>${Object.keys(MGRS).map(k=>`<option ${S.im===k?'selected':''}>${esc(k)}</option>`).join('')}</select>`:'';
+  const scopeMgr=()=>isDir()?(S.im==='all'?null:S.im):S.mgr;
+  function vInbox(){
+    const sm=scopeMgr(), L=LEADS.filter(l=>chStatus(l)!=='closed'&&(!sm||l.mgr===sm)), cnt=s=>L.filter(l=>chStatus(l)===s).length, q=(S.q.ch||'').toLowerCase();
+    let F=L; if(S.cf!=='all') F=F.filter(l=>chStatus(l)===S.cf); if(q) F=F.filter(l=>l.name.toLowerCase().includes(q)||l.group.toLowerCase().includes(q));
+    F=F.slice().sort((a,b)=>a.age-b.age); const pg=pager('ch',F.length), page=F.slice(pg.from,pg.to);
+    if(!page.some(l=>l.id===S.chat)) S.chat=page[0]?page[0].id:null; const cur=S.chat?lead(S.chat):null;
+    const last=l=>{const t=thread(l);return t[t.length-1][1];};
+    const list=page.map(l=>{const s=chStatus(l);return `<div class="chi ${cur&&cur.id===l.id?'on':''}" data-act="chat" data-id="${l.id}"><div class="row"><span class="nm">${esc(l.name)}</span><span class="pill ${CHS[s][0]}">${CHS[s][1]}</span></div><div class="l2">${esc(last(l))}</div><div class="l2">${l.group} · ${mins(l.age)} назад${isDir()?' · '+esc(l.mgr):''}</div></div>`;}).join('')||'<div class="chi meta">Нет диалогов</div>';
+    let th='<div class="thr"><div class="ms"><div class="msg s">Выберите диалог слева</div></div></div>';
+    if(cur){const g=gid(cur.group);
+      th=`<div class="thr"><div class="hd2"><div class="row"><div><div class="nm">${esc(cur.name)}</div><div class="meta">${g.id} · ${esc(g.level)} · менеджер: ${esc(cur.mgr)}</div></div><div class="acts" style="margin:0">${cur.taken?`<button class="btn" data-act="give" data-id="${cur.id}">Вернуть ассистенту</button>`:`<button class="btn pri" data-act="take" data-id="${cur.id}">Взять диалог</button>`}<button class="btn sm" data-act="open" data-id="${cur.id}">Карточка</button></div></div></div>
+      <div class="ms" id="ms">${thread(cur).map(m=>m[0]==='s'?`<div class="msg s">${esc(m[1])}</div>`:`<div class="msg ${m[0]}"><small>${m[0]==='c'?esc(cur.name):m[0]==='a'?'ассистент':'менеджер '+esc(m[2]||cur.mgr)}</small>${esc(m[1])}</div>`).join('')}</div>
+      <div class="rp"><input type="text" id="rp-text" placeholder="${cur.taken?'Ваш ответ…':'Возьмите диалог, чтобы ответить самим'}" ${cur.taken?'':'disabled'}><button class="btn pri" data-act="send" data-id="${cur.id}" ${cur.taken?'':'disabled'}>Отправить</button></div></div>`;}
+    return `<div class="head"><div><h2>Аккаунт ассистента</h2><div class="sub">Бизнес-аккаунт, от имени которого ассистент ведёт переписку. Менеджер и директор видят диалоги и могут взять любой на себя.</div></div><div class="inl no-print">${mgrSel()}</div></div>
+    <div class="grid g4">${stat(num(L.length),'активных диалогов')}${stat(pct(cnt('ai'),L.length)+'%','ведёт ассистент сам','ok')}${stat(cnt('wait'),'ждут человека','hot')}${stat(cnt('human'),'взяты менеджером')}</div>
+    <div style="height:10px"></div>${chipRow([['all','Все'],['ai','Ведёт ассистент'],['wait','Ждут человека'],['human','Взяты менеджером']],S.cf,'cf')}${searchBox('ch','Поиск по имени или группе')}
+    <div class="inbox"><div><div class="chl">${list}</div>${pg.html}</div>${th}</div>
+    <h3>Правила ассистента</h3><div class="card"><div class="row"><div><b>Ассистент ${aiOn?'включён':'на паузе'}</b><div class="meta">${aiOn?'Отвечает на типовые вопросы, собирает анкету, даёт ссылку на оплату и напоминает.':'Все новые диалоги сразу попадают менеджерам.'}</div></div>${isDir()?`<button class="btn ${aiOn?'':'gold'}" data-act="aitoggle">${aiOn?'Поставить на паузу':'Включить'}</button>`:''}</div>
+    <div class="kv" style="margin-top:8px"><span>Отвечает только по базе знаний и актуальным группам</span><b>да</b></div><div class="kv"><span>Религиозные вопросы и вопросы без ответа</span><b>передаёт человеку</b></div><div class="kv"><span>Напоминаний одному человеку</span><b>не больше 2</b></div><div class="kv"><span>Когда пишет менеджер</span><b>ассистент молчит</b></div></div>`;
+  }
+  function vArch(){
+    const sm=scopeMgr();
+    const head=`<div class="head"><div><h2>База переписок и заказов</h2><div class="sub">Вся история за 5 месяцев: кто писал, кто вёл диалог, чем закончилось, какие были заказы и оплаты.</div></div><div class="inl no-print">${mgrSel()}<button class="btn gold" data-act="export">Выгрузить в таблицу</button></div></div>${chipRow([['chats','Переписки'],['orders','Заказы']],S.at,'at')}`;
+    if(S.at==='orders'){
+      const O=ORDERS.filter(o=>!sm||o.mgr===sm), c=s=>O.filter(o=>o.st===s).length, q=(S.q.ao||'').toLowerCase();
+      let F=O; if(S.os!=='all') F=F.filter(o=>o.st===S.os); if(q) F=F.filter(o=>o.name.toLowerCase().includes(q)||o.group.toLowerCase().includes(q)||o.id.toLowerCase().includes(q));
+      const pg=pager('ao',F.length);
+      return head+`<div class="grid g4">${stat(num(O.length),'заказов')}${stat(mln(c('paid')*CFG.PRICE),'оплачено','ok')}${stat(num(c('wait')),'ожидают оплаты','hot')}${stat(num(c('refund')),'возвратов','red')}</div><div style="height:10px"></div>${chipRow([['all','Все'],['paid','Оплачены'],['wait','Ожидают'],['refund','Возвраты']],S.os,'os')}${searchBox('ao','Номер заказа, имя или группа')}
+      <div class="tw"><table><tr><th>Заказ</th><th>Дата</th><th>Студент</th><th>Группа</th><th class="r">Сумма</th><th>Статус</th><th>Менеджер</th><th>Источник</th></tr>${F.slice(pg.from,pg.to).map(o=>`<tr><td class="nm">${o.id}</td><td>${dago(o.days)}</td><td>${esc(o.name)}${o.promo?' <span class="pill gold">Акция</span>':''}</td><td>${o.group}</td><td class="r">${money(o.amount)}</td><td><span class="pill ${OST[o.st][0]}">${OST[o.st][1]}</span></td><td>${esc(o.mgr)}</td><td class="meta">${o.src}</td></tr>`).join('')||'<tr><td colspan="8" class="meta">Ничего не найдено</td></tr>'}</table></div>${pg.html}`;
+    }
+    const A=ARCH.filter(a=>!sm||a.mgr===sm), q=(S.q.ac||'').toLowerCase(), RP={'оплатил':'ok','думает':'warn','отказ':'red','не ответил':'gray'};
+    let F=A; if(S.cr!=='all') F=F.filter(a=>a.res===S.cr); if(q) F=F.filter(a=>a.name.toLowerCase().includes(q));
+    const pg=pager('ac',F.length);
+    return head+`<div class="grid g4">${stat(num(A.length),'переписок')}${stat(pct(A.filter(a=>a.by==='ассистент').length,A.length)+'%','вёл ассистент','ok')}${stat(pct(A.filter(a=>a.res==='оплатил').length,A.length)+'%','закончились оплатой')}${stat(num(A.filter(a=>a.res==='не ответил').length),'остались без ответа','hot')}</div><div style="height:10px"></div>${chipRow([['all','Все'],['оплатил','Оплатили'],['думает','Думают'],['отказ','Отказ'],['не ответил','Не ответили']],S.cr,'cr')}${searchBox('ac','Поиск по имени')}
+    <div class="tw"><table><tr><th>Дата</th><th>Студент</th><th>Менеджер</th><th>Источник</th><th class="c">Сообщений</th><th>Кто вёл</th><th>Итог</th><th></th></tr>${F.slice(pg.from,pg.to).map(a=>`<tr><td>${dago(a.days)}</td><td class="nm">${esc(a.name)}</td><td>${esc(a.mgr)}</td><td class="meta">${a.src}</td><td class="c">${a.msgs}</td><td>${a.by}</td><td><span class="pill ${RP[a.res]}">${a.res}</span></td><td><button class="btn sm" data-act="archopen" data-id="${a.i}">Открыть</button></td></tr>`).join('')||'<tr><td colspan="8" class="meta">Ничего не найдено</td></tr>'}</table></div>${pg.html}`;
+  }
+  function archChat(i){
+    const a=ARCH.find(x=>x.i===+i); if(!a) return;
+    const end={'оплатил':[['c',a.sex==='w'?'Оплатила, отправляю чек':'Оплатил, отправляю чек'],['m','Оплата подтверждена, место закреплено. Ждём вас на занятии!']],'думает':[['c','Мне нужно подумать'],['a','Хорошо. Напишу вам через 2 дня, место пока не закреплено.']],'отказ':[['c','Пока не получится, спасибо'],['a','Понимаю. Если решите позже, напишите сюда.']],'не ответил':[['a','Удалось определиться с группой?'],['a','Напоминаю в последний раз, больше не побеспокою.'],['s','Диалог закрыт: нет ответа']]}[a.res];
+    const t=[['c','Ассаляму алейкум, сколько стоит обучение?'],['a','Ва алейкум ассалям! 30 уроков стоят '+money(CFG.PRICE)+'. Умеете читать по-арабски?'],['c','Да'],['a','Тогда подойдёт группа для начинающих. Отправляю расписание и ссылку на анкету.']].concat(end);
+    document.getElementById('modal').innerHTML=`<div class="modal" data-act="mclose"><div class="in"><div class="row"><div><h2>${esc(a.name)}</h2><div class="meta">${dago(a.days)} · менеджер ${esc(a.mgr)} · ${a.src} · всего сообщений: ${a.msgs} · вёл: ${a.by}</div></div><button class="btn sm" data-act="mclose">Закрыть</button></div>
+    <div class="thr" style="margin-top:10px"><div class="ms">${t.map(m=>m[0]==='s'?`<div class="msg s">${esc(m[1])}</div>`:`<div class="msg ${m[0]}"><small>${m[0]==='c'?esc(a.name):m[0]==='a'?'ассистент':'менеджер '+esc(a.mgr)}</small>${esc(m[1])}</div>`).join('')}</div></div><div class="meta" style="margin-top:8px">Показано начало и конец переписки (демо).</div></div></div>`;
+  }
+  function vD_eff(){
+    const mg=Object.keys(MGRS).map(k=>{const ch=ARCH.filter(a=>a.mgr===k&&a.days<30), paid=ch.filter(a=>a.res==='оплатил').length;return {name:k,chats:ch.length,paid,conv:pct(paid,ch.length),reply:({Фатима:'2 ч 10 мин',Идрис:'1 ч 05 мин',Ахмад:'1 ч 20 мин'}[k]||'—'),sla:LEADS.filter(l=>l.mgr===k&&slaRed(l)).length,ai:pct(ch.filter(a=>a.by==='ассистент').length,ch.length),lost:ch.filter(a=>a.res==='не ответил').length};});
+    let ts=teachersNow().filter(t=>t.on&&t.groups.length).map(t=>{const att=avg(t.groups.map(g=>g.att)), perf=avg(t.groups.map(g=>g.perf)), ret=70+((t.id*37)%26);return {name:t.name,groups:t.groups.length,students:t.students,att,perf,ret,rate:(4.2+((t.id*13)%8)/10).toFixed(1),idx:Math.round(0.4*att+0.4*perf+0.2*ret)};}).sort((a,b)=>b.idx-a.idx);
+    const best=ts[0], worst=ts[ts.length-1]; if(S.ef==='top') ts=ts.slice(0,10); else if(S.ef==='low') ts=ts.filter(t=>t.idx<72);
+    const pg=pager('de',ts.length);
+    return `<h2>Эффективность сотрудников</h2><div class="sub">За последние 30 дней. Условные данные демо.</div>
+    <h3>Менеджеры</h3><div class="tw"><table><tr><th>Менеджер</th><th class="c">Диалогов</th><th class="c">Оплатили</th><th class="c">Конверсия</th><th class="c">Среднее время ответа</th><th class="c">Просрочено сейчас</th><th class="c">Вёл ассистент</th><th class="c">Остались без ответа</th></tr>${mg.map(m=>`<tr><td class="nm">${esc(m.name)}</td><td class="c">${num(m.chats)}</td><td class="c">${num(m.paid)}</td><td class="c"><span class="pill ${m.conv>=40?'ok':m.conv>=35?'gold':'warn'}">${m.conv}%</span></td><td class="c">${m.reply}</td><td class="c ${m.sla>20?'neg':''}">${m.sla}</td><td class="c">${m.ai}%</td><td class="c">${m.lost}</td></tr>`).join('')}</table></div>
+    <h3>Преподаватели</h3><div class="grid g2" style="margin-bottom:10px"><div class="card"><div class="tag">Лучший показатель</div><div class="nm">${esc(best.name)}</div><div class="meta">индекс ${best.idx} · посещаемость ${best.att}% · успеваемость ${best.perf}%</div></div><div class="card"><div class="tag">Нужна поддержка</div><div class="nm">${esc(worst.name)}</div><div class="meta">индекс ${worst.idx} · посещаемость ${worst.att}% · успеваемость ${worst.perf}%</div></div></div>
+    ${chipRow([['all','Все'],['top','Лучшие 10'],['low','Требуют внимания']],S.ef,'ef')}
+    <div class="tw"><table><tr><th>Преподаватель</th><th class="c">Групп</th><th class="c">Учеников</th><th class="c">Посещаемость</th><th class="c">Успеваемость</th><th class="c">Продлили обучение</th><th class="c">Оценка студентов</th><th class="c">Индекс</th></tr>${ts.slice(pg.from,pg.to).map(t=>`<tr><td class="nm">${esc(t.name)}</td><td class="c">${t.groups}</td><td class="c">${num(t.students)}</td><td class="c">${t.att}%</td><td class="c">${t.perf}%</td><td class="c">${t.ret}%</td><td class="c">${t.rate}</td><td class="c"><span class="pill ${t.idx>=80?'ok':t.idx>=72?'gray':'red'}">${t.idx}</span></td></tr>`).join('')||'<tr><td colspan="8" class="meta">Нет данных</td></tr>'}</table></div>${pg.html}
+    <div class="hint">Индекс = 40% посещаемость + 40% успеваемость + 20% продления. Это ориентир для разговора с сотрудником, а не оценка человека.</div>`;
+  }
+  function channels(){
+    const share={'реклама Telegram':.55,'реклама Instagram':.35,'канал':.05,'сайт':.05,'рекомендация':0};
+    return SRC.map(s=>{const a=ARCH.filter(x=>x.src===s&&x.days<30), paid=a.filter(x=>x.res==='оплатил').length, spend=adsMonth()*share[s], rev=paid*CFG.PRICE;return {s,apps:a.length,paid,spend,rev,cpa:paid&&spend?spend/paid:0,roi:spend?rev/spend:null};});
+  }
+  const channelsTable=()=>`<div class="tw"><table><tr><th>Канал</th><th class="r">Расход</th><th class="c">Заявок</th><th class="c">Оплатили</th><th class="c">Конверсия</th><th class="r">Цена оплатившей</th><th class="r">Выручка</th><th class="c">Окупаемость</th></tr>${channels().map(c=>`<tr><td class="nm">${c.s}</td><td class="r">${c.spend?money(c.spend):'—'}</td><td class="c">${c.apps}</td><td class="c">${c.paid}</td><td class="c">${pct(c.paid,c.apps)}%</td><td class="r">${c.cpa?money(c.cpa):'—'}</td><td class="r">${money(c.rev)}</td><td class="c">${c.roi===null?'<span class="pill ok">без затрат</span>':`<span class="pill ${c.roi>=3?'ok':'warn'}">×${c.roi.toFixed(1)}</span>`}</td></tr>`).join('')}</table></div>`;
+
+  /* ===== Владелец: финансы ===== */
+  function vO_fin(){
+    const mi=S.fm, t=tot(mi), prev=mi>0?tot(mi-1):null;
+    const dl=(k,inv)=>prev?` ${delta(prev[k],t[k],inv)}`:'';
+    const dyn=MONTHS.map((m,i)=>[m,tot(i).rev]);
+    const gl=GROUPS.map(g=>({g,f:gFin(g,mi)})).sort((a,b)=>b.f.profit-a.f.profit);
+    const lines=[['Поступило от студентов',t.rev,1],['Преподаватели',-t.teacher],['Реклама',-t.ads],['Менеджеры и администрация',-t.mgr],['Платформа и AI',-t.platform],['Прочие расходы (комиссии, мелочи)',-t.other],['Налоги (условно '+Math.round(CFG.TAX*100)+'%)',-t.tax],['Резерв ('+Math.round(CFG.RESERVE*100)+'%)',-t.reserve]];
+    return `<div class="head"><div><h2>Финансы</h2><div class="sub">Модельные данные: студенты × цена × доля платящих, ставки условные.</div></div><div class="inl no-print">${monthSel('fm',mi)}${pdfBtn()}</div></div>
+    <div class="grid g4">${stat(mln(t.rev)+dl('rev'),'доходы за '+['май','июнь','июль','август','сентябрь','октябрь'][mi])}${stat(mln(t.exp)+dl('exp',true),'расходы')}${stat(mln(t.profit)+dl('profit'),'прибыль','ok')}${stat(mln(t.free),'свободные деньги','ok')}</div>
+    <div class="grid g2"><div><h3>Свободные деньги: откуда берутся</h3><div class="card">${lines.map(l=>`<div class="kv"><span>${l[0]}</span><b class="${l[1]>=0?'pos':''}">${l[1]>=0?'':'−'}${mln(Math.abs(l[1]))}</b></div>`).join('')}<div class="kv tot"><span>Свободные средства</span><b class="pos">${mln(t.free)}</b></div><div class="meta" style="margin-top:6px">Свободные деньги = поступления − обязательные расходы − налоги − резерв.</div></div></div>
+    <div><h3>Динамика доходов</h3><div class="card">${bars(dyn,true)}<div class="meta">Май–Окт 2026, модель</div></div></div></div>
+    <div class="grid g2"><div><h3>Самые прибыльные группы</h3><div class="card">${gl.slice(0,5).map(x=>`<div class="kv"><span>${x.g.id} · ${esc(x.g.level)}</span><b class="pos">${money(x.f.profit)}</b></div>`).join('')}</div></div>
+    <div><h3>Самые слабые группы</h3><div class="card">${gl.slice(-5).reverse().map(x=>`<div class="kv"><span>${x.g.id} · ${esc(x.g.level)}</span><b class="${x.f.profit<0?'neg':''}">${money(x.f.profit)}</b></div>`).join('')}</div></div></div>`;
+  }
+  /* источники дохода: один и тот же доход месяца в разных разрезах */
+  function incomeData(mi){
+    const R=tot(mi).rev, by=keyf=>{const m={};GROUPS.forEach(g=>{const k=keyf(g);m[k]=(m[k]||0)+gFin(g,mi).rev;});return Object.keys(m).map(k=>[k,m[k]]).sort((a,b)=>b[1]-a[1]);};
+    const ch=channels(), paidTot=sum(ch,c=>c.paid)||1, fresh=R*0.46;
+    return {R,
+      type:[['Продления действующих студентов',R*0.54],['Первые оплаты новых студентов',R*0.36],['Оплаты по акции «30 уроков сразу»',R*0.10]],
+      dir:by(g=>g.sex==='w'?'Женские группы':'Мужские группы'),
+      prog:by(g=>g.level.indexOf('Huna Arabiya')===0?'Huna Arabiya, арабский язык':g.level),
+      chan:ch.map(c=>[c.s.charAt(0).toUpperCase()+c.s.slice(1),fresh*c.paid/paidTot]).sort((a,b)=>b[1]-a[1]),
+      pay:[['СБП по QR-коду',R*0.71],['Перевод на карту',R*0.24],['Оплата частями',R*0.05]],
+      mgr:by(g=>g.mgr).map(r=>[r[0]+' ('+(MGRS[r[0]]||'менеджер')+')',r[1]]),fresh};
+  }
+  const srcCard=(title,rows,total,note)=>`<div><h3>${title}</h3><div class="card">${rows.map(r=>`<div class="kv"><span>${esc(r[0])}</span><b>${mln(r[1])} <span class="meta">${pct(r[1],total)}%</span></b></div><div class="bar" style="margin-bottom:11px"><i style="width:${pct(r[1],total)}%"></i></div>`).join('')}${note?`<div class="meta">${note}</div>`:''}</div></div>`;
+  function vO_income(){
+    const mi=S.fm, D=incomeData(mi), top=D.prog[0], full=['май','июнь','июль','август','сентябрь','октябрь'];
+    return `<div class="head"><div><h2>Источники дохода</h2><div class="sub">Откуда пришли деньги за месяц: один и тот же доход, разложенный по типу оплаты, направлениям, программам, каналам, способам оплаты и менеджерам. Модельные данные.</div></div><div class="inl no-print">${monthSel('fm',mi)}${pdfBtn()}</div></div>
+    <div class="grid g4">${stat(mln(D.R),'все доходы за '+full[mi])}${stat(mln(D.type[0][1]),'продления, '+pct(D.type[0][1],D.R)+'% дохода','ok')}${stat(mln(D.fresh),'от новых студентов, '+pct(D.fresh,D.R)+'%')}${stat(pct(top[1],D.R)+'%','даёт программа «'+esc(top[0])+'»')}</div>
+    <div class="grid g2">${srcCard('По типу оплаты',D.type,D.R,'Продления: студент оплачивает следующие 30 уроков. Первые оплаты: только что записавшиеся.')}${srcCard('По направлениям',D.dir,D.R)}</div>
+    <div class="grid g2">${srcCard('По программам',D.prog,D.R)}${srcCard('Откуда пришли новые студенты',D.chan,D.fresh,'Считаются только первые оплаты и оплаты по акции: '+mln(D.fresh)+'.')}</div>
+    <div class="grid g2">${srcCard('По способу оплаты',D.pay,D.R)}${srcCard('По менеджерам',D.mgr,D.R,'Доход групп, которые ведёт менеджер.')}</div>
+    <h3>Источники по месяцам</h3><div class="tw"><table><tr><th>Месяц</th><th class="r">Продления</th><th class="r">Новые студенты</th><th class="r">Акция</th><th class="r">Женские группы</th><th class="r">Мужские группы</th><th class="r">Всего</th></tr>${MONTHS.map((m,i)=>{const d=incomeData(i), w=(d.dir.find(x=>x[0]==='Женские группы')||[0,0])[1];return `<tr class="${i===mi?'sel':''}"><td class="nm">${m} 2026</td><td class="r">${money(d.type[0][1])}</td><td class="r">${money(d.type[1][1])}</td><td class="r">${money(d.type[2][1])}</td><td class="r">${money(w)}</td><td class="r">${money(d.R-w)}</td><td class="r"><b>${money(d.R)}</b></td></tr>`;}).join('')}</table></div>`;
+  }
+  function groupFinTable(full){
+    const mi=S.fm; let rows=GROUPS.map(g=>({g,f:gFin(g,mi)})); const q=(S.q.of||'').toLowerCase();
+    if(S.gsex!=='all') rows=rows.filter(r=>r.g.sex===S.gsex); if(S.ff==='loss') rows=rows.filter(r=>r.f.margin<0.25);
+    if(q) rows=rows.filter(r=>r.g.id.toLowerCase().includes(q)||r.g.teacher.toLowerCase().includes(q));
+    rows.sort((a,b)=>b.f.profit-a.f.profit); const pg=pager('of',rows.length,full), T=tot(mi);
+    const tr=rows.slice(pg.from,pg.to).map(r=>`<tr><td class="nm">${r.g.id}</td><td>${esc(r.g.level)}</td><td class="c">${r.g.size}</td><td class="r">${money(r.f.rev)}</td><td class="r">${money(r.f.teacher)}</td><td class="r">${money(r.f.ads)}</td><td class="r">${money(r.f.platform+r.f.other)}</td><td class="r">${money(r.f.exp)}</td><td class="r ${r.f.profit<0?'neg':'pos'}">${money(r.f.profit)}</td><td class="c">${Math.round(r.f.margin*100)}%</td></tr>`).join('');
+    return `<div class="tw"><table><tr><th>Группа</th><th>Уровень</th><th class="c">Студентов</th><th class="r">Доходы</th><th class="r">Преподаватель</th><th class="r">Реклама</th><th class="r">Платформа и прочее</th><th class="r">Расходы</th><th class="r">Прибыль</th><th class="c">Маржа</th></tr>${tr}<tr class="sum"><td colspan="2">Итого по всем группам</td><td class="c">${num(sum(GROUPS,g=>g.size))}</td><td class="r">${money(T.rev)}</td><td class="r">${money(T.teacher)}</td><td class="r">${money(T.ads)}</td><td class="r">${money(T.platform+T.other)}</td><td class="r">${money(T.teacher+T.ads+T.platform+T.other)}</td><td class="r">${money(T.rev-T.teacher-T.ads-T.platform-T.other)}</td><td class="c">—</td></tr></table></div>${pg.html}`;
+  }
+  function vO_groups(){
+    return `<div class="head"><div><h2>Доходы и расходы по группам</h2><div class="sub">Сколько заработала и потратила каждая группа за месяц (реклама распределена по числу студентов).</div></div><div class="inl no-print">${monthSel('fm',S.fm)}${pdfBtn()}</div></div>
+    ${chipRow([['all','Все'],['w','Женские'],['m','Мужские']],S.gsex,'gsex')}${chipRow([['all','Все группы'],['loss','Низкая маржа (<25%)']],S.ff,'ff')}${searchBox('of','Номер группы или преподаватель')}${groupFinTable(false)}`;
+  }
+  function intakesTable(){
+    const rows=INTAKE_NAMES.map((_,i)=>intake(i));
+    return `<div class="tw"><table><tr><th>Набор</th><th class="r">Расход на рекламу</th><th class="c">Заявок</th><th class="c">Оплатили</th><th class="r">Цена заявки</th><th class="r">Цена оплатившей</th><th class="r">Выручка с оплат</th><th class="c">Окупаемость</th></tr>${rows.map(r=>`<tr><td class="nm">${r.name}</td><td class="r">${money(r.spend)}</td><td class="c">${r.apps}</td><td class="c">${r.paid}</td><td class="r">${money(r.cpl)}</td><td class="r">${money(r.cpa)}</td><td class="r">${money(r.rev)}</td><td class="c"><span class="pill ${r.roi>=4?'ok':'warn'}">×${r.roi.toFixed(1)}</span></td></tr>`).join('')}</table></div>`;
+  }
+  function vO_intakes(){
+    const cur=intake(5), prev=intake(4);
+    return `<div class="head"><div><h2>Наборы и реклама</h2><div class="sub">Сколько потратили на каждый набор и что получили.</div></div><div class="inl no-print">${pdfBtn()}</div></div>
+    <div class="grid g4">${stat(money(cur.spend)+' '+delta(prev.spend,cur.spend,true),'потратили на текущий набор')}${stat(cur.paid+' '+delta(prev.paid,cur.paid),'оплатили')}${stat(money(cur.cpa)+' '+delta(prev.cpa,cur.cpa,true),'цена оплатившей','hot')}${stat('×'+cur.roi.toFixed(1),'окупаемость рекламы','ok')}</div>
+    <h3>Все наборы</h3>${intakesTable()}<div class="hint">Окупаемость = выручка с первых оплат ÷ расход на рекламу. Расход на текущий набор меняется в разделе директора «Реклама и конверсия».</div>`;
+  }
+  function cmpRows(a,b){
+    const A=tot(a), B=tot(b), IA=intake(a), IB=intake(b);
+    return [['Доходы',A.rev,B.rev,money,false],['Расходы',A.exp,B.exp,money,true],['Прибыль',A.profit,B.profit,money,false],['Рентабельность, %',A.margin*100,B.margin*100,v=>v.toFixed(1)+'%',false],['Студентов',A.students,B.students,num,false],['Расходы на рекламу',A.ads,B.ads,money,true],['Цена оплатившей',IA.cpa,IB.cpa,money,true],['Свободные деньги',A.free,B.free,money,false]];
+  }
+  function cmpTable(a,b){
+    return `<div class="tw"><table><tr><th>Показатель</th><th class="r">${MONTHS[a]} 2026</th><th class="r">${MONTHS[b]} 2026</th><th class="c">Изменение</th></tr>${cmpRows(a,b).map(r=>`<tr><td>${r[0]}</td><td class="r">${r[3](r[1])}</td><td class="r">${r[3](r[2])}</td><td class="c">${delta(r[1],r[2],r[4])}</td></tr>`).join('')}</table></div>`;
+  }
+  function vO_compare(){
+    return `<div class="head"><div><h2>Сравнение периодов</h2><div class="sub">Выберите два месяца и сравните ключевые показатели.</div></div><div class="inl no-print">${pdfBtn()}</div></div>
+    <div class="inl no-print"><span class="meta">Период 1</span>${monthSel('cmpA',S.cmpA)}<span class="meta">Период 2</span>${monthSel('cmpB',S.cmpB)}</div>${cmpTable(S.cmpA,S.cmpB)}`;
+  }
+  function dynChart(){
+    const rows=MONTHS.map((m,i)=>({m,t:tot(i)})), max=Math.max(...rows.map(r=>r.t.rev));
+    return `<div class="card"><div class="mbars">${rows.map(r=>`<div class="m"><div class="s"><i style="height:${Math.round(r.t.rev/max*100)}%;background:#1b5e4f" title="Доходы"></i><i style="height:${Math.round(r.t.exp/max*100)}%;background:#c9a24b" title="Расходы"></i><i style="height:${Math.max(2,Math.round(r.t.profit/max*100))}%;background:#2f7d57;opacity:.7" title="Прибыль"></i></div><span>${r.m}</span></div>`).join('')}</div><div class="legend"><span><b style="background:#1b5e4f"></b>доходы</span><span><b style="background:#c9a24b"></b>расходы</span><span><b style="background:#2f7d57"></b>прибыль</span></div></div>`;
+  }
+  function vO_dyn(){
+    const rows=MONTHS.map((m,i)=>({m,t:tot(i),p:i?tot(i-1):null}));
+    return `<div class="head"><div><h2>Динамика</h2><div class="sub">Как менялись доходы, расходы и прибыль по месяцам (модель).</div></div><div class="inl no-print">${pdfBtn()}</div></div>${dynChart()}
+    <h3>По месяцам</h3><div class="tw"><table><tr><th>Месяц</th><th class="r">Доходы</th><th class="c">к пред.</th><th class="r">Расходы</th><th class="r">Прибыль</th><th class="c">к пред.</th><th class="r">Свободные деньги</th><th class="c">Студентов</th></tr>${rows.map(r=>`<tr><td class="nm">${r.m}</td><td class="r">${money(r.t.rev)}</td><td class="c">${r.p?delta(r.p.rev,r.t.rev):'—'}</td><td class="r">${money(r.t.exp)}</td><td class="r">${money(r.t.profit)}</td><td class="c">${r.p?delta(r.p.profit,r.t.profit):'—'}</td><td class="r">${money(r.t.free)}</td><td class="c">${num(r.t.students)}</td></tr>`).join('')}</table></div>`;
+  }
+  function cell(v){
+    if(v==='all') return '<span class="ac all" title="Видит всё"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-9"/></svg></span>';
+    if(v==='own') return '<span class="ac own" title="Видит только своё">свои</span>'; if(v==='summary') return '<span class="ac own" title="Видит только итоги">итоги</span>';
+    if(v===false) return '<span class="ac no" title="Нет доступа"></span>';
+    if(Array.isArray(v)) return `<label class="sw" title="Вы решаете сами"><input type="checkbox" data-act="acc" data-role="${v[0]}" data-key="${v[1]}" ${accOn(v)?'checked':''}><i></i></label>`;
+    return '';
+  }
+  const accOn=v=>v[1]==='audit'?!!ACC.director.audit:ACC[v[0]][v[1]]!==false;
+  const sees=v=>v==='all'||v==='own'||v==='summary'||(Array.isArray(v)&&accOn(v));
+  const ROLECARDS=[['s','Студент','Только своё: расписание, задания, оплата и объявления.'],['t','Преподаватель','Свои группы и ученики, свои часы и расписание.'],['m','Менеджер','Свои заявки, переписки и оплаты.'],['d','Директор','Вся работа академии, кроме финансов владельца.'],['o','Владелец','Всё, включая деньги и доступы.']];
+  function vO_access(){
+    const q=(S.q.oa||'').toLowerCase(); let rows=STAFFALL.slice(); if(q) rows=rows.filter(r=>r.name.toLowerCase().includes(q)||r.role.toLowerCase().includes(q)); const pg=pager('oa',rows.length);
+    const caps=MATRIX.filter(r=>r.cap);
+    return `<h2>Доступы и аккаунты</h2><div class="sub">Кто что видит в системе. Переключатели вы включаете и выключаете сами, меню у сотрудников меняется сразу.</div>
+    <div class="grid g5">${ROLECARDS.map(c=>`<div class="card rolec"><b>${c[1]}</b><span>${c[2]}</span><i>${caps.filter(r=>sees(r[c[0]])).length} из ${caps.length} разделов</i></div>`).join('')}</div>
+    <div class="lg"><span><span class="ac all"><svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-9"/></svg></span> видит всё</span><span><span class="ac own">свои</span> только своё</span><span><span class="ac no"></span> нет доступа</span><span><label class="sw"><input type="checkbox" checked disabled><i></i></label> решаете вы</span></div>
+    <div class="tw"><table class="mx"><tr><th>Раздел</th><th class="c">Студент</th><th class="c">Преподаватель</th><th class="c">Менеджер</th><th class="c">Директор</th><th class="c">Владелец</th></tr>${MATRIX.map(r=>r.h?`<tr class="cat"><td colspan="6">${r.h}</td></tr>`:`<tr><td>${r.cap}</td><td class="c">${cell(r.s)}</td><td class="c">${cell(r.t)}</td><td class="c">${cell(r.m)}</td><td class="c">${cell(r.d)}</td><td class="c">${cell(r.o)}</td></tr>`).join('')}</table></div>
+    <h3>Аккаунты (${STAFFALL.length})</h3>${searchBox('oa','Поиск по имени или роли')}<div class="tw"><table><tr><th>Сотрудник</th><th>Ник в Telegram</th><th>Роль</th><th class="c">Статус</th><th></th></tr>${rows.slice(pg.from,pg.to).map(p=>`<tr><td class="nm">${esc(p.name)}</td><td>${esc(p.tg)}</td><td>${p.role}</td><td class="c">${accPill(p)}</td><td>${p.role==='Владелец'?'':p.inv==='sent'?`<button class="btn sm gold" data-act="invshow" data-id="${p.id}">Приглашение</button>`:`<button class="btn sm" data-act="stafftoggle" data-id="${p.id}">${p.on?'Отключить':'Включить'}</button>`}</td></tr>`).join('')}</table></div>${pg.html}<div class="meta" style="margin-top:8px">Вход идёт по аккаунту Telegram: роль закреплена за человеком, лишние разделы ему не показываются.</div>`;
+  }
+
+  /* ===== PDF (печать в PDF) ===== */
+  const PRINTERS={
+    grp:()=>vGroup(true),
+    d_hours:()=>vHours(true), o_hours:()=>vHours(true),
+    m_promo:()=>vPromo(true), d_promo:()=>vPromo(true), o_promo:()=>vPromo(true),
+    m_leads:()=>`<h2>Заявки: ${period(S.lm,S.lo).label}</h2><div class="sub">${esc(S.mgr)}, ${esc(MGRS[S.mgr]||'')}</div>${vM_period(true)}`,
+    o_groups:()=>`<h2>Доходы и расходы по группам · ${MONTHS[S.fm]} 2026</h2>${groupFinTable(true)}`,
+    o_intakes:()=>`<h2>Наборы и реклама</h2>${intakesTable()}`,
+    o_compare:()=>`<h2>Сравнение периодов: ${MONTHS[S.cmpA]} и ${MONTHS[S.cmpB]} 2026</h2>${cmpTable(S.cmpA,S.cmpB)}`,
+    o_dyn:()=>`<h2>Динамика доходов и расходов</h2>${dynChart()}`+document.getElementById('main').innerHTML.split('<h3>По месяцам</h3>')[1]?.replace(/^/,'<h3>По месяцам</h3>')||''
+  };
+  function printReport(){
+    const body=PRINTERS[S.view]?PRINTERS[S.view]():document.getElementById('main').innerHTML, pa=document.getElementById('printarea');
+    pa.innerHTML=`<div class="phead"><b>Huna Arabic · отчёт (демо-прототип)</b><span>${new Date().toLocaleDateString('ru-RU')}</span></div>${body}<div class="pfoot">Условные данные для демонстрации. Сформировано в CRM.</div>`;
+    document.body.classList.add('printing'); toast('В окне печати выберите «Сохранить как PDF»'); log(meNow(),'выгрузил(а) отчёт в PDF');
+    setTimeout(()=>{window.print();document.body.classList.remove('printing');pa.innerHTML='';},350);
+  }
+
+  /* ===== Карточка заявки и события ===== */
+  function openLead(id){
+    const l=lead(id); if(!l) return; const g=gid(l.group), ev=[['Анкета получена',l.age+30],['Ссылка на оплату и условия акции отправлены',l.age+29]];
+    if(l.rem>=1) ev.push(['Напоминание 1 отправлено ботом',Math.max(60,l.age-2880)]); if(l.rem>=2) ev.push(['Напоминание 2 отправлено ботом, ответа нет',Math.max(30,l.age-7200)]); if(l.st==='check') ev.push(['Нажата кнопка «Я оплатил(а)», чек отправлен',l.age]);
+    const tl=ev.sort((a,b)=>b[1]-a[1]);
+    document.getElementById('modal').innerHTML=`<div class="modal" data-act="mclose"><div class="in"><div class="row"><h2>${esc(l.name)}</h2><button class="btn sm" data-act="mclose">Закрыть</button></div>
+    <div class="meta">${esc(g.id)} · ${esc(g.level)} · ${g.days}, ${g.time} · мест осталось ${CFG.CAP-g.size} · источник: ${l.src}</div>
+    <div class="row" style="margin:10px 0"><span class="pill ${LST[l.st][0]}">${LST[l.st][1]}</span>${l.promo?'<span class="pill gold">Акция «30 уроков сразу»</span>':''}<span class="sla ${slaRed(l)?'red':''}">ждёт ${mins(l.age)}</span></div>
+    <ul class="tl">${tl.map(e=>`<li>${e[0]}<small>${mins(e[1])} назад</small></li>`).join('')}</ul><textarea id="lnote" placeholder="Заметка менеджера">${esc(l.note)}</textarea>
+    <div class="acts">${l.st==='wait'?`<button class="btn" data-act="remind" data-id="${l.id}">Напомнить</button>`:''}${l.st==='noreact'?`<button class="btn" data-act="personal" data-id="${l.id}">Написать лично</button>`:''}${l.st==='check'?`<button class="btn pri" data-act="confirm" data-id="${l.id}">Подтвердить оплату</button>`:''}<button class="btn" data-act="lnote" data-id="${l.id}">Сохранить заметку</button></div></div></div>`;
+  }
+  function evCard(gidv,t,d){
+    const g=gid(gidv); if(!g) return; const isT=S.role==='teacher';
+    document.getElementById('modal').innerHTML=`<div class="modal" data-act="mclose"><div class="in"><div class="row"><div><h2>${g.id} · ${esc(g.level)}</h2><div class="meta">${new Date(+d).toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'})} · ${t}</div></div><button class="btn sm" data-act="mclose">Закрыть</button></div>
+    <div class="grid g3" style="margin:12px 0">${stat(g.size,'учеников')}${stat(g.att+'%','посещаемость')}${stat(esc(g.teacher.replace('Устаз ','').replace('Устаза ','')),'преподаватель')}</div>
+    <div class="meta">Ссылка на занятие: придёт в чат группы за 5 минут до начала.</div>${isT?`<div class="acts"><button class="btn pri" data-act="evatt" data-g="${g.id}">Открыть журнал занятия</button></div>`:''}</div></div>`;
+  }
+
+  /* ===== Иконки меню ===== */
+  const IP={
+    home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+    cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+    book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M9 8h6"/>',
+    chart:'<path d="M4 20V11M10 20V4M16 20v-7M22 20H2"/>',
+    wallet:'<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M16 14.5h2"/>',
+    users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14a5 5 0 0 1 4.5 5"/>',
+    user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+    check:'<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12.5l3 3 5-6"/>',
+    pen:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
+    clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    list:'<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>',
+    chat:'<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/>',
+    db:'<ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/>',
+    help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17h.01"/>',
+    gauge:'<path d="M4 18a8 8 0 1 1 16 0"/><path d="M12 18l4-6"/>',
+    award:'<circle cx="12" cy="9" r="5"/><path d="M9 13.5L7.5 21l4.5-2.5L16.5 21 15 13.5"/>',
+    target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/>',
+    swap:'<path d="M4 8h14l-3-3M20 16H6l3 3"/>',
+    shield:'<path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.500-8-9V6z"/><path d="M9 12l2.2 2.200L15 10"/>',
+    bell:'<path d="M6 17v-6a6 6 0 0 1 12 0v6l2 2H4z"/><path d="M10 21h4"/>'
+  };
+  const IMAP={s_home:'home',s_sched:'cal',s_hw:'book',s_prog:'chart',s_pay:'wallet',t_sched:'cal',t_groups:'users',t_att:'check',t_students:'user',t_post:'pen',m_today:'clock',m_leads:'list',m_inbox:'chat',m_arch:'db',m_pay:'wallet',m_groups:'users',m_q:'help',m_stats:'chart',d_over:'home',d_staff:'user',d_groups:'users',d_team:'gauge',d_eff:'award',d_ads:'target',d_inbox:'chat',d_arch:'db',d_audit:'list',o_fin:'wallet',o_groups:'users',o_intakes:'target',o_compare:'swap',o_dyn:'chart',o_access:'shield',o_audit:'list',ann:'bell',t_hours:'clock',d_hours:'clock',o_hours:'clock',m_promo:'gift',d_promo:'gift',o_promo:'gift'};
+  IMAP.t_prog='award';
+  IP.pie='<path d="M12 3a9 9 0 1 0 9 9h-9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/>'; IMAP.o_income='pie';
+  IP.gift='<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M5 12v9h14v-9M12 8C9 8 8 6.5 8 5.5S10.5 3 12 8c1.5-5 4-3.5 4-2.5S15 8 12 8z"/>';
+  const ico=id=>`<svg viewBox="0 0 24 24" aria-hidden="true">${IP[IMAP[id]]||IP.list}</svg>`;
+
+  /* ===== Рендер ===== */
+  const VIEWS={s_home:vS_home,s_sched:vS_sched,s_hw:vS_hw,s_prog:vS_prog,s_pay:vS_pay,t_sched:vT_sched,t_groups:vT_groups,t_att:vT_att,t_students:vT_students,t_post:vT_post,m_today:vM_today,m_leads:vM_leads,m_pay:vM_pay,m_groups:vM_groups,m_q:vM_q,ann:vAnn,t_prog:vT_prog,o_income:vO_income,grp:()=>vGroup(false),t_hours:vT_hours,d_hours:()=>vHours(false),o_hours:()=>vHours(false),m_promo:()=>vPromo(false),d_promo:()=>vPromo(false),o_promo:()=>vPromo(false),m_stats:vM_stats,m_inbox:vInbox,m_arch:vArch,d_inbox:vInbox,d_arch:vArch,d_eff:vD_eff,d_over:vD_over,d_staff:vD_staff,d_groups:vD_groups,d_team:vD_team,d_ads:vD_ads,d_audit:vAudit,o_fin:vO_fin,o_groups:vO_groups,o_intakes:vO_intakes,o_compare:vO_compare,o_dyn:vO_dyn,o_access:vO_access,o_audit:vAudit};
+  function render(){
+    const nav=navFor(S.role), inGroup=S.view==='grp'&&(S.role==='manager'||S.role==='director')&&gid(S.grp);
+    if(!inGroup&&!nav.some(n=>n[0]===S.view)) S.view=nav[0][0];
+    const navOn=inGroup?(S.role==='manager'?'m_groups':'d_groups'):S.view;
+    const tl=teachersNow().filter(t=>t.on); if(!tl.some(t=>t.name===S.teacher)) S.teacher=(tl[0]||{}).name;
+    if(!MGRS[S.mgr]) S.mgr=Object.keys(MGRS)[0];
+    document.getElementById('roles').innerHTML=ROLES.map(r=>`<button data-act="role" data-id="${r[0]}" class="${S.role===r[0]?'on':''}">${r[1]}</button>`).join('');
+    let who='';
+    if(S.role==='manager') who=`<b>Менеджер</b><small>Вы входите как:</small><select data-act="mgr">${Object.keys(MGRS).map(k=>`<option ${S.mgr===k?'selected':''}>${esc(k)}</option>`).join('')}</select>`;
+    else if(S.role==='teacher') who=`<b>Преподаватель</b><small>Вы входите как:</small><select data-act="teacher">${tl.map(t=>`<option ${S.teacher===t.name?'selected':''}>${esc(t.name)}</option>`).join('')}</select>`;
+    else if(S.role==='student') who='<b>Студент</b><small>Тест Т. · группа Ж-017</small>';
+    else if(S.role==='director') who='<b>Директор</b><small>Операционное управление</small>';
+    else who='<b>Владелец</b><small>Финансы, отчёты и доступы</small>';
+    document.getElementById('who').innerHTML=who;
+    const main=document.getElementById('main'); main.innerHTML=VIEWS[S.view]();
+    document.getElementById('nav').innerHTML=nav.map(n=>{const b=badge(n[0]);return `<button data-act="go" data-id="${n[0]}" class="${navOn===n[0]?'on':''}">${ico(n[0])}<span>${n[1]}</span>${b?`<span class="badge">${b}</span>`:''}</button>`;}).join('');
+    document.getElementById('scale').innerHTML=`Групп: ${GROUPS.length}<br>Студентов: ${num(totalStudents())}<br>Сотрудников: ${STAFFALL.length}<br>Числа условные, для примера.`;
+    const ms=main.querySelector('#ms'); if(ms) ms.scrollTop=ms.scrollHeight;
+    const cw=main.querySelector('.calwrap'); if(cw){const b=cw.querySelector('.cal-body'); b.scrollTop=+cw.getAttribute('data-scroll');}
+    if(!S.open && !S.keepModal) document.getElementById('modal').innerHTML='';
+  }
+  const rerender=()=>{const sc=document.getElementById('main').scrollTop;render();document.getElementById('main').scrollTop=sc;if(S.open) openLead(S.open);};
+  const closeModal=()=>{S.open=null;S.keepModal=false;document.getElementById('modal').innerHTML='';};
+
+  /* ===== Действия ===== */
+  const doRemind=l=>{l.rem++;l.st=l.rem>=2?'noreact':'wait';};
+  document.addEventListener('click',e=>{
+    const el=e.target.closest('[data-act]'); if(!el) return; const a=el.getAttribute('data-act'), id=el.getAttribute('data-id');
+    if(a==='role'){S.role=id;S.view='';S.filter='all';S.sel={};closeModal();render();}
+    else if(a==='go'){S.view=id;const f=el.getAttribute('data-f');S.filter=(f&&['check','noreact','sla'].includes(f))?f:'all';if(f&&id==='m_leads')S.lm='now';P.lq=0;render();window.scrollTo(0,0);}
+    else if(a==='lm'||a==='pr'||a==='mk'||a==='gn'||a==='al'||a==='hm'||a==='hf'||a==='am'||a==='pm'){S[a]=id;P.tp=0;if(a==='lm'){S.lo=0;S.psel={};S.pr='all';}if(a==='am')S.aoff=0;P.pa=0;P.al=0;P.hq=0;P.pq=0;render();}
+    else if(a==='anav'){const d=+el.getAttribute('data-d');S.aoff=d===0?0:Math.min(0,S.aoff+d);P.pq=0;render();}
+    else if(a==='hsel'){S.hs=+id;rerender();window.scrollTo(0,0);}
+    else if(a==='lnav'){const d=+el.getAttribute('data-d');S.lo=d===0?0:Math.min(0,S.lo+d);S.psel={};P.pa=0;render();}
+    else if(a==='psel'){S.psel[id]=el.checked;rerender();}
+    else if(a==='pclear'){S.psel={};rerender();}
+    else if(a==='popen'){S.keepModal=true;recCard(id);}
+    else if(a==='pback'){const x=periodApps(S.mgr,S.lm,S.lo).find(z=>z.id===id);if(x){backToWork(x);delete S.psel[id];log(S.mgr,'вернул(а) заявку в работу: '+x.name);toast('Заявка в работе, напоминание отправлено');}closeModal();rerender();}
+    else if(a==='pbulk'){const ids=Object.keys(S.psel).filter(k=>S.psel[k]),list=periodApps(S.mgr,S.lm,S.lo);let n=0;ids.forEach(i=>{const x=list.find(z=>z.id===i);if(x&&canBack(x)){backToWork(x);n++;}});S.psel={};log(S.mgr,'вернул(а) в работу заявок: '+n);toast('Возвращено в работу: '+n+'. Напоминания отправлены');rerender();}
+    else if(a==='gopen'){S.grp=id;S.back=S.view;S.view='grp';P.gs=0;S.q.gs='';render();window.scrollTo(0,0);}
+    else if(a==='gback'){S.view=S.back||(S.role==='manager'?'m_groups':'d_groups');render();}
+    else if(a==='filter'){S.filter=id;P.lq=0;P.ts=0;render();}
+    else if(a==='gf'||a==='gsex'||a==='sf'||a==='ff'||a==='cf'||a==='at'||a==='os'||a==='cr'||a==='ef'||a==='af'){S[a]=id;P.gq=0;P.dg=0;P.st=0;P.of=0;P.ch=0;P.ao=0;P.ac=0;P.de=0;render();}
+    else if(a==='annsend'){const t=document.getElementById('ann-text'),au=document.getElementById('ann-aud');if(!t.value.trim()){toast('Напишите текст объявления');return;}ANN.push({id:ANNID++,from:meNow(),role:S.role,aud:au.value,text:t.value.trim(),mins:0,pin:false});log(meNow(),'объявление, кому: '+audLabel(au.value));toast('Объявление отправлено. Кому: '+audLabel(au.value));rerender();}
+    else if(a==='annpin'){const x=ANN.find(z=>z.id===+id);x.pin=!x.pin;toast(x.pin?'Объявление закреплено':'Объявление откреплено');rerender();}
+    else if(a==='anndel'){const i=ANN.findIndex(z=>z.id===+id);if(i>=0){log(meNow(),'удалил(а) объявление');ANN.splice(i,1);}toast('Объявление удалено');rerender();}
+    else if(a==='invcopy'){const s=staff(id);try{navigator.clipboard.writeText(s.link);}catch(err){}toast('Ссылка скопирована');}
+    else if(a==='invresend'){const s=staff(id);toast('Приглашение отправлено ещё раз: '+s.tg);log(actorLead(),'повторное приглашение: '+s.tg);}
+    else if(a==='invaccept'){const s=staff(id);s.inv='accepted';s.on=true;log(s.name,'принял(а) приглашение и вошёл(ла) в систему');toast(s.name+' перешёл(ла) по ссылке, доступ открыт');closeModal();render();}
+    else if(a==='invshow'){S.keepModal=true;inviteCard(id);}
+    else if(a==='chat'){S.chat=+id;rerender();}
+    else if(a==='take'){const l=lead(id);l.taken=true;thread(l).push(['s',actor()+' взял(а) диалог. Ассистент на паузе в этом чате']);log(actor(),'взял(а) диалог: '+l.name);toast('Диалог ваш, ассистент молчит');rerender();}
+    else if(a==='give'){const l=lead(id);l.taken=false;thread(l).push(['s','Диалог возвращён ассистенту']);log(actor(),'вернул(а) диалог ассистенту: '+l.name);toast('Ассистент снова ведёт диалог');rerender();}
+    else if(a==='send'){const l=lead(id),t=document.getElementById('rp-text');if(!t||!t.value.trim()){toast('Напишите сообщение');return;}thread(l).push(['m',t.value.trim(),actor()]);log(actor(),'ответил(а) в диалоге: '+l.name);rerender();}
+    else if(a==='aitoggle'){aiOn=!aiOn;log('Директор','ассистент '+(aiOn?'включён':'поставлен на паузу'));toast(aiOn?'Ассистент включён':'Ассистент на паузе');rerender();}
+    else if(a==='archopen'){S.keepModal=true;archChat(id);}
+    else if(a==='export'){toast('Выгрузка в таблицу готова (демо)');log(actor(),'выгрузка базы: '+(S.at==='orders'?'заказы':'переписки'));}
+    else if(a==='tg'){S.tg=id;P.ts=0;render();}
+    else if(a==='page'){const k=el.getAttribute('data-key');P[k]=(P[k]||0)+(+el.getAttribute('data-d'));rerender();}
+    else if(a==='sel'){S.sel[id]=el.checked;rerender();}
+    else if(a==='open'){S.open=+id;openLead(id);}
+    else if(a==='mclose'){if(e.target===el||el.tagName==='BUTTON')closeModal();}
+    else if(a==='calnav'){const d=+el.getAttribute('data-d');S.calOff=d===0?0:S.calOff+d;render();}
+    else if(a==='ev'){evCard(el.getAttribute('data-g'),el.getAttribute('data-t'),el.getAttribute('data-d'));}
+    else if(a==='evhw'){S.view='s_hw';render();}
+    else if(a==='evatt'){S.tg=el.getAttribute('data-g');S.view='t_att';closeModal();render();}
+    else if(a==='remind'){S.open=null;const l=lead(id);doRemind(l);toast(l.rem>=2?'Напоминание отправлено. Это второе: дальше человек':'Напоминание отправлено');log(S.mgr,'напоминание: '+l.name);rerender();}
+    else if(a==='personal'){S.open=null;const l=lead(id);l.st='wait';l.rem=2;toast('Отмечено: написали лично');log(S.mgr,'написал(а) лично: '+l.name);rerender();}
+    else if(a==='confirm'){S.open=null;const l=lead(id);l.st='done';const g=gid(l.group);g.size=Math.min(CFG.CAP,g.size+1);g._r=null;toast('Оплата подтверждена, место в '+g.id+' закреплено');log(S.mgr,'подтвердил(а) оплату: '+l.name+' → '+g.id);rerender();}
+    else if(a==='lnote'){const l=lead(id);l.note=document.getElementById('lnote').value;toast('Заметка сохранена');log(S.mgr,'заметка: '+l.name);}
+    else if(a==='bremind'){const ids=Object.keys(S.sel).filter(k=>S.sel[k]);let n=0;ids.forEach(i=>{const l=lead(i);if(l&&l.st==='wait'){doRemind(l);n++;}});S.sel={};toast('Напоминаний отправлено: '+n+(ids.length>n?' (остальные не ждут оплаты)':''));log(S.mgr,'массовое напоминание: '+n);rerender();}
+    else if(a==='bclose'){const ids=Object.keys(S.sel).filter(k=>S.sel[k]);ids.forEach(i=>{lead(i).st='closed';});S.sel={};toast('Закрыто как «не актуально»: '+ids.length);log(S.mgr,'закрыл(а) заявок: '+ids.length);rerender();}
+    else if(a==='bclear'){S.sel={};rerender();}
+    else if(a==='debtremind'){let n=0;myGroups().forEach(g=>roster(g).forEach(x=>{if(x.pay!=='paid')n++;}));toast('Напоминание отправлено лично: '+num(n)+' человек');log(S.mgr,'напоминание должникам: '+num(n));}
+    else if(a==='gtoggle'){const g=gid(id);g.open=!g.open;toast(g.open?'Набор открыт':'Набор закрыт');log(S.mgr,(g.open?'открыл(а)':'закрыл(а)')+' набор '+g.id);rerender();}
+    else if(a==='answer'){const q=QUESTIONS.find(x=>x.id===+id),ta=document.getElementById('qa-'+id);if(!ta||ta.value.trim().length<2){toast('Напишите ответ');return;}q.st='done';q.ans=ta.value.trim();toast('Ответ отправлен ученику');log(S.mgr,'ответил(а) на вопрос: '+q.from);rerender();}
+    else if(a==='newq'){QUESTIONS.push({id:NEXTID++,from:mkName(mySex(),R),mgr:S.mgr,text:'Подскажите, можно ли пропустить первое занятие?',st:'open',ans:''});toast('Ассистент передал новый вопрос');rerender();}
+    else if(a==='newlead'){const g=(myGroups().filter(x=>x.size<CFG.CAP)[0])||myGroups()[0];LEADS.unshift({id:NEXTID++,name:mkName(mySex(),R),sex:mySex(),group:g.id,mgr:S.mgr,st:'check',rem:0,promo:R()<.5,age:3,src:'бот',note:'',amount:CFG.PRICE,match:true});S.seen++;toast('Заявка из бота: оплата ждёт проверки');log('Бот','новая заявка для '+S.mgr);rerender();}
+    else if(a==='hwdone'){HWDONE[id]=true;toast('Отправлено на проверку');log('Студент','сдал(а) ДЗ');rerender();}
+    else if(a==='att'){S.att[el.getAttribute('data-k')]=el.checked;const g=curTG(),r=roster(g);document.getElementById('attcnt').textContent=r.filter(x=>S.att[g.id+x.name]!==false).length+' из '+r.length+' присутствуют';}
+    else if(a==='attall'){const g=curTG(),v=el.getAttribute('data-v')==='1';roster(g).forEach(x=>{S.att[g.id+x.name]=v;});rerender();}
+    else if(a==='attsave'){const g=curTG(),r=roster(g),p=r.filter(x=>S.att[g.id+x.name]!==false).length;g.att=Math.round((g.att*4+pct(p,r.length))/5);toast('Посещаемость сохранена: '+p+' из '+r.length);log(S.teacher,'журнал занятия '+g.id+': '+p+'/'+r.length);rerender();}
+    else if(a==='postnews'){const t=document.getElementById('tp-text'),g=document.getElementById('tp-g');if(!t.value.trim()){toast('Напишите текст');return;}NEWS.push({g:g.value,text:t.value.trim()});ANN.push({id:ANNID++,from:S.teacher,role:'teacher',aud:'g:'+g.value,text:t.value.trim(),mins:0,pin:false});log(S.teacher,'объявление в '+g.value);toast('Опубликовано');rerender();}
+    else if(a==='posthw'){const ti=document.getElementById('tp-title'),g=document.getElementById('tp-g');if(!ti.value.trim()){toast('Напишите название');return;}HWX.push({id:'x'+NEXTID++,g:g.value,title:ti.value.trim(),ts:addDays(sod(new Date()),3).getTime()});log(S.teacher,'ДЗ в '+g.value);toast('Задание выдано');rerender();}
+    else if(a==='stafftoggle'){const p=staff(id);p.on=!p.on;log(S.role==='owner'?'Владелец':'Директор',(p.on?'включил(а)':'отключил(а)')+' доступ: '+p.name);toast(p.on?'Доступ включён':'Доступ отключён');if(S.role==='director'){staffCard(id);S.keepModal=true;}rerender();}
+    else if(a==='staffcard'){S.keepModal=true;staffCard(id);}
+    else if(a==='groupcard'){S.keepModal=true;groupCard(id);}
+    else if(a==='addstaff'){S.keepModal=true;staffAddForm();}
+    else if(a==='staffadd'){
+      const name=document.getElementById('sf-name').value.trim(), role=document.getElementById('sf-role').value, from=document.getElementById('sf-from').value, n=+document.getElementById('sf-n').value||0;
+      if(name.length<3){toast('Введите имя сотрудника');return;}
+      if(STAFFALL.some(s=>s.name.toLowerCase()===name.toLowerCase())){toast('Сотрудник с таким именем уже есть');return;}
+      let tg=document.getElementById('sf-tg').value.trim().replace(/^@/,'');
+      if(!/^[A-Za-z][A-Za-z0-9_]{4,31}$/.test(tg)){toast('Укажите ник Telegram латиницей, от 5 символов');return;}
+      tg='@'+tg; if(STAFFALL.some(s=>s.tg.toLowerCase()===tg.toLowerCase())){toast('Этот ник уже привязан к другому сотруднику');return;}
+      const ns={id:SID++,name,role,on:false,tg,inv:'sent',link:invLink()}; STAFFALL.push(ns); let moved=0;
+      if(role==='Менеджер') MGRS[name]='новый менеджер';
+      if(role==='Преподаватель'&&from){const src=staff(from);GROUPS.filter(g=>g.teacher===src.name).slice(0,n).forEach(g=>{g.teacher=name;moved++;});}
+      log('Директор','пригласил(а) сотрудника: '+name+' '+tg+' ('+role+(moved?', передано групп: '+moved:'')+')'); toast('Приглашение отправлено: '+tg); S.keepModal=true; render(); inviteCard(ns.id);}
+    else if(a==='attach'){const s=staff(id),g=gid(document.getElementById('at-g').value);if(g&&moveGroup(g,s.name)){S.keepModal=true;render();staffCard(id);}}
+    else if(a==='staffdel'){S.keepModal=true;staffDelForm(id);}
+    else if(a==='staffdelok'){
+      const s=staff(id), to=document.getElementById('sd-to'); const target=to?staff(to.value):null; let moved=0;
+      if(s.role==='Преподаватель'){GROUPS.filter(g=>g.teacher===s.name).forEach(g=>{if(target){g.teacher=target.name;moved++;}});}
+      if(s.role==='Менеджер'){LEADS.filter(l=>l.mgr===s.name).forEach(l=>{if(target){l.mgr=target.name;moved++;}});GROUPS.filter(g=>g.mgr===s.name).forEach(g=>{if(target)g.mgr=target.name;});QUESTIONS.filter(q=>q.mgr===s.name).forEach(q=>{if(target)q.mgr=target.name;});delete MGRS[s.name];}
+      STAFFALL.splice(STAFFALL.findIndex(x=>x.id===s.id),1); log('Директор','удалил(а) сотрудника: '+s.name+(moved?' (передано: '+moved+')':'')); toast('Сотрудник удалён, доступ закрыт'+(moved?' · передано: '+moved:'')); closeModal(); render();}
+    else if(a==='acc'){const role=el.getAttribute('data-role'),key=el.getAttribute('data-key');ACC[role][key]=el.checked;log('Владелец','доступ «'+key+'» для роли '+role+': '+(el.checked?'включён':'выключен'));toast('Доступ обновлён');rerender();}
+    else if(a==='pdf'){printReport();}
+  });
+  document.addEventListener('change',e=>{
+    const el=e.target.closest('[data-act]'); if(!el) return; const a=el.getAttribute('data-act');
+    if(a==='mgr'){S.mgr=el.value;S.sel={};S.filter='all';P.lq=0;render();}
+    else if(a==='teacher'){S.teacher=el.value;S.tg='';render();}
+    else if(a==='bassign'){if(el.value==='Передать другому…')return;const ids=Object.keys(S.sel).filter(k=>S.sel[k]);ids.forEach(i=>{lead(i).mgr=el.value;});toast('Передано заявок: '+ids.length+' → '+el.value);log(S.mgr,'передал(а) '+ids.length+' заявок → '+el.value);S.sel={};rerender();}
+    else if(a==='spend'){adSpend=Math.max(1000,+el.value||900000);rerender();}
+    else if(a==='fm'){S.fm=+el.value;render();} else if(a==='cmpA'){S.cmpA=+el.value;render();} else if(a==='cmpB'){S.cmpB=+el.value;render();}
+    else if(a==='calmode'){S.calMode=el.value;S.calOff=0;render();}
+    else if(a==='im'){S.im=el.value;P.ch=0;P.ao=0;P.ac=0;S.chat=null;render();}
+    else if(a==='regroup'){if(el.value==='…')return;const g=gid(el.getAttribute('data-g')),from=g.teacher,sid=STAFFALL.find(s=>s.name===from).id;moveGroup(g,el.value);S.keepModal=true;render();staffCard(sid);}
+    else if(a==='gteacher'){if(!el.value)return;const g=gid(S.grp);moveGroup(g,el.value);render();}
+  });
+  document.addEventListener('input',e=>{
+    const el=e.target.closest('[data-act]'); if(!el) return; const a=el.getAttribute('data-act');
+    if(a==='q'){const k=el.getAttribute('data-key');S.q[k]=el.value;P[k]=0;rerender();const n=document.querySelector('input[data-key="'+k+'"]');if(n){n.focus();n.setSelectionRange(n.value.length,n.value.length);}}
+    else if(a==='delta'){S.adDelta=+el.value;rerender();const r=document.querySelector('input[data-act="delta"]');if(r)r.focus();}
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
